@@ -1,9 +1,9 @@
 package com.example.catdog.gorup;
 
+import com.example.catdog.common.Resign_yn;
+import com.example.catdog.common.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
@@ -14,14 +14,13 @@ public class Group {
     @Column(nullable = false)
     private int group_num;
 
-    @Column(length = 255)
     private String group_name;
 
-    @Column(length = 50)
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
-    @Column(length = 10)
-    private String resign_yn;
+    @Enumerated(EnumType.STRING)
+    private Resign_yn resign_yn;
 
     @Column(length = 200, nullable = false)
     private String id;

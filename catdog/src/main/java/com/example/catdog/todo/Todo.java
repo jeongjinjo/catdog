@@ -1,6 +1,6 @@
 package com.example.catdog.todo;
 
-import com.example.catdog.member.resign_yn;
+import com.example.catdog.common.Resign_yn;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -26,7 +26,7 @@ public class Todo {
     private LocalDateTime start_date;
 
     @Column(length = 50)
-    private String resign_yn;
+    private Resign_yn resign_yn;
 
     @Column(nullable = false)
     private int group_num;
