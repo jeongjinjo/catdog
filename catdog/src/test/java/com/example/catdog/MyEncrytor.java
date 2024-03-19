@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 public class MyEncrytor {
     private String password = "cr@amma@rc";
 
-    @Test
+    /*Test
     void name() {
 
         PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
@@ -35,5 +35,5 @@ public class MyEncrytor {
         encString = encryptor.encrypt(content);
         decString = encryptor.decrypt(encString);
         System.out.println(String.format("root encString = %s decString = %s", encString, decString));
-    }
+    }*/
 }

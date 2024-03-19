@@ -1,25 +1,25 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ENC(+fzYl6edMPZVOoSpPPp3E1NAWgexOvAQD7miLEQRScDCRxDxhOcydddp+F+9tFjGvjaIFj/cejN9k963qD5/OeDmXyA5uNwy6FApl50fYRNb5zfsv4ZM8gVIZdbNVzcCa9w8O4HqrEZQTQ3yZq2gmo3nXa/EGEvMs4VxNYMvfXo=)
-    username: ENC(g3rkfCagGb1fT855B5MfBw==)
-    password: ENC(u25mGMKCZUDQtx7DhB9RMQ==)
+    url: jdbc:mysql://192.168.0.82:3306/catdog_test?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: 1234
 
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MySQLDialect
     defer-datasource-initialization: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: none
     generate-ddl: true
     show-sql: true
     properties:
       hibernate:
         format_sql: true
-  sql:
-    init:
-      mode: always
+#  sql:
+#    init:
+#      mode: always
 
-jasypt:
-  encryptor:
-    password: ${PASSWORD}
+#jasypt:
+#  encryptor:
+#    password: ${PASSWORD}
