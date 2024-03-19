@@ -1,9 +1,6 @@
 package com.example.catdog.member;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,10 +15,14 @@ public class Member {
     private String id = UUID.randomUUID().toString();
 
     private String password;
+
+    @Column(unique = true)
     private String nickname;
+
+
     private String name;
 
 //    @Enumerated(EnumType.STRING)
-    private resign_yn resignYn;
+    private String resign_yn;
 
 }
