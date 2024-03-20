@@ -28,7 +28,7 @@ public class PetService {
         Optional<Pet> optionalPet =petRepository.findById(pet_num);
         return optionalPet.get();
     }
-
+    //수정 기능
     public Pet updatePet(Long pet_num, PetDto petDto) {
         //        updatedPet.setId(idx);
         Optional<Pet> optionalPet = petRepository.findById(pet_num);
@@ -43,11 +43,12 @@ public class PetService {
             return null;
         }
     }
-
+    //삭제 기능
     public void deletePet(Long pet_num) {
         petRepository.deleteById(pet_num);
     }
 
+    //전체 조회가 굳이 필요하나?
     public List<Pet> getAllPets() {
         return petRepository.findAll();
     }
