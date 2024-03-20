@@ -1,4 +1,4 @@
-package com.example.catdog.gorup;
+package com.example.catdog.group;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
