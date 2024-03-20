@@ -10,4 +10,7 @@ public interface MemberRepository extends JpaRepository<Member, String> {
 
 //    Optional<Member> findById(String id);
 
+    // SELECT ... FROM member WHERE id = ? AND password = ?
+    public Optional<Member> findByIdAndPassword(String id, String pw);
+
 }

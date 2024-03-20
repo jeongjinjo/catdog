@@ -1,5 +1,6 @@
 package com.example.catdog.gorup;
 
+import com.example.catdog.common.Role;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -19,7 +20,7 @@ public class GroupDTO {
 
     @NotBlank(message = "필수 입력 값")
     @Size(max = 50)
-    private String role;
+    private Role role;
 
     @Size(max = 10)
     private String resign_yn;
