@@ -1,4 +1,4 @@
-package com.example.catdog.gorup;
+package com.example.catdog.group;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;

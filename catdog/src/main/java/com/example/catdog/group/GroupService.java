@@ -1,4 +1,4 @@
-package com.example.catdog.gorup;
+package com.example.catdog.group;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

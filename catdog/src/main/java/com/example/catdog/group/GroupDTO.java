@@ -1,4 +1,4 @@
-package com.example.catdog.gorup;
+package com.example.catdog.group;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
