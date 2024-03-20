@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 @Entity
 @Schema(description = "Group Table에 대한 내용입니다.")
-public class Group {
+public class CareGroup {
     @Id
     @Column(nullable = false)
     private int group_num;
@@ -32,4 +32,16 @@ public class Group {
     private int group_class;
     private String name;
     private String nickname;
+
+    public CareGroup() {}
+
+    public CareGroup(int group_num, Role role, String member_id, int group_class, String name, String nickname) {
+        this.group_num = group_num;
+        this.role = role;
+        this.member_id = member_id;
+        this.group_class = group_class;
+        this.name = name;
+        this.nickname = nickname;
+    }
+
 }

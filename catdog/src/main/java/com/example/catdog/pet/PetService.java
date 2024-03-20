@@ -1,5 +1,7 @@
 package com.example.catdog.pet;
 
+import com.example.catdog.exception.ErrorCode;
+import com.example.catdog.exception.PetException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +25,13 @@ public class PetService {
     }//save 메소드는 Spring Data JPA 에서 제공하는 메소드, 주어진 앤티티를 데이터베이스에 저장하고 저장된 앤티티를 반환한다.
 
     //pet 정보 조회 기능
-    public Pet getPetById(Long pet_num) {
+    public Pet getPetById(int pet_num) {
 
         Optional<Pet> optionalPet =petRepository.findById(pet_num);
         return optionalPet.get();
     }
 
-    public Pet updatePet(Long pet_num, PetDto petDto) {
+    public Pet updatePet(int pet_num, PetDto petDto) {
         //        updatedPet.setId(idx);
         Optional<Pet> optionalPet = petRepository.findById(pet_num);
         if (optionalPet.isPresent()) {
@@ -44,12 +46,22 @@ public class PetService {
         }
     }
 
-    public void deletePet(Long pet_num) {
+    public void deletePet(int pet_num) {
         petRepository.deleteById(pet_num);
     }
 
     public List<Pet> getAllPets() {
         return petRepository.findAll();
+    }
+
+    // eunae
+    public List<Pet> getGroupNotInPet(String id) {
+        Optional<List<Pet>> pet = petRepository.findByGroupNotInPet(id);
+
+        if(pet.isEmpty())
+            throw new PetException(ErrorCode.NOT_FOUND);
+
+        return pet.get();
     }
 }
 

@@ -1,5 +1,6 @@
 package com.example.catdog.pet;
 
+import com.example.catdog.common.Type;
 import com.example.catdog.member.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
@@ -20,28 +21,26 @@ public class Pet {
     //pet_num이 기본키
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long pet_num;
+    private int pet_num;
 
-    @Column(nullable = false)
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private Type type;
 
     @Column(nullable = false)
     private String pet_name; //(사람 id 랑 외래키 연결)
 
     //이렇게하면... pet_num과 id 연결 되는 것
-    @ManyToOne(fetch = FetchType.LAZY)
+    /*@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="petandmember_id")
-    private Member member; //Member테이블과의 관계 설정
+    private Member member; //Member테이블과의 관계 설정*/
 
     //Member member
     //불러서
     //외래키 지정
 
-    @Column(nullable = false)
-    private int pet_age;
+    /*private int pet_age;
 
-    @Column(nullable = false)
-    private float pet_kg;
+    private float pet_kg;*/
 
     private String disease;
     //없다면 체크를 눌러서 disease없음에 해당되는건 어떨까//
@@ -51,5 +50,10 @@ public class Pet {
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
+
+    // eunae 추가
+    private String id;
+    private int age;
+    private float kg;
 
 }

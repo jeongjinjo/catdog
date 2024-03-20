@@ -22,7 +22,7 @@ public class PetController {
 
     // id를 통해 반려동물 조회 (id가 중복 허용이 안되니까..) 이게 편할 듯 id가 pet_num과 연결.
     @GetMapping("/select/{pet_num}")
-    public ResponseEntity<Pet> getPet(@PathVariable Long pet_num) {
+    public ResponseEntity<Pet> getPet(@PathVariable int pet_num) {
         Pet pet = petService.getPetById(pet_num);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(pet);
     }

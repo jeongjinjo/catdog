@@ -33,6 +33,19 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                             .body(errorResponse);
     }
 
+    @ExceptionHandler(PetException.class)
+    private ResponseEntity<ErrorResponse> handleEmpExcption(PetException petException) {
+        ErrorCode errorCode = petException.getErrorCode();
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                                                    .errorCode(errorCode.getErrorCode())
+                                                    .errorMessage(errorCode.getMessage())
+                                                    .errorDateTime(LocalDateTime.now())
+                                                    .build();
+        return ResponseEntity.status(petException.getErrorCode().getHttpStatus())
+                            .body(errorResponse);
+    }
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex
                                                                 , HttpHeaders headers
