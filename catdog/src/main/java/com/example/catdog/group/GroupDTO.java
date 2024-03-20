@@ -1,4 +1,4 @@
-package com.example.catdog.gorup;
+package com.example.catdog.group;
 
 import com.example.catdog.common.Role;
 import jakarta.validation.constraints.NotBlank;

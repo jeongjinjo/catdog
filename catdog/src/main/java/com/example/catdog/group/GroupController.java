@@ -1,4 +1,4 @@
-package com.example.catdog.gorup;
+package com.example.catdog.group;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
