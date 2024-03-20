@@ -14,6 +14,7 @@ public class Group {
     @Column(nullable = false)
     private int group_num;
 
+    @Column(length = 100)
     private String group_name;
 
     @Enumerated(EnumType.STRING)
@@ -22,9 +23,13 @@ public class Group {
     @Enumerated(EnumType.STRING)
     private Resign_yn resign_yn;
 
-    @Column(length = 200, nullable = false)
-    private String id;
+    @Column(length = 100)
+    private String member_id;
 
     @Column(nullable = false)
     private int pet_num;
+
+    private int group_class;
+    private String name;
+    private String nickname;
 }
