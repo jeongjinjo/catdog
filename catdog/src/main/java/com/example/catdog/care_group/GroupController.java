@@ -1,4 +1,4 @@
-package com.example.catdog.group;
+package com.example.catdog.care_group;
 
 import com.example.catdog.pet.Pet;
 import com.example.catdog.pet.PetService;
@@ -18,13 +18,13 @@ public class GroupController {
     private final PetService petService;
 
     @GetMapping()
-    public ResponseEntity<Map<Integer, List<CareGroup>>> gorupList(@RequestBody String id) {
+    public ResponseEntity<Map<Integer, List<Care_group>>> gorupList(@RequestBody String id) {
         String idValue = id.split(":")[1]
                             .replace("{", "")
                             .replace("}", "")
                             .replace("\"", "")
                             .trim();
-        Map<Integer,List<CareGroup>> list = groupService.groupList(idValue);
+        Map<Integer,List<Care_group>> list = groupService.groupList(idValue);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(list);
     }
 

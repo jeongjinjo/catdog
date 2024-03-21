@@ -15,7 +15,7 @@ public interface PetRepository extends JpaRepository<Pet, Integer> {
             "FROM Pet p " +
             "WHERE NOT EXISTS (" +
             "    SELECT 1 " +
-            "    FROM CareTarget c " +
+            "    FROM Care_target c " +
             "    WHERE c.pet_num = p.pet_num " +
             ") " +
             "AND p.id = :id"

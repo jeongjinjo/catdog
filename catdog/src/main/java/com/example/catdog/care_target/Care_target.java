@@ -1,4 +1,4 @@
-package com.example.catdog.careTarget;
+package com.example.catdog.care_target;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,10 +12,10 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class CareTarget {
+public class Care_target {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int key;
+    private int care_num;
     private int group_num;
     private int pet_num;
 }

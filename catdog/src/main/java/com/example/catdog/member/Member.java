@@ -15,7 +15,7 @@ import java.util.UUID;
 public class Member {
     @Id
     @Column(nullable = false)
-    private String id = UUID.randomUUID().toString();
+    private String member_id = UUID.randomUUID().toString();
 
     private String password;
 
