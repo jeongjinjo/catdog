@@ -12,6 +12,7 @@ import java.util.*;
 public class GroupService {
     private final GroupRepository groupRepository;
 
+    // 유저가 속해있는 그룹과 그룹에 속해있는 유저 조회 ( eunae )
     public Map<Integer, List<Care_group>> groupList(String memberId) {
         // 특정 memberId가 멤버가 속한 그룹을 group_class를 기준으로 그룹화하는 Map
         Map<Integer, List<Care_group>> groupedByClass = new HashMap<>();
