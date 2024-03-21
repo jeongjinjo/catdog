@@ -50,6 +50,7 @@ public class PetService {
         petRepository.deleteById(pet_num);
     }
 
+    //전체 조회가 굳이 필요하나?
     public List<Pet> getAllPets() {
         return petRepository.findAll();
     }

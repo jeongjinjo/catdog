@@ -5,10 +5,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/pet")
@@ -42,14 +39,19 @@ public class PetController {
     }
     //수정
     @PutMapping("/update/{pet_num}")
-    public ResponseEntity<Pet> updatePet(@PathVariable Long pet_num, @Valid @RequestBody PetDto petDto) {
+    public ResponseEntity<Pet> updatePet(@RequestBody @Valid PetDto petDto) {
+        ModelMapper mapper=new ModelMapper();
+        Pet pet=mapper.map(petDto,Pet.class);
 
+        //Pet pet은 된게 없으니까 pet.getPet_num() 해서 Pet에 있는걸 가지고 와줘야함.
+        Pet dbPet=petService.updatePet(pet.getPet_num(),petDto); //getpet_num이 아니라 어떻게 getPet_num을 가지고 오는겨?! 물음표 ?!?!?
 
-
-
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(null);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(dbPet);
     }
     //삭제
-
-
+    @DeleteMapping("delete/{pet_num}")
+    public ResponseEntity<String> deletedbyPet(@PathVariable Long pet_num){
+         petService.deletePet(pet_num);
+         return ResponseEntity.status(HttpStatus.ACCEPTED).body("삭제됨");
+    }
 }
