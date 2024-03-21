@@ -1,7 +1,12 @@
 package com.example.catdog.care_group;
 
+import com.example.catdog.care_target.CareTargetRepository;
+import com.example.catdog.care_target.Care_target;
 import com.example.catdog.exception.ErrorCode;
 import com.example.catdog.exception.MemberExcption;
+import com.example.catdog.pet.Pet;
+import com.example.catdog.pet.PetRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +16,8 @@ import java.util.*;
 @RequiredArgsConstructor
 public class GroupService {
     private final GroupRepository groupRepository;
+    private final PetRepository petRepository;
+    private final CareTargetRepository careTargetRepository;
 
     // 유저가 속해있는 그룹과 그룹에 속해있는 유저 조회 ( eunae )
     public Map<Integer, List<Care_group>> groupList(String memberId) {
@@ -35,5 +42,25 @@ public class GroupService {
 
         // 그룹화된 결과를 반환
         return groupedByClass;
+    }
+
+    @Transactional
+    // 유저(HOST 기준)의 그룹별 반려동물 정보 조회 ( eunae )
+    public Map<Integer, List<Pet>> getGroupInfoPet(String member_id) {
+        Map<Integer, List<Pet>> petInformationByGroup = new HashMap<>();
+        List<Pet> petList = petRepository.getGroupInfoPet(member_id);
+
+        for (Pet p : petList) {
+            // 그룹번호 가져오는 쿼리문 따로 생성
+            Care_target careTarget = careTargetRepository.getCareGroupNum(p.getPet_num());
+
+            int groupNum = careTarget.getGroup_num();
+            if (!petInformationByGroup.containsKey(groupNum)) {
+                petInformationByGroup.put(groupNum, new ArrayList<>());
+            }
+            petInformationByGroup.get(groupNum).add(p);
+        }
+
+        return petInformationByGroup;
     }
 }

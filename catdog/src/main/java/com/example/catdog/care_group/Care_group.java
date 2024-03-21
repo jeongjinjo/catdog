@@ -34,13 +34,15 @@ public class Care_group {
 
     public Care_group() {}
 
-    public Care_group(int group_num, Role role, String member_id, int group_key, String name, String nickname) {
+    public Care_group(int group_num, Role role, String member_id, int group_key
+                        , String name, String nickname, String group_name, Resign_yn resign_yn) {
         this.group_num = group_num;
         this.role = role;
         this.member_id = member_id;
         this.group_key = group_key;
         this.name = name;
         this.nickname = nickname;
+        this.group_name = group_name;
     }
 
 }

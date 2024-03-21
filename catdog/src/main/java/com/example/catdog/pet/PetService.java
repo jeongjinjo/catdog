@@ -55,14 +55,9 @@ public class PetService {
         return petRepository.findAll();
     }
 
-    // eunae
+    // 내가 등록한 반려동물 중 그룹에 등록되지 않은 반려동물 목록 조회 기능 ( eunae )
     public List<Pet> getGroupNotInPet(String id) {
-        Optional<List<Pet>> pet = petRepository.findByGroupNotInPet(id);
-
-        if(pet.isEmpty())
-            throw new PetException(ErrorCode.NOT_FOUND);
-
-        return pet.get();
+        return petRepository.findByGroupNotInPet(id);
     }
 }
 

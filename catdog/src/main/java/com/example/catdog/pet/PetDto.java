@@ -11,7 +11,7 @@ import lombok.*;
 @Builder
 public class PetDto {
 
-    private Long pet_num;
+    private int pet_num;
 
     private String type;
 
@@ -26,5 +26,4 @@ public class PetDto {
     private String resign_yn;
 
     private Gender gender;
-
 }

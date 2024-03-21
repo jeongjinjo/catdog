@@ -3,6 +3,7 @@ package com.example.catdog.care_group;
 import com.example.catdog.member.Member;
 import com.example.catdog.member.MemberService;
 import com.example.catdog.pet.Pet;
+import com.example.catdog.pet.PetDto;
 import com.example.catdog.pet.PetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,7 +34,7 @@ public class GroupController {
     }
 
     // 그룹에 속해있지 않은 내 반려동물 조회 ( eunae ) - 03.21 확인완료
-    @GetMapping("/pet")
+    @GetMapping("pet")
     public ResponseEntity<List<Pet>> getGroupNotInPet(@RequestBody String id) {
         String idValue = id.split(":")[1]
                             .replace("{", "")
@@ -60,4 +61,14 @@ public class GroupController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(list);
     }
 
+    @GetMapping("{id}")
+    public ResponseEntity<Map<Integer, List<Pet>>> getGroupInfoPet(@PathVariable String id) {
+//        String idValue = id.split(":")[1]
+//                .replace("{", "")
+//                .replace("}", "")
+//                .replace("\"", "")
+//                .trim();
+        Map<Integer,List<Pet>> list = groupService.getGroupInfoPet(id);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(list);
+    }
 }

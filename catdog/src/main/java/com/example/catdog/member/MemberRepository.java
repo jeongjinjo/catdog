@@ -17,9 +17,16 @@ public interface MemberRepository extends JpaRepository<Member, String> {
             "  AND m.password = :password")
     public Optional<Member> findByMemberIdAndPassword(@Param("member_id") String member_id, @Param("password") String password);
 
-    @Query(value = "SELECT new com.example.catdog.member.Member(m.member_id, m.password, m.name, m.nickname, m.phone_num, m.resign_yn) " +
-            " FROM Member m " +
-            "WHERE m.member_id = :member_id")
+    @Query(value = "SELECT new com.example.catdog.member.Member(" +
+                                  "m.member_id" +
+                                ", m.password" +
+                                ", m.name" +
+                                ", m.nickname" +
+                                ", m.phone_num" +
+                                ", m.resign_yn" +
+                            ") " +
+                    " FROM Member m " +
+                    "WHERE m.member_id = :member_id")
     public Optional<Member> findByMemberId(@Param("member_id") String member_id);
 
     @Modifying
@@ -46,7 +53,9 @@ public interface MemberRepository extends JpaRepository<Member, String> {
     @Query(value = "SELECT m " +
                     " FROM Member m " +
                     "WHERE m.member_id NOT IN (:member_id) " +
-                    "AND m.member_id LIKE CONCAT('%', :search_id, '%')")
+                    "AND m.member_id LIKE CONCAT('%', :search_id, '%') " +
+                    " OR m.nickname LIKE CONCAT('%', '치', '%') " +
+                    " AND m.resign_yn = 'N'")
     public List<Member> memberGroupInvite(@Param("member_id") String member_id, @Param("search_id") String search_id);
 
 
