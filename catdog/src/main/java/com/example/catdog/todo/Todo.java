@@ -18,7 +18,7 @@ public class Todo {
     private String todo;
 
     @Column(length = 50)
-    private String status;
+    private String comp_yn;
 
     private String start_id;
 
