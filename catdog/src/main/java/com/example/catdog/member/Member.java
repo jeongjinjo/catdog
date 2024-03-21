@@ -2,6 +2,7 @@ package com.example.catdog.member;
 
 import com.example.catdog.enum_column.Resign_yn;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

@@ -3,6 +3,7 @@ package com.example.catdog.member;
 import com.example.catdog.enum_column.Resign_yn;
 import com.example.catdog.exception.ErrorCode;
 import com.example.catdog.exception.MemberExcption;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,22 +25,26 @@ public class MemberService {
         return member.get();
     }
 
+    @Transactional
     // 내 정보 수정
-    public Member myInfoUpdate(Member member, String passwordUpdate) {
-        Optional<Member> mem = memberRepository.findBymemberIdAndPassword(member.getMember_id(), member.getPassword());
+    public int myInfoUpdate(Member member, String passwordUpdate) {
+        Optional<Member> mem = memberRepository.findByMemberIdAndPassword(member.getMember_id(), member.getPassword());
 
         if(mem.isEmpty()) {
             throw new MemberExcption(ErrorCode.PASSWORD_NOT_MATCH);
         }
 
-        Member db = memberRepository.save(mem.get());
+        int result = memberRepository.myInfoUpdate(
+                                        member.getName(),
+                                        member.getNickname(),
+                                        passwordUpdate,
+                                        member.getPhone_num(),
+                                        member.getMember_id()
+                        );
 
-        db.setName(member.getName());
-        db.setPassword(passwordUpdate);
-        db.setNickname(member.getNickname());
-        return db;
+//        Member db = memberRepository.save(mem.get());
+        return result;
     }
-
 
     // 회원탈퇴
     public Member signOut(String id) {
@@ -62,10 +67,10 @@ public class MemberService {
 
     // 비밀번호 확인
     public Member pwCheck(String id, String pw) {
-        Optional<Member> member = memberRepository.findBymemberIdAndPassword(id, pw);
+        Optional<Member> member = memberRepository.findByMemberIdAndPassword(id, pw);
 
         if(member.isEmpty()) {
-            throw new MemberExcption(ErrorCode.PASSWORD_NOT_MATCH);
+            throw new MemberExcption(ErrorCode.ID_OR_PASSWORD_FAILED);
         }
 
         return member.get();

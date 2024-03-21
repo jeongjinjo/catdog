@@ -13,25 +13,25 @@ import org.springframework.web.bind.annotation.*;
 public class MyPageController {
     private final MemberService service;
 
-    // 내 정보 확인 ( eunae )
+    // 내 정보 확인 ( eunae ) - 03.21 확인완료
     @GetMapping("{id}")
     public ResponseEntity<Member> myInfo(@PathVariable String id) {
         Member member = service.getInfo(id);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(member);
     }
 
-    // 내 정보 수정
+    // 내 정보 수정 ( eunae ) - 03.21 수정완료
     @PutMapping()
-    public ResponseEntity<Member> myInfoUpdate(@Valid @RequestBody MemberDTO memberDTO) {
+    public ResponseEntity<Integer> myInfoUpdate(@Valid @RequestBody MemberDTO memberDTO) {
         ModelMapper mapper = new ModelMapper();
         Member member = mapper.map(memberDTO, Member.class);
 
-        Member db = service.myInfoUpdate(member, memberDTO.getPasswordUpdate());
+        int result = service.myInfoUpdate(member, memberDTO.getPasswordUpdate());
 
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(db);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(result);
     }
 
-    // 회원탈퇴 ( eunae )
+    // 회원탈퇴 ( eunae ) - 03.21 확인완료
     @PutMapping("signOut")
     public ResponseEntity<Member> SignOut(@Valid @RequestBody String id) {
         System.out.println(id);
@@ -44,9 +44,10 @@ public class MyPageController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(db);
     }
 
-    // 탈퇴 전 비밀번호 입력하기 ( eunae )
+    // 탈퇴 전 비밀번호 입력하기 ( eunae ) - 03.21 수정완료
     @GetMapping("pwCheck")
-    public ResponseEntity<Member> pwCheck(@Valid @RequestBody String idAndPw) {
+    public ResponseEntity<Integer> pwCheck(@Valid @RequestBody String idAndPw) {
+        int result = 0;
         String[] parts = idAndPw.split(":");
         String idValue = parts[1].split(",")[0]
                                     .replaceAll("[{}\"]", "")
@@ -55,6 +56,11 @@ public class MyPageController {
                                     .trim();
 
         Member db = service.pwCheck(idValue, pwValue);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(db);
+
+        if(db != null) {
+            result = 1;
+        }
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(result);
     }
 }
