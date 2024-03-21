@@ -20,18 +20,21 @@ public class MyPageController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(member);
     }
 
+    // 내 정보 수정
     @PutMapping()
     public ResponseEntity<Member> myInfoUpdate(@Valid @RequestBody MemberDTO memberDTO) {
         ModelMapper mapper = new ModelMapper();
         Member member = mapper.map(memberDTO, Member.class);
 
-        Member db = service.myInfoUpdate(member);
+        Member db = service.myInfoUpdate(member, memberDTO.getPasswordUpdate());
+
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(db);
     }
 
     // 회원탈퇴 ( eunae )
     @PutMapping("signOut")
     public ResponseEntity<Member> SignOut(@Valid @RequestBody String id) {
+        System.out.println(id);
         String idValue = id.split(":")[1]
                             .replace("{", "")
                             .replace("}", "")

@@ -18,7 +18,7 @@ public interface PetRepository extends JpaRepository<Pet, Integer> {
             "    FROM Care_target c " +
             "    WHERE c.pet_num = p.pet_num " +
             ") " +
-            "AND p.id = :id"
+            "AND p.member_id = :id"
     )
     public Optional<List<Pet>> findByGroupNotInPet(@Param("id") String id);
 

@@ -1,5 +1,6 @@
 package com.example.catdog.pet;
 
+import com.example.catdog.enum_column.Gender;
 import lombok.*;
 
 @ToString

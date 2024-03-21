@@ -1,8 +1,7 @@
 package com.example.catdog.pet;
 
-import com.example.catdog.common.Type;
-import com.example.catdog.member.Member;
-import io.swagger.v3.oas.annotations.media.Schema;
+import com.example.catdog.enum_column.Gender;
+import com.example.catdog.enum_column.Type;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,8 +21,25 @@ public class Pet {
     @Enumerated(EnumType.STRING)
     private Type type;
 
+    private String type_detail;
+
     @Column(nullable = false)
     private String pet_name; //(사람 id 랑 외래키 연결)
+
+    private int age;
+
+    private float kg;
+
+    private String disease;
+    //없다면 체크를 눌러서 disease없음에 해당되는건 어떨까//
+    //질병 ex( 심장병,방광염 , , , ) 쉼표로 구분되게 해야함.
+
+    private String resign_yn;
+
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
+    private String member_id;
 
     //이렇게하면... pet_num과 id 연결 되는 것
     /*@ManyToOne(fetch = FetchType.LAZY)
@@ -37,20 +53,5 @@ public class Pet {
     /*private int pet_age;
 
     private float pet_kg;*/
-
-    private String disease;
-    //없다면 체크를 눌러서 disease없음에 해당되는건 어떨까//
-    //질병 ex( 심장병,방광염 , , , ) 쉼표로 구분되게 해야함.
-
-    private String resign_yn;
-
-
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
-
-    // eunae 추가
-    private String id;
-    private int age;
-    private float kg;
 
 }
