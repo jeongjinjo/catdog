@@ -13,10 +13,10 @@ public class GroupService {
     private final GroupRepository groupRepository;
 
     public Map<Integer, List<Care_group>> groupList(String memberId) {
-        // memberId가 123123인 멤버가 속한 그룹을 group_class를 기준으로 그룹화하는 Map
+        // 특정 memberId가 멤버가 속한 그룹을 group_class를 기준으로 그룹화하는 Map
         Map<Integer, List<Care_group>> groupedByClass = new HashMap<>();
 
-        // memberId가 123123인 멤버가 속한 그룹 리스트를 가져옴.
+        // 특정 memberId가 멤버가 속한 그룹 리스트를 가져옴.
         Optional<List<Care_group>> careGroups = groupRepository.findByClassNumGrouped(memberId);
 
         if(careGroups.isEmpty()) {

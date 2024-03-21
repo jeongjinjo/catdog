@@ -8,6 +8,7 @@ public enum ErrorCode {
     NOT_FOUND(HttpStatus.NOT_FOUND, "NOT_FOUND", "해당하는 내용이 없습니다."),
     VALIDATION_FAILED(HttpStatus.BAD_REQUEST, "VALIDATION_FAILED", "유효성 검사를 실패하였습니다."),
     DUPLICATE(HttpStatus.CONFLICT, "DUPLICATE", "중복된 값이 존재합니다."),
+    ID_OR_PASSWORD_FAILED(HttpStatus.BAD_REQUEST, "ID_AND_PASSWORD_FAILED", "아이디 또는 비밀번호가 틀렸습니다."),
     PASSWORD_NOT_MATCH(HttpStatus.BAD_REQUEST, "PASSWORD_NOT_MATCH", "비밀번호가 일치하지 않습니다.")
     ;
 

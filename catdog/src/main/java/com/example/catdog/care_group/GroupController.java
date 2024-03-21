@@ -17,6 +17,7 @@ public class GroupController {
     private final GroupService groupService;
     private final PetService petService;
 
+    // 유저가 속해있는 그룹 정보 조회 ( eunae ) - 03.21 확인
     @GetMapping()
     public ResponseEntity<Map<Integer, List<Care_group>>> gorupList(@RequestBody String id) {
         String idValue = id.split(":")[1]
@@ -28,6 +29,7 @@ public class GroupController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(list);
     }
 
+    // 그룹에 속해있지 않은 내 반려동물 조회 ( eunae ) - 03.21 확인완료
     @GetMapping("/pet")
     public ResponseEntity<List<Pet>> getGroupNotInPet(@RequestBody String id) {
         String idValue = id.split(":")[1]
