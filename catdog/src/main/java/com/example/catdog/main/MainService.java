@@ -1,6 +1,5 @@
 package com.example.catdog.main;
 
-import com.example.catdog.care_group.Care_group;
 import com.example.catdog.enum_column.Gender;
 import com.example.catdog.pet.Pet;
 import com.example.catdog.pet.PetRepository;
@@ -16,22 +15,24 @@ public class MainService {
     private final PetRepository petRepository;
 
     // 로그인 한 회원의 그룹별 반려동물 정보
-    public List<Pet> getGroupInfoPet(String id){
-        List<Object[]> petinfo = petRepository.findByGroupInfoPet(id);
-        List<Pet> pets = new ArrayList<>();
+    public Map<String, List<Object>> getGroupInfoPet(String id){
+        Optional<List<Object[]>> petinfo = petRepository.findByGroupInfoPet(id);
+        Map<String, List<Object>> groupPets = new HashMap<>();
 
-        for(Object[] info : petinfo){
+        for(Object[] info : petinfo.get()){
+            String groupname = (String) info[0];
+
             Pet pet = new Pet();
-            Care_group careGroup = new Care_group();
 
-            careGroup.setGroup_name((String) info[0]);
             pet.setPet_name((String) info[1]);
             pet.setGender((Gender) info[2]);
             pet.setAge((Integer) info[3]);
             pet.setDisease((String) info[4]);
 
-            pets.add(pet);
+            groupPets.putIfAbsent(groupname, new ArrayList<>());
+
+            groupPets.get(groupname).add(pet);
         }
-        return pets;
+        return groupPets;
     }
 }
