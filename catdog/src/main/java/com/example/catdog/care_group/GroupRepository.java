@@ -11,12 +11,12 @@ import java.util.Optional;
 @Repository
 public interface GroupRepository extends JpaRepository<Care_group, Integer> {
     // 클래스 번호로 내가 속해있는 그룹 조회
-    @Query(value = "SELECT new com.example.catdog.care_group.Care_group(g.group_num, g.role, g.member_id, g.group_class, m.name, m.nickname)  " +
+    @Query(value = "SELECT new com.example.catdog.care_group.Care_group(g.group_num, g.role, g.member_id, g.group_key, m.name, m.nickname)  " +
             "FROM Care_group g " +
             "JOIN Member m " +
-            "ON g.member_id = m.id " +
-            "WHERE g.group_class IN ( " +
-            "      SELECT gr.group_class " +
+            "ON g.member_id = m.member_id " +
+            "WHERE g.group_key IN ( " +
+            "      SELECT gr.group_key " +
             "      FROM Care_group gr " +
             "      WHERE gr.member_id = :member_id" +
             "   )")

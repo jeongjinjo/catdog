@@ -1,34 +1,35 @@
-package com.example.catdog.todo;
+package com.example.catdog.todo.dto;
 
 import com.example.catdog.enum_column.Comp_yn;
 import com.example.catdog.enum_column.Resign_yn;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import lombok.Data;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
-@Data
-@Entity
-public class Todo {
-    @Id
-    @Column(nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@Getter
+@Setter
+@ToString
+public class TodoDTO {
+    @NotBlank(message = "필수 입력 값")
     private int todo_num;
 
+    @Size(max = 255, message = "todo는 최대 255자까지만 입력이 가능합니다.")
     private String todo;
 
-    @Enumerated(EnumType.STRING)
     private Comp_yn comp_yn;
 
     private String start_id;
 
-    @JsonFormat(pattern = "yyyy/MM/dd HH:ss:mm")
     private LocalDateTime start_date;
 
-    @Enumerated(EnumType.STRING)
     private Resign_yn resign_yn;
 
-    @Column(nullable = false)
+    @NotBlank(message = "필수 입력 값")
     private int group_num;
 }

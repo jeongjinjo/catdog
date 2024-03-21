@@ -1,7 +1,7 @@
 package com.example.catdog.care_group;
 
-import com.example.catdog.common.Resign_yn;
-import com.example.catdog.common.Role;
+import com.example.catdog.enum_column.Resign_yn;
+import com.example.catdog.enum_column.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -17,19 +17,18 @@ public class Care_group {
     @Column(length = 100)
     private String group_name;
 
+    @Column(length = 100)
+    private String member_id;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
     @Enumerated(EnumType.STRING)
     private Resign_yn resign_yn;
 
-    @Column(length = 100)
-    private String member_id;
-
-    @Column(nullable = false)
-    private int pet_num;
-
     private int group_key;
+
+    // member JOIN시 필요한 필드명
     private String name;
     private String nickname;
 

@@ -50,7 +50,7 @@ public class PetController {
     }
     //삭제
     @DeleteMapping("delete/{pet_num}")
-    public ResponseEntity<String> deletedbyPet(@PathVariable Long pet_num){
+    public ResponseEntity<String> deletedbyPet(@PathVariable int pet_num){
          petService.deletePet(pet_num);
          return ResponseEntity.status(HttpStatus.ACCEPTED).body("삭제됨");
     }

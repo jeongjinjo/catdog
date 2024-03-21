@@ -1,6 +1,6 @@
 package com.example.catdog.member;
 
-import com.example.catdog.common.Resign_yn;
+import com.example.catdog.enum_column.Resign_yn;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,7 +27,20 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Resign_yn resign_yn;
 
+    private String phone_num;
+
     // 비밀번호 변경될 값
-    private String passwordUpdate;
+//    private String passwordUpdate;
+
+    public Member() {}
+
+    public Member(String member_id, String password, String name, String nickname, String phone_num, Resign_yn resign_yn) {
+        this.member_id = member_id;
+        this.password = password;
+        this.name = name;
+        this.nickname = nickname;
+        this.phone_num = phone_num;
+        this.resign_yn = resign_yn;
+    }
 
 }

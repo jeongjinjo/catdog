@@ -25,7 +25,7 @@ public class GroupService {
 
         // 가져온 그룹 리스트를 group_class를 기준으로 그룹화.
         for (Care_group careGroup : careGroups.get()) {
-            int groupClass = careGroup.getGroup_class();
+            int groupClass = careGroup.getGroup_key();
             if (!groupedByClass.containsKey(groupClass)) {
                 groupedByClass.put(groupClass, new ArrayList<>());
             }

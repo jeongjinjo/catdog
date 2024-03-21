@@ -1,6 +1,6 @@
 package com.example.catdog.member;
 
-import com.example.catdog.common.Resign_yn;
+import com.example.catdog.enum_column.Resign_yn;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import lombok.ToString;
 public class MemberDTO {
     @NotBlank(message = "아이디 값이 없습니다.")
     @Size(min = 2, max = 50, message = "아이디는 최소 2글자 이상 ~ 50글자 이하로 입력해야합니다.")
-    private String id;
+    private String member_id;
 
     @NotBlank(message = "패스워드 값이 없습니다.")
     @Size(min = 4, max = 100 ,message = "패스워드의 크기는 4에서 100 사이여야 합니다.")
@@ -28,6 +28,8 @@ public class MemberDTO {
     private String name;
 
     private Resign_yn resign_yn;
+
+    private String phone_num;
 
     // 비밀번호 변경될 값
     @Size(min = 4, max = 100, message = "패스워드의 크기는 4에서 100 사이여야 합니다.")
