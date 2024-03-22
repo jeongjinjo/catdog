@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 @Getter
 @Setter
 @ToString
@@ -26,5 +28,5 @@ public class GroupDTO {
 
     private Resign_yn resign_yn;
 
-    private int group_key;
+    private List<Integer> group_key;
 }

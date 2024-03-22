@@ -1,5 +1,6 @@
 package com.example.catdog.care_group;
 
+import com.example.catdog.care_target.CareTagetDTO;
 import com.example.catdog.member.Member;
 import com.example.catdog.member.MemberService;
 import com.example.catdog.pet.Pet;
@@ -24,31 +25,20 @@ public class GroupController {
     private final MemberService memberService;
 
     // 유저가 속해있는 그룹 정보 조회 ( eunae ) - 03.21 확인완료
-    @GetMapping()
-    public ResponseEntity<Map<Integer, List<Care_group>>> gorupList(@RequestBody String id) {
-        String idValue = id.split(":")[1]
-                            .replace("{", "")
-                            .replace("}", "")
-                            .replace("\"", "")
-                            .trim();
-        Map<Integer,List<Care_group>> list = groupService.groupList(idValue);
+    @GetMapping("{id}")
+    public ResponseEntity<Map<Integer, List<Care_group>>> gorupList(@PathVariable String id) {
+        Map<Integer,List<Care_group>> list = groupService.groupList(id);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(list);
     }
 
     // 그룹에 속해있지 않은 내 반려동물 조회 ( eunae ) - 03.21 확인완료
-    @GetMapping("pet")
-    public ResponseEntity<List<Pet>> getGroupNotInPet(@RequestBody String id) {
-        String idValue = id.split(":")[1]
-                            .replace("{", "")
-                            .replace("}", "")
-                            .replace("\"", "")
-                            .trim();
-        List<Pet> pet = petService.getGroupNotInPet(idValue);
-
+    @GetMapping("pet/{id}")
+    public ResponseEntity<List<Pet>> getGroupNotInPet(@PathVariable String id) {
+        List<Pet> pet = petService.getGroupNotInPet(id);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(pet);
     }
 
-    // 멤버 그룹 초대 ( eunae ) -> 기능보유객체: Member
+    // 그룹 내에 등록할 유저 검색 ( eunae ) -> 기능보유객체: Member
     @GetMapping("search")
     public ResponseEntity<List<Member>> memberGroupInvite(@RequestBody String myAndSearchMember) {
         String[] parts = myAndSearchMember.split(":");
@@ -63,26 +53,23 @@ public class GroupController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(list);
     }
 
-    @GetMapping("{id}")
+    // 그룹에 속해있는 반려동물 확인하기 ( eunae )
+    @GetMapping("groupInPet/{id}")
     public ResponseEntity<Map<Integer, List<Pet>>> getGroupInfoPet(@PathVariable String id) {
-//        String idValue = id.split(":")[1]
-//                .replace("{", "")
-//                .replace("}", "")
-//                .replace("\"", "")
-//                .trim();
         Map<Integer,List<Pet>> list = groupService.getGroupInfoPet(id);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(list);
     }
 
-//    @PostMapping()
-//    public ResponseEntity<Integer> careGroupAndTagetInsert(@Valid @RequestBody GroupDTO groupDTO) {
-//        ModelMapper mapper = new ModelMapper();
-//        Care_group careGroup = mapper.map(groupDTO, Care_group.class);
-//
-//        int result = groupService.careGroupAndTagetInsert(careGroup);
-//
-//        return ResponseEntity.status(HttpStatus.ACCEPTED).body(result);
-//    }
+    @PostMapping()
+    public ResponseEntity<Integer> careGroupAndTagetInsert(@Valid @RequestBody GroupDTO groupDTO) {
+        ModelMapper mapper = new ModelMapper();
+        Care_group careGroup = mapper.map(groupDTO, Care_group.class);
+
+
+        int result = groupService.careGroupAndTagetInsert(careGroup);
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(result);
+    }
 
 
 }

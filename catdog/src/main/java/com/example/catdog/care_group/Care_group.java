@@ -1,11 +1,15 @@
 package com.example.catdog.care_group;
 
+import com.example.catdog.care_target.Care_target;
 import com.example.catdog.enum_column.Resign_yn;
 import com.example.catdog.enum_column.Role;
 import com.example.catdog.member.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -20,8 +24,9 @@ public class Care_group {
     @Column(length = 100)
     private String group_name;
 
-//    @Column(length = 100)
-//    private String member_id;
+    @OneToOne
+    @JoinColumn(name="member_id", unique = true)
+    private Member member;
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -30,23 +35,4 @@ public class Care_group {
     private Resign_yn resign_yn;
 
     private int group_key;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="member_id")
-    private Member member;
-
-
-    public Care_group() {}
-
-    // 다른 방법이 있을 거 같은데.. ㅠ.ㅠ
-    public Care_group(String group_name, Member member, Role role, Resign_yn resign_yn, int group_key) {
-        this.group_name = group_name;
-//        this.member_id = member;
-        this.member = member;
-        this.role = role;
-        this.resign_yn = resign_yn;
-        this.group_key = group_key;
-    }
-
-
 }

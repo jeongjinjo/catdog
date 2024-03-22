@@ -2,6 +2,8 @@ package com.example.catdog.care_group;
 
 import com.example.catdog.care_target.CareTargetRepository;
 import com.example.catdog.care_target.Care_target;
+import com.example.catdog.enum_column.Resign_yn;
+import com.example.catdog.enum_column.Role;
 import com.example.catdog.exception.ErrorCode;
 import com.example.catdog.exception.MemberExcption;
 import com.example.catdog.member.Member;
@@ -34,7 +36,6 @@ public class GroupService {
         }
         // 가져온 그룹 리스트를 group_class를 기준으로 그룹화.
         for (Care_group careGroup : careGroups.get()) {
-            Optional<Member> member = memberRepository.findByMemberId(careGroup.getMember().getMember_id());
             int groupClass = careGroup.getGroup_key();
 
             if (!groupedByClass.containsKey(groupClass)) {
@@ -68,9 +69,42 @@ public class GroupService {
         return petInformationByGroup;
     }
 
+    // 그룹 등록 ( eunae )
+    @Transactional
     public int careGroupAndTagetInsert(Care_group careGroup) {
+        int result = 0;
+
+        // 1. HOST인 주인장의 정보와 그룹을 만든다
+        //   1.1. 근데 그룹이 3개 이상이면 INSERT 못하게 해야하잖아?
+        Long groupCount = groupRepository.countByMemberIdAndResignYn(careGroup.getMember().getMember_id());
+        if(groupCount > 2L) {
+            throw new MemberExcption(ErrorCode.GROUP_REGISTRATION_RESTRICTIONS);
+        }
+        //   1.2. 그룹 정상 등록
+        careGroup.setGroup_num(groupRepository.findNextGroupNum());
+        careGroup.setRole(Role.HOST);
+        careGroup.setResign_yn(Resign_yn.N);
+        careGroup.setGroup_key(groupRepository.findNextGroupNum());
+        Care_group cg = groupRepository.save(careGroup);
+
+        // 2. 1번이 정상적으로 진행되면 그룹에 GUEST를 넣어준다.
+        Optional<Care_group> findCgInfo
+                = groupRepository.findGoupHostInfo(careGroup.getMember().getMember_id(), groupRepository.findNextGroupNum());
+        //   2.1. 등록이 되지 않았다면 예외처리
+        if(findCgInfo.isEmpty()) {
+            throw new MemberExcption(ErrorCode.NOT_FOUND);
+        }
+        //   2.2. GUEST를 최대 3명까지 등록할 수 있도록 진행하기
 
 
-        return 0;
+        // 3. 2번이 정상적으로 진행되면 그룹에 등록할 반려동물을 등록해준다.
+
+        if(cg != null) {
+            result = 1;
+        }
+
+
+
+        return result;
     }
 }
