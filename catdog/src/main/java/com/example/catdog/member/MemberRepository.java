@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -42,6 +43,17 @@ public interface MemberRepository extends JpaRepository<Member, String> {
                             @Param("member_id") String member_id
                             );
 
-
+    // 로그인 한 사람의 그룹별 회원닉네임 정보 ( gayoung )
+    @Query(value = "SELECT c.group_key, m.nickname " +
+            "FROM Member m " +
+            "JOIN Care_group c ON m.member_id=c.member_id " +
+            "WHERE c.group_key IN ( " +
+            "   SELECT group_key " +
+            "   FROM Care_group " +
+            "   WHERE member_id=:id " +
+            ") " +
+            "AND m.resign_yn='N'"
+    )
+    public Optional<List<Object[]>> findByGroupMember(@Param("id") String id);
 
 }
