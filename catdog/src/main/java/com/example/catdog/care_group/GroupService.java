@@ -4,6 +4,8 @@ import com.example.catdog.care_target.CareTargetRepository;
 import com.example.catdog.care_target.Care_target;
 import com.example.catdog.exception.ErrorCode;
 import com.example.catdog.exception.MemberExcption;
+import com.example.catdog.member.Member;
+import com.example.catdog.member.MemberRepository;
 import com.example.catdog.pet.Pet;
 import com.example.catdog.pet.PetRepository;
 import jakarta.transaction.Transactional;
@@ -18,6 +20,7 @@ public class GroupService {
     private final GroupRepository groupRepository;
     private final PetRepository petRepository;
     private final CareTargetRepository careTargetRepository;
+    private final MemberRepository memberRepository;
 
     // 유저가 속해있는 그룹과 그룹에 속해있는 유저 조회 ( eunae )
     public Map<Integer, List<Care_group>> groupList(String memberId) {
@@ -26,17 +29,18 @@ public class GroupService {
 
         // 특정 memberId가 멤버가 속한 그룹 리스트를 가져옴.
         Optional<List<Care_group>> careGroups = groupRepository.findByClassNumGrouped(memberId);
-
         if(careGroups.isEmpty()) {
             throw new MemberExcption(ErrorCode.NOT_FOUND);
         }
-
         // 가져온 그룹 리스트를 group_class를 기준으로 그룹화.
         for (Care_group careGroup : careGroups.get()) {
+            Optional<Member> member = memberRepository.findByMemberId(careGroup.getMember().getMember_id());
             int groupClass = careGroup.getGroup_key();
+
             if (!groupedByClass.containsKey(groupClass)) {
                 groupedByClass.put(groupClass, new ArrayList<>());
             }
+
             groupedByClass.get(groupClass).add(careGroup);
         }
 
@@ -62,5 +66,11 @@ public class GroupService {
         }
 
         return petInformationByGroup;
+    }
+
+    public int careGroupAndTagetInsert(Care_group careGroup) {
+
+
+        return 0;
     }
 }

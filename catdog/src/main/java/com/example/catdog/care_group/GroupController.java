@@ -5,7 +5,9 @@ import com.example.catdog.member.MemberService;
 import com.example.catdog.pet.Pet;
 import com.example.catdog.pet.PetDto;
 import com.example.catdog.pet.PetService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -71,4 +73,16 @@ public class GroupController {
         Map<Integer,List<Pet>> list = groupService.getGroupInfoPet(id);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(list);
     }
+
+//    @PostMapping()
+//    public ResponseEntity<Integer> careGroupAndTagetInsert(@Valid @RequestBody GroupDTO groupDTO) {
+//        ModelMapper mapper = new ModelMapper();
+//        Care_group careGroup = mapper.map(groupDTO, Care_group.class);
+//
+//        int result = groupService.careGroupAndTagetInsert(careGroup);
+//
+//        return ResponseEntity.status(HttpStatus.ACCEPTED).body(result);
+//    }
+
+
 }
