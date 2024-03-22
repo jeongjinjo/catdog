@@ -1,5 +1,6 @@
 package com.example.catdog.member;
 
+import com.example.catdog.care_group.Care_group;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

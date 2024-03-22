@@ -2,9 +2,12 @@ package com.example.catdog.care_group;
 
 import com.example.catdog.enum_column.Resign_yn;
 import com.example.catdog.enum_column.Role;
+import com.example.catdog.member.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 @Entity
@@ -17,8 +20,8 @@ public class Care_group {
     @Column(length = 100)
     private String group_name;
 
-    @Column(length = 100)
-    private String member_id;
+//    @Column(length = 100)
+//    private String member_id;
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -28,21 +31,22 @@ public class Care_group {
 
     private int group_key;
 
-    // member JOIN시 필요한 필드명
-    private String name;
-    private String nickname;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="member_id")
+    private Member member;
+
 
     public Care_group() {}
 
-    public Care_group(int group_num, Role role, String member_id, int group_key
-                        , String name, String nickname, String group_name, Resign_yn resign_yn) {
-        this.group_num = group_num;
-        this.role = role;
-        this.member_id = member_id;
-        this.group_key = group_key;
-        this.name = name;
-        this.nickname = nickname;
+    // 다른 방법이 있을 거 같은데.. ㅠ.ㅠ
+    public Care_group(String group_name, Member member, Role role, Resign_yn resign_yn, int group_key) {
         this.group_name = group_name;
+//        this.member_id = member;
+        this.member = member;
+        this.role = role;
+        this.resign_yn = resign_yn;
+        this.group_key = group_key;
     }
+
 
 }

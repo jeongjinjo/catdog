@@ -1,5 +1,6 @@
 package com.example.catdog.member;
 
+import com.example.catdog.care_group.Care_group;
 import com.example.catdog.enum_column.Resign_yn;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -30,10 +31,17 @@ public class Member {
 
     private String phone_num;
 
+
     // 비밀번호 변경될 값
 //    private String passwordUpdate;
 
     public Member() {}
+
+    public Member(String member_id, String nickname, String name) {
+        this.member_id = member_id;
+        this.nickname = nickname;
+        this.name = name;
+    }
 
     public Member(String member_id, String password, String name, String nickname, String phone_num, Resign_yn resign_yn) {
         this.member_id = member_id;

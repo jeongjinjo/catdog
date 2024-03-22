@@ -12,7 +12,6 @@ import lombok.ToString;
 @Setter
 @ToString
 public class GroupDTO {
-    @NotBlank(message = "필수 입력 값")
     private int group_num;
 
     @NotBlank(message = "필수 입력 값")
