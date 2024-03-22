@@ -37,10 +37,10 @@ public interface PetRepository extends JpaRepository<Pet, Integer> {
             "   FROM Care_group a " +
             "   JOIN Care_target b ON a.group_key=b.group_num " +
             "   WHERE a.member.member_id = :id " +
-            "     AND p.resign_yn = 'N'"
+            "     AND p.resign_yn = 'N'" +
             ")"
     )
-    public List<Object[]> findByGroupInfoPet(@Param("id") String id);
+    public Optional<List<Object[]>> findByGroupInfoPet(@Param("id") String id);
 
 
     // 로그인 한 사람의 그룹별 반려동물 정보 ( eunae )

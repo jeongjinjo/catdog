@@ -61,11 +61,11 @@ public interface MemberRepository extends JpaRepository<Member, String> {
     // 로그인 한 사람의 그룹별 회원닉네임 정보 ( gayoung )
     @Query(value = "SELECT c.group_key, m.nickname " +
             "FROM Member m " +
-            "JOIN Care_group c ON m.member_id=c.member_id " +
+            "JOIN Care_group c ON m.member_id=c.member.member_id " +
             "WHERE c.group_key IN ( " +
-            "   SELECT group_key " +
-            "   FROM Care_group " +
-            "   WHERE member_id=:id " +
+            "   SELECT cg.group_key " +
+            "   FROM Care_group cg" +
+            "   WHERE cg.member.member_id=:id " +
             ") " +
             "AND m.resign_yn='N'"
     )
