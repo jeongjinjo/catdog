@@ -7,6 +7,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -14,7 +16,7 @@ import java.util.Optional;
 public class MemberService {
     private final MemberRepository memberRepository;
 
-    // 내 정보 확인
+    // 내 정보 확인 ( eunae )
     public Member getInfo(String id) {
         Optional<Member> member = memberRepository.findByMemberId(id);
 
@@ -26,7 +28,7 @@ public class MemberService {
     }
 
     @Transactional
-    // 내 정보 수정
+    // 내 정보 수정 ( eunae )
     public int myInfoUpdate(Member member, String passwordUpdate) {
         Optional<Member> mem = memberRepository.findByMemberIdAndPassword(member.getMember_id(), member.getPassword());
 
@@ -46,7 +48,7 @@ public class MemberService {
         return result;
     }
 
-    // 회원탈퇴
+    // 회원탈퇴 ( eunae )
     public Member signOut(String id) {
         Optional<Member> member = memberRepository.findByMemberId(id);
 
@@ -65,7 +67,7 @@ public class MemberService {
         return db;
     }
 
-    // 비밀번호 확인
+    // 비밀번호 확인 ( eunae )
     public Member pwCheck(String id, String pw) {
         Optional<Member> member = memberRepository.findByMemberIdAndPassword(id, pw);
 
@@ -74,6 +76,11 @@ public class MemberService {
         }
 
         return member.get();
+    }
+
+    // 멤버 그룹 초대 ( eunae )
+    public List<Member> memberGroupInvite(String member_id, String search_id) {
+        return memberRepository.memberGroupInvite(member_id, search_id);
     }
 
 //    private final PasswordEncoder passwordEncoder;

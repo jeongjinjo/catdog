@@ -18,4 +18,12 @@ public class Care_target {
     private int care_num;
     private int group_num;
     private int pet_num;
+
+    // 생성자
+    public Care_target() {}
+
+    public Care_target(int group_num) {
+        this.group_num = group_num;
+    }
+
 }
