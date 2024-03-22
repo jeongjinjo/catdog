@@ -1,5 +1,6 @@
 package com.example.catdog.pet;
 
+import com.example.catdog.member.Member;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,19 @@ public class PetController {
     private PetService petService;
     @Autowired
     private PetRepository petRepository;
-    //반려동물 전체 조회
-    //굳이 필요 함? ? ? ? ?   그냥 id로 조회하면되잖음..? 전체 조회할 일이 있을까
 
-    // id를 통해 반려동물 조회 (id가 중복 허용이 안되니까..) 이게 편할 듯 id가 pet_num과 연결.
+//    @Autowired
+//    private Member member;
+
+    //id당 등록된 반려동물 조회 기능 (member_id가 pet_name이 외래키로 연결)
+//    @GetMapping("/select/{member_id}")
+//    public ResponseEntity<Pet> getPetById(
+//
+//    )
+
+
+
+    // id의 pet_num 을 이용해 pet의 정보 조회(개별적으로 조회 하는 기능)
     @GetMapping("/select/{pet_num}")
     public ResponseEntity<Pet> getPet(@PathVariable int pet_num) {
         Pet pet = petService.getPetById(pet_num);

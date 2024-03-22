@@ -45,7 +45,6 @@ public interface MemberRepository extends JpaRepository<Member, String> {
                             @Param("phone_num") String phone_num,
                             @Param("member_id") String member_id
                             );
-
     /**
      * 그룹 초대 ( 나 제외 )
      * @param member_id 로그인한 아이디, 검색에서 제외시킴
@@ -59,5 +58,17 @@ public interface MemberRepository extends JpaRepository<Member, String> {
                     " AND m.resign_yn = 'N'")
     public List<Member> memberGroupInvite(@Param("member_id") String member_id, @Param("search_id") String search_id);
 
+    // 로그인 한 사람의 그룹별 회원닉네임 정보 ( gayoung )
+    @Query(value = "SELECT c.group_key, m.nickname " +
+            "FROM Member m " +
+            "JOIN Care_group c ON m.member_id=c.member_id " +
+            "WHERE c.group_key IN ( " +
+            "   SELECT group_key " +
+            "   FROM Care_group " +
+            "   WHERE member_id=:id " +
+            ") " +
+            "AND m.resign_yn='N'"
+    )
+    public Optional<List<Object[]>> findByGroupMember(@Param("id") String id);
 
 }
