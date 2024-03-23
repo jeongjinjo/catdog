@@ -1,4 +1,4 @@
-package com.example.catdog.care_group;
+package com.example.catdog.careGroup;
 
 import com.example.catdog.enum_column.Resign_yn;
 import com.example.catdog.enum_column.Role;
@@ -7,6 +7,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -26,5 +28,5 @@ public class GroupDTO {
 
     private Resign_yn resign_yn;
 
-    private int group_key;
+    private List<Integer> group_key;
 }

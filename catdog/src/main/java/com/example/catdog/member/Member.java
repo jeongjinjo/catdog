@@ -1,12 +1,9 @@
 package com.example.catdog.member;
 
-import com.example.catdog.care_group.Care_group;
 import com.example.catdog.enum_column.Resign_yn;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -14,11 +11,13 @@ import java.util.UUID;
 @Getter
 @Setter
 @ToString
+@Table(name = "member")
 public class Member {
     @Id
     @Column(nullable = false)
     private String member_id = UUID.randomUUID().toString();
 
+    @JsonIgnore
     private String password;
 
     @Column(unique = true)
@@ -32,24 +31,14 @@ public class Member {
     private String phone_num;
 
 
-    // 비밀번호 변경될 값
-//    private String passwordUpdate;
-
     public Member() {}
 
-    public Member(String member_id, String nickname, String name) {
-        this.member_id = member_id;
-        this.nickname = nickname;
-        this.name = name;
-    }
-
-    public Member(String member_id, String password, String name, String nickname, String phone_num, Resign_yn resign_yn) {
+    public Member(String member_id, String password, String nickname, String name, Resign_yn resign_yn, String phone_num) {
         this.member_id = member_id;
         this.password = password;
-        this.name = name;
         this.nickname = nickname;
-        this.phone_num = phone_num;
+        this.name = name;
         this.resign_yn = resign_yn;
+        this.phone_num = phone_num;
     }
-
 }

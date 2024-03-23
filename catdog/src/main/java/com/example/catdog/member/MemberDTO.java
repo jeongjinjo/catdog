@@ -32,7 +32,6 @@ public class MemberDTO {
     private String phone_num;
 
     // 비밀번호 변경될 값
-    @Size(min = 4, max = 100, message = "패스워드의 크기는 4에서 100 사이여야 합니다.")
     private String passwordUpdate;
 }
 //    @Pattern(regexp="^[a-zA-Z]+$", message="영어만 사용이 가능합니다.")

@@ -1,6 +1,5 @@
 package com.example.catdog.member;
 
-import com.example.catdog.care_group.Care_group;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -12,7 +11,14 @@ import java.util.Optional;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member, String> {
-    @Query(value = "SELECT new com.example.catdog.member.Member(m.member_id, m.password, m.name, m.nickname, m.phone_num, m.resign_yn) " +
+    @Query(value = "SELECT new com.example.catdog.member.Member(" +
+                        "m.member_id" +
+                        ", m.password" +
+                        ", m.nickname" +
+                        ", m.name" +
+                        ", m.resign_yn" +
+                        ", m.phone_num" +
+                    ") " +
             " FROM Member m " +
             "WHERE m.member_id = :member_id " +
             "  AND m.password = :password")
@@ -21,10 +27,10 @@ public interface MemberRepository extends JpaRepository<Member, String> {
     @Query(value = "SELECT new com.example.catdog.member.Member(" +
                                   "m.member_id" +
                                 ", m.password" +
-                                ", m.name" +
                                 ", m.nickname" +
-                                ", m.phone_num" +
+                                ", m.name" +
                                 ", m.resign_yn" +
+                                ", m.phone_num" +
                             ") " +
                     " FROM Member m " +
                     "WHERE m.member_id = :member_id")
@@ -59,15 +65,16 @@ public interface MemberRepository extends JpaRepository<Member, String> {
     public List<Member> memberGroupInvite(@Param("member_id") String member_id, @Param("search_id") String search_id);
 
     // 로그인 한 사람의 그룹별 회원닉네임 정보 ( gayoung )
-    @Query(value = "SELECT c.group_key, m.nickname " +
-            "FROM Member m " +
-            "JOIN Care_group c ON m.member_id=c.member.member_id " +
-            "WHERE c.group_key IN ( " +
-            "   SELECT cg.group_key " +
-            "   FROM Care_group cg" +
-            "   WHERE cg.member.member_id=:id " +
-            ") " +
-            "AND m.resign_yn='N'"
+    @Query(value = "SELECT m.nickname, cgm.careGroup.group_num " +
+            "  FROM Member m " +
+            "  JOIN CareGroupMember cgm " +
+            "    ON m.member_id = cgm.member.member_id " +
+            " WHERE cgm.careGroup.group_num IN ( " +
+            " SELECT cgm2.careGroup.group_num " +
+            "   FROM CareGroupMember cgm2 " +
+            " WHERE cgm2.member.member_id = :id" +
+            ")" +
+            "   AND m.resign_yn = 'N'"
     )
     public Optional<List<Object[]>> findByGroupMember(@Param("id") String id);
 
