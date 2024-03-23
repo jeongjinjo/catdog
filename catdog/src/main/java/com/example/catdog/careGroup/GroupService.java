@@ -1,16 +1,20 @@
 package com.example.catdog.careGroup;
 
 import com.example.catdog.careGroup.member.CareGroupMember;
+import com.example.catdog.careGroup.member.CareGroupMemberDTO;
 import com.example.catdog.careGroup.member.CareGroupMemberRepository;
+import com.example.catdog.careGroup.target.CareTargetDTO;
 import com.example.catdog.careGroup.target.CareTargetRepository;
 import com.example.catdog.careGroup.target.CareTarget;
 import com.example.catdog.enum_column.Resign_yn;
+import com.example.catdog.enum_column.Role;
+import com.example.catdog.exception.CareGroupException;
 import com.example.catdog.exception.ErrorCode;
-import com.example.catdog.exception.MemberExcption;
 import com.example.catdog.pet.Pet;
 import com.example.catdog.pet.PetRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -31,7 +35,7 @@ public class GroupService {
         // 특정 memberId가 멤버가 속한 그룹 리스트를 가져옴.
         Optional<List<CareGroupMember>> careGroups = careGroupMemberRepository.findByGroup(memberId);
         if(careGroups.isEmpty()) {
-            throw new MemberExcption(ErrorCode.NOT_FOUND);
+            throw new CareGroupException(ErrorCode.NOT_FOUND);
         }
         // 가져온 그룹 리스트를 group_class를 기준으로 그룹화.
         for (CareGroupMember careGroup : careGroups.get()) {
@@ -70,47 +74,80 @@ public class GroupService {
 
     // 그룹 등록 ( eunae )
     @Transactional
-    public int groupInsert(CareGroup careGroup, String id) {
-
+    public int groupInsert(CareGroup careGroup, List<String> memberId, List<Integer> petNum, String currentMemberId) {
         int result = 0;
-        // 1. 주인장이 그룹을 3개 가지고 있으면 등록을 못하게 해야해
-        int groupCount = careGroupMemberRepository.countByMemberIdAndResignYn(id);
 
-        if(groupCount > 3) {
-            throw new MemberExcption(ErrorCode.GROUP_REGISTRATION_RESTRICTIONS);
+        // NOTE 예외처리
+        // CHECK 1. 로그인한 사람이 그룹을 3개 가지고 있으면 등록을 못하게 하기.
+        int groupCount = careGroupMemberRepository.countByMemberIdAndResignYn(currentMemberId);
+        if(groupCount >= 3) {
+            result = -1;
+            throw new CareGroupException(ErrorCode.GROUP_REGISTRATION_RESTRICTIONS);
         }
 
-        // 2. admin인 주인장이 그룹을 만들어
-        //  2.1. 그룹 등록
+        // CHECK 2. 등록할 사람이 하나도 없다면?
+        if(memberId.size() == 0) {
+            result = -1;
+            throw new CareGroupException(ErrorCode.MEMBER_NOT_FOUND);
+        }
+
+        // CHECK 3.그룹내에 몇 명을 집어넣을건지 확인한다.
+        if(memberId.size() > 4) {
+            result = -1;
+            throw new CareGroupException(ErrorCode.LIMITED_NUMBER_OF_MEMBER_REGISTERED);
+        }
+        // CHECK 4. 그룹내에 몇 마리의 반려동물을 집어넣을건지 확인한다.
+        if(petNum.size() > 5) {
+            result = -1;
+            throw new CareGroupException(ErrorCode.PET_REGISTRATION_RESTRICTIONS);
+        }
+
+        // NOTE * INSERT START *
+        // 1. 그룹 등록
         careGroup.setResign_yn(Resign_yn.N);
-        CareGroup groupInsert = groupRepository.save(careGroup);
+        groupRepository.save(careGroup);
+        CareGroup groupNum = groupRepository.findByLastGroupNumIsCareGroupType();
 
-        //  2.2. 그룹에 사람 집어넣기
-        List<CareGroupMember> careGroupMember = new ArrayList<>();
+        //  2. 그룹에 사람 집어넣기
+        List<CareGroupMember> careGroupMemberInsert = new ArrayList<>();
+        for(String member : memberId) {
+            String role = String.valueOf(Role.guest);
+            if(member.equals(currentMemberId)) {
+                role = String.valueOf(Role.admin);
+            }
 
-        // group_num 반환 받아서 사용하기
+            CareGroupMemberDTO cgmDTO = CareGroupMemberDTO
+                                                    .builder()
+                                                        .groupNum(groupNum)
+                                                        .member_id(member)
+                                                        .role(Role.valueOf(role))
+                                                        .resign_yn(Resign_yn.N)
+                                                    .build();
+            ModelMapper mapper = new ModelMapper();
+            CareGroupMember careGroupMember = mapper.map(cgmDTO, CareGroupMember.class);
+            careGroupMemberInsert.add(careGroupMember);
+        }
+        careGroupMemberRepository.saveAll(careGroupMemberInsert);
+
+        // 3. 반려동물 등록
+        if(petNum.size() != 0) {
+            List<CareTarget> careTargetInsert = new ArrayList<>();
+            int CareTargetInsertGroupNum = groupNum.getGroup_num();
+            for(int pet : petNum) {
+                CareTargetDTO ctDTO = CareTargetDTO
+                        .builder()
+                        .group_num(CareTargetInsertGroupNum)
+                        .pet_num(pet)
+                        .build();
+                ModelMapper mapper = new ModelMapper();
+                CareTarget careTarget =  mapper.map(ctDTO, CareTarget.class);
+                careTargetInsert.add(careTarget);
+            }
+            careTargetRepository.saveAll(careTargetInsert);
+        }
 
 
-
-        // 2. HOST인 주인장의 정보와 그룹을 만든다
-//        //   1.2. 그룹 정상 등록
-//        careGroup.setResign_yn(Resign_yn.N);
-//        CareGroup cg = groupRepository.save(careGroup);
-//
-//        // 2. 1번이 정상적으로 진행되면 그룹에 GUEST를 넣어준다.
-//        Optional<CareGroup> findCgInfo
-//                = groupRepository.findGoupHostInfo(careGroup.getMember().getMember_id(), groupRepository.findNextGroupNum());
-//
-//
-//
-//
-//        // 3. 2번이 정상적으로 진행되면 그룹에 등록할 반려동물을 등록해준다.
-//
-//        if(cg != null) {
-//            result = 1;
-//        }
-
-
+        result = 1;
 
         return result;
     }

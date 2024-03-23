@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface CareTargetRepository extends JpaRepository<CareGroup, Integer> {
+public interface CareTargetRepository extends JpaRepository<CareTarget, Integer> {
 
     @Query(value = "SELECT new com.example.catdog.careGroup.target.CareTarget(ct.group_num) " +
                     " FROM CareTarget ct " +

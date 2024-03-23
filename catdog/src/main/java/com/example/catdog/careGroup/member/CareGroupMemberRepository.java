@@ -27,7 +27,7 @@ public interface CareGroupMemberRepository extends JpaRepository<CareGroupMember
             )
     Optional<List<CareGroupMember>> findByGroup(@Param("member_id") String memberId);
 
-    // 로그인한 유저의 그룹 개수 확인 ( eunae )
+    // NOTE 로그인한 유저의 그룹 개수 확인 ( eunae )
     @Query("SELECT COUNT(*) " +
             "FROM CareGroupMember cgm " +
             "WHERE cgm.member.member_id = :member_id " +

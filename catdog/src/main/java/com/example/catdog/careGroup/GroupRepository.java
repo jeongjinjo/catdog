@@ -9,16 +9,10 @@ import java.util.Optional;
 
 @Repository
 public interface GroupRepository extends JpaRepository<CareGroup, Integer> {
-
-    /** 등록한 그룹 찾기 ( eunae )
-     *
-     * @param memberId 권한이 HOST인 member_id(로그인 한 유저)
-     * @param groupNum 등록된 그룹의 그룹 번호
-     * @return
-     */
-//    @Query(value = "")
-//    public Optional<CareGroup> findGroupHostInfo(@Param("memberId") String memberId, @Param("groupNum") int groupNum);
-
-
-
+    // NOTE 그룹의 마지막 그룹 번호 가져오기
+    @Query(value = "SELECT new com.example.catdog.careGroup.CareGroup(cg.group_num) " +
+                    "  FROM CareGroup cg " +
+                    " ORDER BY cg.group_num DESC " +
+                    " LIMIT 1")
+    CareGroup findByLastGroupNumIsCareGroupType();
 }

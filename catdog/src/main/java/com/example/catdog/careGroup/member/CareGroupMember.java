@@ -16,11 +16,11 @@ public class CareGroupMember {
     private int group_member_num;
 
     @OneToOne
-    @JoinColumn(name="group_num")
+    @JoinColumn(name="group_num", unique = true)
     private CareGroup careGroup;
 
     @OneToOne
-    @JoinColumn(name="member_id")
+    @JoinColumn(name="member_id", unique = true)
     private Member member;
 
     @Enumerated(EnumType.STRING)
