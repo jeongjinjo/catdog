@@ -20,7 +20,8 @@ public class TodoController {
 
     @GetMapping("{id}")
     public ResponseEntity<Map<Integer, List<Object>>> todolist(@PathVariable String id){
-        Map<Integer, List<Object>> todolists = todoService.get(id);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(todolists);
+//        Map<Integer, List<Object>> todolists = todoService.get(id);
+        // ResponseEntity.status(HttpStatus.ACCEPTED).body(todolists);
+        return null;
     }
 }
