@@ -1,10 +1,8 @@
-package com.example.catdog.care_target;
+package com.example.catdog.careGroup.target;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
-import java.util.List;
 
 @Getter
 @Setter

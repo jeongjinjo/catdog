@@ -1,9 +1,6 @@
-package com.example.catdog.care_target;
+package com.example.catdog.careGroup.target;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -12,17 +9,20 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class Care_target {
+@Table(name = "care_target")
+public class CareTarget {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int care_num;
+
     private int group_num;
+
     private int pet_num;
 
     // 생성자
-    public Care_target() {}
+    public CareTarget() {}
 
-    public Care_target(int group_num) {
+    public CareTarget(int group_num) {
         this.group_num = group_num;
     }
 

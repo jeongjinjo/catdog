@@ -19,23 +19,23 @@ public class MainService {
 
     // 로그인 한 회원의 그룹별 반려동물 정보
     public Map<Integer, List<Object>> getGroupInfoPet(String id){
-        Optional<List<Object[]>> petInfo = petRepository.findByGroupInfoPet(id);
+//        Optional<List<Object[]>> petInfo = petRepository.findByGroupInfoPet(id);
         Map<Integer, List<Object>> groupPets = new HashMap<>();
-
-        for(Object[] info : petInfo.get()){
-            Integer groupName = (Integer) info[0];
-
-            Pet pet = new Pet();
-
-            pet.setPet_name((String) info[1]);
-            pet.setGender((Gender) info[2]);
-            pet.setAge((Integer) info[3]);
-            pet.setDisease((String) info[4]);
-
-            groupPets.putIfAbsent(groupName, new ArrayList<>());
-
-            groupPets.get(groupName).add(pet);
-        }
+//
+//        for(Object[] info : petInfo.get()){
+//            Integer groupName = (Integer) info[0];
+//
+//            Pet pet = new Pet();
+//
+//            pet.setPet_name((String) info[1]);
+//            pet.setGender((Gender) info[2]);
+//            pet.setAge((Integer) info[3]);
+//            pet.setDisease((String) info[4]);
+//
+//            groupPets.putIfAbsent(groupName, new ArrayList<>());
+//
+//            groupPets.get(groupName).add(pet);
+//        }
         return groupPets;
     }
     // 로그인 한 회원이 속한 그룹의 그룹별 회원닉네임

@@ -1,4 +1,4 @@
-package com.example.catdog.care_group;
+package com.example.catdog.careGroup;
 
 import com.example.catdog.enum_column.Resign_yn;
 import com.example.catdog.enum_column.Role;

@@ -30,21 +30,25 @@ public class MemberService {
     @Transactional
     // 내 정보 수정 ( eunae )
     public int myInfoUpdate(Member member, String passwordUpdate) {
+        String password = passwordUpdate;
         Optional<Member> mem = memberRepository.findByMemberIdAndPassword(member.getMember_id(), member.getPassword());
 
         if(mem.isEmpty()) {
             throw new MemberExcption(ErrorCode.PASSWORD_NOT_MATCH);
         }
 
+        // 패스워드를 바꾸지 않고 다른 정보를 바꾸는거라면?
+        if(passwordUpdate == null || passwordUpdate.equals("") || passwordUpdate == "") {
+            password = member.getPassword();
+        }
+
         int result = memberRepository.myInfoUpdate(
                                         member.getName(),
                                         member.getNickname(),
-                                        passwordUpdate,
+                                        password,
                                         member.getPhone_num(),
                                         member.getMember_id()
                         );
-
-//        Member db = memberRepository.save(mem.get());
         return result;
     }
 

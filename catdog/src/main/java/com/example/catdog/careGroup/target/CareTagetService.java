@@ -1,10 +1,7 @@
-package com.example.catdog.care_target;
+package com.example.catdog.careGroup.target;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

@@ -1,12 +1,9 @@
 package com.example.catdog.pet;
 
-import com.example.catdog.care_target.Care_target;
 import com.example.catdog.enum_column.Gender;
 import com.example.catdog.enum_column.Type;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.List;
 
 @Entity // 이 클래스가 JPA 앤티티임을 나타낸다. JPA가 이 클래스와 데이터베이스 테이블 간의 매핑을 수행한다.
 @Getter

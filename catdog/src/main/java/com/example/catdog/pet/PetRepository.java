@@ -16,47 +16,49 @@ public interface PetRepository extends JpaRepository<Pet, Integer> {
 
     // 그룹에 등록되지 않은 펫 확인하기 ( eunae )
     @Query(value = "SELECT p " +
-                    " FROM Pet p " +
-                    "WHERE NOT EXISTS (" +
-                                "    SELECT 1 " +
-                                "      FROM Care_target c " +
-                                "     WHERE c.pet_num = p.pet_num " +
-                                ") " +
-                    "  AND p.member_id = :id"
+            " FROM Pet p " +
+            "WHERE NOT EXISTS (" +
+            "    SELECT 1 " +
+            "      FROM CareTarget c " +
+            "     WHERE c.pet_num = p.pet_num " +
+            ") " +
+            "  AND p.member_id = :id"
     )
     public List<Pet> findByGroupNotInPet(@Param("id") String id);
 
     // 로그인 한 사람의 그룹별 반려동물 정보 ( gayoung )
-    @Query(value = "SELECT DISTINCT c.group_num, p.pet_name, p.gender, p.age, p.disease " +
-            "FROM Pet p " +
-            "JOIN Member m ON m.member_id=p.member_id " +
-            "JOIN Care_target c ON c.pet_num=p.pet_num " +
-            "JOIN Care_group g ON g.group_key=c.group_num " +
-            "WHERE c.group_num IN ( " +
-            "   SELECT a.group_key " +
-            "   FROM Care_group a " +
-            "   JOIN Care_target b ON a.group_key=b.group_num " +
-            "   WHERE a.member.member_id = :id " +
-            "     AND p.resign_yn = 'N'" +
-            ")"
-    )
-    public Optional<List<Object[]>> findByGroupInfoPet(@Param("id") String id);
+//    @Query(value = "SELECT DISTINCT c.group_num, p.pet_name, p.gender, p.age, p.disease " +
+//            "FROM Pet p " +
+//            "JOIN Member m ON m.member_id=p.member_id " +
+//            "JOIN CareTarget c ON c.pet_num=p.pet_num " +
+//            "JOIN CareGroup g ON g.group_key=c.group_num " +
+//            "WHERE c.group_num IN ( " +
+//            "   SELECT a.group_key " +
+//            "   FROM CareGroup a " +
+//            "   JOIN CareTarget b ON a.group_key=b.group_num " +
+//            "   WHERE a.member.member_id = :id " +
+//            "     AND p.resign_yn = 'N'" +
+//            ")"
+//    )
+//    public Optional<List<Object[]>> findByGroupInfoPet(@Param("id") String id);
 
 
     // 로그인 한 사람의 그룹별 반려동물 정보 ( eunae )
     @Query(value = "SELECT new com.example.catdog.pet.Pet(p.pet_num, p.type, p.type_detail, p.pet_name, p.age, p.kg, p.disease, p.resign_yn, p.gender, p.member_id) " +
-                    " FROM Pet p " +
-                    " JOIN Care_target ct " +
-                    "   ON p.pet_num = ct.pet_num " +
-                    "WHERE ct.group_num IN (  " +
-                        "   SELECT cg.group_key  " +
-                        "     FROM Care_group cg " +
-                        "     JOIN Care_target ct2" +
-                        "       ON cg.group_key = ct2.group_num " +
-                        "    WHERE cg.member.member_id = :member_id " +
-                        "      AND cg.resign_yn = 'N' " +
-                        ") " +
-                    "  AND p.resign_yn = 'N'"
+            " FROM Pet p " +
+            "  JOIN CareTarget ct " +
+            "    ON ct.pet_num = p.pet_num " +
+            " WHERE ct.group_num IN (" +
+            "   SELECT cg.group_num " +
+            "     FROM CareGroup cg " +
+            "     JOIN CareTarget ct2 " +
+            "       ON cg.group_num = ct2.group_num " +
+            "     JOIN CareGroupMember cgm " +
+            "       ON cgm.careGroup.group_num = cg.group_num " +
+            "    WHERE cgm.member.member_id = :member_id " +
+            "      AND cgm.resign_yn = 'N' " +
+            ")  " +
+            "AND p.resign_yn = 'N'"
     )
     public List<Pet> getGroupInfoPet(@Param("member_id") String member_id);
 
