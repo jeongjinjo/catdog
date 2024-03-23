@@ -1,6 +1,5 @@
 package com.example.catdog.pet;
 
-import com.example.catdog.member.Member;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +34,7 @@ public class PetController {
     }
     //애완동물 등록
     @PostMapping("/insert")
-    public ResponseEntity<Pet> addPet(@Valid @RequestBody PetDto petDto) {
+    public ResponseEntity<Pet> addPet(@Valid @RequestBody PetDTO petDto) {
         //클라이언트가 전송한 요청을 UserDto 객체로 받아온다..
         //@RequestBody는 HTTP 요청 본문을 해당 객체로 변환.
         //@Valid 는 UserDto 객체의 유효성 검사를 수행한다.
@@ -49,12 +48,12 @@ public class PetController {
     }
     //수정
     @PutMapping("/update/{pet_num}")
-    public ResponseEntity<Pet> updatePet(@RequestBody @Valid PetDto petDto) {
+    public ResponseEntity<Pet> updatePet(@RequestBody @Valid PetDTO petDto) {
         ModelMapper mapper=new ModelMapper();
         Pet pet=mapper.map(petDto,Pet.class);
 
         //Pet pet은 된게 없으니까 pet.getPet_num() 해서 Pet에 있는걸 가지고 와줘야함.
-        Pet dbPet=petService.updatePet(pet.getPet_num(),petDto); //getpet_num이 아니라 어떻게 getPet_num을 가지고 오는겨?! 물음표 ?!?!?
+        Pet dbPet=petService.updatePet(pet.getPet_num(), petDto); //getpet_num이 아니라 어떻게 getPet_num을 가지고 오는겨?! 물음표 ?!?!?
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(dbPet);
     }

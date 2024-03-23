@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PetDto {
+public class PetDTO {
 
     private int pet_num;
 
