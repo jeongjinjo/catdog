@@ -12,9 +12,11 @@ import lombok.ToString;
 @Setter
 @ToString
 public class CareGroupMemberDTO {
+    private int group_member_num;
+
     private int group_num;
 
-    private Member member;
+    private String member_id;
 
     private Role role;
 

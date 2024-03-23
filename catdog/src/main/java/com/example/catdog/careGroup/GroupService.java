@@ -4,6 +4,7 @@ import com.example.catdog.careGroup.member.CareGroupMember;
 import com.example.catdog.careGroup.member.CareGroupMemberRepository;
 import com.example.catdog.careGroup.target.CareTargetRepository;
 import com.example.catdog.careGroup.target.CareTarget;
+import com.example.catdog.enum_column.Resign_yn;
 import com.example.catdog.exception.ErrorCode;
 import com.example.catdog.exception.MemberExcption;
 import com.example.catdog.pet.Pet;
@@ -69,21 +70,29 @@ public class GroupService {
 
     // 그룹 등록 ( eunae )
     @Transactional
-    public int groupInsert(CareGroupMember careGroupMember) {
+    public int groupInsert(CareGroup careGroup, String id) {
 
         int result = 0;
         // 1. 주인장이 그룹을 3개 가지고 있으면 등록을 못하게 해야해
-        int gorupCount = careGroupMemberRepository.countByMemberIdAndResignYn(careGroupMember.getMember().getMember_id());
+        int groupCount = careGroupMemberRepository.countByMemberIdAndResignYn(id);
+
+        if(groupCount > 3) {
+            throw new MemberExcption(ErrorCode.GROUP_REGISTRATION_RESTRICTIONS);
+        }
+
         // 2. admin인 주인장이 그룹을 만들어
+        //  2.1. 그룹 등록
+        careGroup.setResign_yn(Resign_yn.N);
+        CareGroup groupInsert = groupRepository.save(careGroup);
+
+        //  2.2. 그룹에 사람 집어넣기
+        List<CareGroupMember> careGroupMember = new ArrayList<>();
+
+        // group_num 반환 받아서 사용하기
 
 
 
         // 2. HOST인 주인장의 정보와 그룹을 만든다
-        //   1.1. 근데 그룹이 3개 이상이면 INSERT 못하게 해야하잖아?
-//        Long groupCount = groupRepository.countByMemberIdAndResignYn(careGroup.getMember().getMember_id());
-//        if(groupCount > 2L) {
-//            throw new MemberExcption(ErrorCode.GROUP_REGISTRATION_RESTRICTIONS);
-//        }
 //        //   1.2. 그룹 정상 등록
 //        careGroup.setResign_yn(Resign_yn.N);
 //        CareGroup cg = groupRepository.save(careGroup);

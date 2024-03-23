@@ -61,11 +61,13 @@ public class GroupController {
     }
 
     // 그룹 등록
-    @PostMapping()
-    public ResponseEntity<Integer> careGroupAndTargetInsert(@Valid @RequestBody CareGroupMemberDTO careGroupMemberDTO) {
+    @PostMapping("{id}")
+    public ResponseEntity<Integer> careGroupAndTargetInsert(@Valid @RequestBody CareGroup careGroup,
+                                                            @PathVariable String id) {
+
         ModelMapper mapper = new ModelMapper();
-        CareGroupMember careGroupMember = mapper.map(careGroupMemberDTO, CareGroupMember.class);
-        int result = groupService.groupInsert(careGroupMember);
+        CareGroup careGroupDb = mapper.map(careGroup, CareGroup.class);
+        int result = groupService.groupInsert(careGroupDb, id);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(result);
     }
 

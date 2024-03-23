@@ -19,4 +19,6 @@ public interface GroupRepository extends JpaRepository<CareGroup, Integer> {
 //    @Query(value = "")
 //    public Optional<CareGroup> findGroupHostInfo(@Param("memberId") String memberId, @Param("groupNum") int groupNum);
 
+
+
 }
