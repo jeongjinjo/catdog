@@ -1,4 +1,4 @@
-package com.example.catdog.todo.dto;
+package com.example.catdog.todo;
 
 import com.example.catdog.enum_column.Comp_yn;
 import com.example.catdog.enum_column.Resign_yn;
@@ -19,7 +19,7 @@ public class TodoDTO {
     @NotBlank(message = "필수 입력 값")
     private int todo_num;
 
-    @Size(max = 255, message = "todo는 최대 255자까지만 입력이 가능합니다.")
+    @Size(max = 30, message = "todo는 최대 30자까지만 입력이 가능합니다.")
     private String todo;
 
     private Comp_yn comp_yn;

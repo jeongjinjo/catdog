@@ -30,5 +30,5 @@ public class Todo {
     private Resign_yn resign_yn;
 
     @Column(nullable = false)
-    private int group_num;
+    private int pet_num;
 }

@@ -1,4 +1,4 @@
-package com.example.catdog.todo.dto;
+package com.example.catdog.todo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Column;

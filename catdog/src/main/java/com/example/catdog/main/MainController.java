@@ -16,15 +16,15 @@ public class MainController {
     private final MainService mainService;
 
     // 로그인 한 회원의 그룹별 반려동물 정보
-    @GetMapping("/petInfo")
-    public ResponseEntity<Map<Integer, List<Object>>> getGroupPet(@RequestParam String id){
+    @GetMapping("{id}/petInfo")
+    public ResponseEntity<Map<Integer, List<Object>>> getGroupPet(@PathVariable String id){
         Map<Integer, List<Object>> pets = mainService.getGroupInfoPet(id);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(pets);
     }
 
     // 로그인 한 회원이 속한 그룹의 그룹별 회원닉네임
-    @GetMapping("/memberInfo")
-    public ResponseEntity<Map<Integer, List<Object>>> getGroupInfoMember(@RequestParam String id){
+    @GetMapping("{id}/memberInfo")
+    public ResponseEntity<Map<Integer, List<Object>>> getGroupInfoMember(@PathVariable String id){
         Map<Integer, List<Object>> members = mainService.getGroupInfoMember(id);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(members);
     }

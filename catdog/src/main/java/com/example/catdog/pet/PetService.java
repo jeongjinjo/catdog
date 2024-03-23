@@ -1,7 +1,5 @@
 package com.example.catdog.pet;
 
-import com.example.catdog.exception.ErrorCode;
-import com.example.catdog.exception.PetException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +14,6 @@ import java.util.Optional;
 public class PetService {
     @Autowired //petRepository 의 인스턴트를 주입할 수 있는 어노테이션.
     PetRepository petRepository;
-    PetDto petDto;
 
     //PET 정보 등록 기능
     public Pet createPet(Pet pet) {
@@ -31,7 +28,7 @@ public class PetService {
         return optionalPet.get();
     }
 
-    public Pet updatePet(int pet_num, PetDto petDto) {
+    public Pet updatePet(int pet_num, PetDTO petDto) {
         //        updatedPet.setId(idx);
         Optional<Pet> optionalPet = petRepository.findById(pet_num);
         if (optionalPet.isPresent()) {
