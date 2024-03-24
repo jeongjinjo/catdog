@@ -28,4 +28,16 @@ class GroupServiceTest {
 
         System.out.println(result);
     }
+
+    @Test
+    void groupDelete() {
+        // 현재 아이디
+        String currentMemberId = "tt";
+        // 그룹번호
+        int groupNum = 21;
+        // 실행
+        int result = service.groupDelete(groupNum, currentMemberId);
+
+        System.out.println(result);
+    }
 }

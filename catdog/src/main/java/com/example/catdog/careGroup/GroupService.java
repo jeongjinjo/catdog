@@ -72,7 +72,7 @@ public class GroupService {
         return petInformationByGroup;
     }
 
-    // 그룹 등록 ( eunae )
+    // NOTE 그룹 등록 ( eunae )
     @Transactional
     public int groupInsert(CareGroup careGroup, List<String> memberId, List<Integer> petNum, String currentMemberId) {
         int result = 0;
@@ -103,12 +103,12 @@ public class GroupService {
         }
 
         // NOTE * INSERT START *
-        // 1. 그룹 등록
+        // CHECK 1. 그룹 등록
         careGroup.setResign_yn(Resign_yn.N);
         groupRepository.save(careGroup);
         CareGroup groupNum = groupRepository.findByLastGroupNumIsCareGroupType();
 
-        //  2. 그룹에 사람 집어넣기
+        //  CHECK 2. 그룹에 사람 집어넣기
         List<CareGroupMember> careGroupMemberInsert = new ArrayList<>();
         for(String member : memberId) {
             String role = String.valueOf(Role.guest);
@@ -129,7 +129,7 @@ public class GroupService {
         }
         careGroupMemberRepository.saveAll(careGroupMemberInsert);
 
-        // 3. 반려동물 등록
+        // CHECK 3. 반려동물 등록
         if(petNum.size() != 0) {
             List<CareTarget> careTargetInsert = new ArrayList<>();
             int CareTargetInsertGroupNum = groupNum.getGroup_num();
@@ -146,9 +146,38 @@ public class GroupService {
             careTargetRepository.saveAll(careTargetInsert);
         }
 
+        result = 1;
+        return result;
+    }
+
+    // NOTE 그룹 삭제 ( eunae )
+    @Transactional
+    public int groupDelete(int groupNum, String currentMemberId) {
+        int result = 0;
+        // NOTE 예외처리 :
+        // CHECK 1. groupNum과 currentMemberId가 없을 때
+        if(groupNum == 0 || currentMemberId.equals("")) {
+            throw new CareGroupException(ErrorCode.NOT_FOUND);
+        }
+        // CHECK 2. 로그인한 사람이 admin이 아닐 경우
+        CareGroupMember careGroupMember = careGroupMemberRepository.findByGroupNumAndMemberId(groupNum, currentMemberId);
+        if(String.valueOf(careGroupMember.getRole()).toLowerCase() != "admin") {
+            result = -1;
+            throw new CareGroupException(ErrorCode.PERMISSION_RESTRICTIONS);
+        }
+
+        // NOTE * GROUP DELETE *
+        // CHECK 1. 펫 삭제 ( DELETE )
+        List<CareTarget> careTargetList = careTargetRepository.findByGroupNumInPet(groupNum);
+        for(CareTarget ct : careTargetList) {
+            careTargetRepository.delete(ct);
+        }
+        // CHECK 2. 멤버 삭제 여부 변경 ( UPDATE )
+        careGroupMemberRepository.groupMemberResignYnUpdateAll(groupNum);
+        // CHECK 3. 그룹 삭제 여부 변경 ( UPDATE )
+        groupRepository.groupResignYnUpdate(groupNum);
 
         result = 1;
-
         return result;
     }
 }

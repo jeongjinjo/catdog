@@ -63,8 +63,8 @@ public class GroupController {
     }
 
     // NOTE 그룹 등록 ( eunae ) CHECK 03.23 생성
-    @PostMapping()
-    public ResponseEntity<Integer> careGroupAndTargetInsert(@Valid @RequestBody RequestDTO requestDTO) {
+    @PostMapping
+    public ResponseEntity<Integer> careGroupAndMemberAndTargetInsert(@Valid @RequestBody RequestDTO requestDTO) {
 
         ModelMapper mapper = new ModelMapper();
         CareGroup careGroupDb = mapper.map(requestDTO.getGroupDTO(), CareGroup.class);
@@ -75,5 +75,19 @@ public class GroupController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    // NOTE 그룹 수정
+    // NOTE 그룹 삭제 ( eunae ) CHECK 03.24 생성
+    @PutMapping("del")
+    public ResponseEntity<Integer> careGroupAllDelete(@Valid @RequestBody RequestDTO requestDTO) {
+        int result = groupService.groupDelete( requestDTO.getGroupDTO().getGroup_num(),
+                                               requestDTO.getCurrent_member_id()
+                                             );
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    // NOTE 그룹 수정 ( eunae )
+    @PutMapping
+    public ResponseEntity<Integer> careGroupUpdate() {
+        int result = 0;
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
 }

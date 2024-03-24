@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -43,5 +44,22 @@ class GroupControllerTest {
                         .content(requestBody))
                 .andExpect(status().is4xxClientError())
                 .andDo(print());
+    }
+
+    @Test
+    void careGroupAllDelete() throws Exception {
+        String requestBody = "{\n" +
+                "  \"groupDTO\": {\n" +
+                "    \"group_num\": \"21\"\n" +
+                "  },\n" +
+                "   \"current_member_id\": \"tt\" \n" +
+                "}";
+
+        mockMvc.perform(put("/group")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isOk())
+                .andDo(print());;
+
     }
 }
