@@ -157,7 +157,7 @@ public class GroupService {
         // NOTE 예외처리 :
         // CHECK 1. groupNum과 currentMemberId가 없을 때
         if(groupNum == 0 || currentMemberId.equals("")) {
-            throw new CareGroupException(ErrorCode.NOT_FOUND);
+            throw new CareGroupException(ErrorCode.EMPTY_VALUE);
         }
         // CHECK 2. 로그인한 사람이 admin이 아닐 경우
         CareGroupMember careGroupMember = careGroupMemberRepository.findByGroupNumAndMemberId(groupNum, currentMemberId);
@@ -180,4 +180,69 @@ public class GroupService {
         result = 1;
         return result;
     }
+
+    // NOTE 그룹 수정 - 인원 삭제 ( eunae )
+    @Transactional
+    public int groupInMemberOutUpdate(int groupNum, String loginId, String delTargetMember) {
+        int result = 0;
+
+        // NOTE 예외처리
+        // CHECK 1. 빈 값일 경우
+        if(groupNum == 0 || delTargetMember.equals("") || loginId.equals("")) {
+            result = -1;
+            throw new CareGroupException(ErrorCode.EMPTY_VALUE);
+        }
+        // CHECK 2. loginId가 admin이 아닐 경우
+        CareGroupMember member = careGroupMemberRepository.findByGroupNumAndMemberId(groupNum, loginId);
+        if(String.valueOf(member.getRole()).toLowerCase() != "admin") {
+            result = -1;
+            throw new CareGroupException(ErrorCode.PERMISSION_RESTRICTIONS);
+        }
+
+        // NOTE 멤버 삭제
+        CareGroupMember deleteTarget = careGroupMemberRepository.findByGroupNumAndMemberId(groupNum, delTargetMember);
+        deleteTarget.setResign_yn(Resign_yn.Y);
+        careGroupMemberRepository.save(deleteTarget);
+
+        result = 1;
+        return result;
+    }
+
+
+    // NOTE 그룹 수정 - 반려동물 삭제 ( eunae )
+    public int groupInPetOutUpdate(int groupNum, String loginId, int deleteTarget) {
+        int result = 0;
+
+        // CHECK 1. 빈 값일 경우
+        if(groupNum == 0 || deleteTarget == 0 || loginId.equals("")) {
+            result = -1;
+            throw new CareGroupException(ErrorCode.NOT_FOUND);
+        }
+        // CHECK 2. loginId가 admin이 아닐 경우
+        CareGroupMember member = careGroupMemberRepository.findByGroupNumAndMemberId(groupNum, loginId);
+        if(String.valueOf(member.getRole()).toLowerCase() != "admin") {
+            result = -1;
+            throw new CareGroupException(ErrorCode.PERMISSION_RESTRICTIONS);
+        }
+
+        // NOTE 반려동물 삭제
+        CareTarget pet = careTargetRepository.findByGroupNumInPetInformation(groupNum, deleteTarget);
+        careTargetRepository.delete(pet);
+
+        return result;
+    }
+
+
+    // NOTE 그룹 수정 ( eunae )
+    public int groupUpdate(CareGroup careGroup, List<String> member, List<Integer> pet, String currentMemberId) {
+        int result = 0;
+
+        // NOTE 예외처리
+        // CHECK 1. 빈값으로 넘어오는지?
+        // CHECK 2. 로그인한 아이디가 그룹을 수정할 수 있는 권한인지?
+        // CHECK 3. 멤버는 0명이 아닌지?
+
+        return result;
+    }
+
 }

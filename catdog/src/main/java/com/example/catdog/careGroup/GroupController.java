@@ -69,25 +69,48 @@ public class GroupController {
         ModelMapper mapper = new ModelMapper();
         CareGroup careGroupDb = mapper.map(requestDTO.getGroupDTO(), CareGroup.class);
         int result = groupService.groupInsert(careGroupDb
-                                                , requestDTO.getMember_id()
-                                                , requestDTO.getPet_num()
-                                                , requestDTO.getCurrent_member_id());
+                , requestDTO.getMember_id()
+                , requestDTO.getPet_num()
+                , requestDTO.getCurrent_member_id());
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    // NOTE 그룹 삭제 ( eunae ) CHECK 03.24 생성
+    // NOTE 그룹 삭제 ( eunae ) CHECK 03.24 생성 --> @PathVariable로 바꿔보기
     @PutMapping("del")
     public ResponseEntity<Integer> careGroupAllDelete(@Valid @RequestBody RequestDTO requestDTO) {
         int result = groupService.groupDelete( requestDTO.getGroupDTO().getGroup_num(),
-                                               requestDTO.getCurrent_member_id()
-                                             );
+                requestDTO.getCurrent_member_id()
+        );
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    // NOTE 그룹 수정 ( eunae )
+    // NOTE 그룹 수정 - 인원 삭제 ( eunae ) CHECK 03.25 생성
+    @PutMapping("{groupNum}/{loginId}/{delTargetMember}")
+    public ResponseEntity<Integer> groupInMemberOutUpdate(@PathVariable int groupNum
+            , @PathVariable String loginId
+            , @PathVariable String delTargetMember) {
+        int result = groupService.groupInMemberOutUpdate(groupNum, loginId, delTargetMember);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    @DeleteMapping("{groupNum}/{loginId}/{delTargetPet}")
+    // NOTE 그룹 수정 - 반려동물 삭제 ( eunae ) CHECK 03.25 생성
+    public ResponseEntity<Integer> groupInPetOutUpdate(@PathVariable int groupNum
+            , @PathVariable String loginId
+            , @PathVariable int delTargetPet) {
+        int result = groupService.groupInPetOutUpdate(groupNum, loginId, delTargetPet);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    // NOTE 그룹 수정 ( eunae ) CHECK 03.26 생성
     @PutMapping
-    public ResponseEntity<Integer> careGroupUpdate() {
-        int result = 0;
+    public ResponseEntity<Integer> careGroupUpdate(@Valid @RequestBody RequestDTO requestDTO) {
+        ModelMapper mapper = new ModelMapper();
+        CareGroup careGroupDb = mapper.map(requestDTO.getGroupDTO(), CareGroup.class);
+        int result = groupService.groupUpdate( careGroupDb
+                                            , requestDTO.getMember_id()
+                                            , requestDTO.getPet_num()
+                                            , requestDTO.getCurrent_member_id());
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }

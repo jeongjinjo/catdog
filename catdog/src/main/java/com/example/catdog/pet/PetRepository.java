@@ -47,22 +47,25 @@ public interface PetRepository extends JpaRepository<Pet, Integer> {
     )
     public Optional<List<Object[]>> findByGroupInfoPet(@Param("id") String id);
 
-    // 로그인 한 사람의 그룹별 반려동물 정보 ( eunae )
-    @Query(value = "SELECT new com.example.catdog.pet.Pet(p.pet_num, p.type, p.type_detail, p.pet_name, p.age, p.kg, p.disease, p.resign_yn, p.gender, p.member_id) " +
-            " FROM Pet p " +
-            "  JOIN CareTarget ct " +
-            "    ON ct.pet_num = p.pet_num " +
-            " WHERE ct.group_num IN (" +
-            "   SELECT cg.group_num " +
-            "     FROM CareGroup cg " +
-            "     JOIN CareTarget ct2 " +
-            "       ON cg.group_num = ct2.group_num " +
-            "     JOIN CareGroupMember cgm " +
-            "       ON cgm.careGroup.group_num = cg.group_num " +
-            "    WHERE cgm.member.member_id = :member_id " +
-            "      AND cgm.resign_yn = 'N' " +
-            ")  " +
-            "AND p.resign_yn = 'N'"
+    // NOTE 로그인 한 사람의 그룹별 반려동물 정보 ( eunae ) CHECK 03.25 수정완료
+    @Query(value = "SELECT p " +
+                    " FROM Pet p " +
+                    "  JOIN CareTarget ct " +
+                    "    ON ct.pet_num = p.pet_num " +
+                    "  LEFT JOIN Photo photo " +
+                    "    ON p.photo.photo_num = photo.photo_num " +
+                    " WHERE ct.group_num IN (" +
+                    "   SELECT cg.group_num " +
+                    "     FROM CareGroup cg " +
+                    "     JOIN CareTarget ct2 " +
+                    "       ON cg.group_num = ct2.group_num " +
+                    "     JOIN CareGroupMember cgm " +
+                    "       ON cgm.careGroup.group_num = cg.group_num " +
+                    "    WHERE cgm.member.member_id = :member_id " +
+                    "      AND cgm.resign_yn = 'N' " +
+                    ")  " +
+                    "AND p.resign_yn = 'N' " +
+                    "AND (photo.resign_yn = 'N' OR photo.resign_yn IS NULL)"
     )
     public List<Pet> getGroupInfoPet(@Param("member_id") String member_id);
 

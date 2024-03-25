@@ -6,10 +6,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -61,5 +63,27 @@ class GroupControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print());;
 
+    }
+
+    @Test
+    void groupInMemberOutUpdate() throws Exception {
+        int groupNum = 8;
+        String loginId = "ninano";
+        String deleteTargetMember = "tt";
+
+        mockMvc.perform(put( "/group/" + groupNum + "/" + loginId + "/" + deleteTargetMember))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    void groupInPetOutUpdate() throws Exception {
+        int groupNum = 1;
+        String loginId = "hoho";
+        int delTargetPet = 1;
+
+        mockMvc.perform(delete( "/group/" + groupNum + "/" + loginId + "/" + delTargetPet))
+                .andExpect(status().isOk())
+                .andDo(print());
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ErrorCode {
     // NOTE 404 ERROR CHECK 요청한 리소스를 서버에서 찾을 수 없는 경우
+    EMPTY_VALUE(HttpStatus.NOT_FOUND, "EMPTY_VALUE", "빈 값이 존재합니다."),
     NOT_FOUND(HttpStatus.NOT_FOUND, "NOT_FOUND", "해당하는 내용이 없습니다."),
     // NOTE 409 ERROR CHECK 클라이언트의 요청이 서버의 현재 상태와 충돌할 때 발생하는 응답코드
     DUPLICATE(HttpStatus.CONFLICT, "DUPLICATE", "중복된 값이 존재합니다."),
