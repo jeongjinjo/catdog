@@ -1,15 +1,20 @@
 package com.example.catdog.careGroup;
 
 import com.example.catdog.careGroup.member.CareGroupMember;
+import com.example.catdog.careGroup.member.CareGroupMemberDTO;
 import com.example.catdog.careGroup.member.CareGroupMemberRepository;
+import com.example.catdog.careGroup.target.CareTargetDTO;
 import com.example.catdog.careGroup.target.CareTargetRepository;
 import com.example.catdog.careGroup.target.CareTarget;
+import com.example.catdog.enum_column.Resign_yn;
+import com.example.catdog.enum_column.Role;
+import com.example.catdog.exception.CareGroupException;
 import com.example.catdog.exception.ErrorCode;
-import com.example.catdog.exception.MemberExcption;
 import com.example.catdog.pet.Pet;
 import com.example.catdog.pet.PetRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -30,7 +35,7 @@ public class GroupService {
         // 특정 memberId가 멤버가 속한 그룹 리스트를 가져옴.
         Optional<List<CareGroupMember>> careGroups = careGroupMemberRepository.findByGroup(memberId);
         if(careGroups.isEmpty()) {
-            throw new MemberExcption(ErrorCode.NOT_FOUND);
+            throw new CareGroupException(ErrorCode.NOT_FOUND);
         }
         // 가져온 그룹 리스트를 group_class를 기준으로 그룹화.
         for (CareGroupMember careGroup : careGroups.get()) {
@@ -67,42 +72,177 @@ public class GroupService {
         return petInformationByGroup;
     }
 
-    // 그룹 등록 ( eunae )
+    // NOTE 그룹 등록 ( eunae )
     @Transactional
-    public int groupInsert(CareGroupMember careGroupMember) {
-
+    public int groupInsert(CareGroup careGroup, List<String> memberId, List<Integer> petNum, String currentMemberId) {
         int result = 0;
-        // 1. 주인장이 그룹을 3개 가지고 있으면 등록을 못하게 해야해
-        int gorupCount = careGroupMemberRepository.countByMemberIdAndResignYn(careGroupMember.getMember().getMember_id());
-        // 2. admin인 주인장이 그룹을 만들어
+
+        // NOTE 예외처리
+        // CHECK 1. 로그인한 사람이 그룹을 3개 가지고 있으면 등록을 못하게 하기.
+        int groupCount = careGroupMemberRepository.countByMemberIdAndResignYn(currentMemberId);
+        if(groupCount >= 3) {
+            result = -1;
+            throw new CareGroupException(ErrorCode.GROUP_REGISTRATION_RESTRICTIONS);
+        }
+
+        // CHECK 2. 등록할 사람이 하나도 없다면?
+        if(memberId.size() == 0) {
+            result = -1;
+            throw new CareGroupException(ErrorCode.MEMBER_NOT_FOUND);
+        }
+
+        // CHECK 3.그룹내에 몇 명을 집어넣을건지 확인한다.
+        if(memberId.size() > 4) {
+            result = -1;
+            throw new CareGroupException(ErrorCode.LIMITED_NUMBER_OF_MEMBER_REGISTERED);
+        }
+        // CHECK 4. 그룹내에 몇 마리의 반려동물을 집어넣을건지 확인한다.
+        if(petNum.size() > 5) {
+            result = -1;
+            throw new CareGroupException(ErrorCode.PET_REGISTRATION_RESTRICTIONS);
+        }
+
+        // NOTE * INSERT START *
+        // CHECK 1. 그룹 등록
+        careGroup.setResign_yn(Resign_yn.N);
+        groupRepository.save(careGroup);
+        CareGroup groupNum = groupRepository.findByLastGroupNumIsCareGroupType();
+
+        //  CHECK 2. 그룹에 사람 집어넣기
+        List<CareGroupMember> careGroupMemberInsert = new ArrayList<>();
+        for(String member : memberId) {
+            String role = String.valueOf(Role.guest);
+            if(member.equals(currentMemberId)) {
+                role = String.valueOf(Role.admin);
+            }
+
+            CareGroupMemberDTO cgmDTO = CareGroupMemberDTO
+                                                    .builder()
+                                                        .groupNum(groupNum)
+                                                        .member_id(member)
+                                                        .role(Role.valueOf(role))
+                                                        .resign_yn(Resign_yn.N)
+                                                    .build();
+            ModelMapper mapper = new ModelMapper();
+            CareGroupMember careGroupMember = mapper.map(cgmDTO, CareGroupMember.class);
+            careGroupMemberInsert.add(careGroupMember);
+        }
+        careGroupMemberRepository.saveAll(careGroupMemberInsert);
+
+        // CHECK 3. 반려동물 등록
+        if(petNum.size() != 0) {
+            List<CareTarget> careTargetInsert = new ArrayList<>();
+            int CareTargetInsertGroupNum = groupNum.getGroup_num();
+            for(int pet : petNum) {
+                CareTargetDTO ctDTO = CareTargetDTO
+                        .builder()
+                        .group_num(CareTargetInsertGroupNum)
+                        .pet_num(pet)
+                        .build();
+                ModelMapper mapper = new ModelMapper();
+                CareTarget careTarget =  mapper.map(ctDTO, CareTarget.class);
+                careTargetInsert.add(careTarget);
+            }
+            careTargetRepository.saveAll(careTargetInsert);
+        }
+
+        result = 1;
+        return result;
+    }
+
+    // NOTE 그룹 삭제 ( eunae )
+    @Transactional
+    public int groupDelete(int groupNum, String currentMemberId) {
+        int result = 0;
+        // NOTE 예외처리 :
+        // CHECK 1. groupNum과 currentMemberId가 없을 때
+        if(groupNum == 0 || currentMemberId.equals("")) {
+            throw new CareGroupException(ErrorCode.EMPTY_VALUE);
+        }
+        // CHECK 2. 로그인한 사람이 admin이 아닐 경우
+        CareGroupMember careGroupMember = careGroupMemberRepository.findByGroupNumAndMemberId(groupNum, currentMemberId);
+        if(String.valueOf(careGroupMember.getRole()).toLowerCase() != "admin") {
+            result = -1;
+            throw new CareGroupException(ErrorCode.PERMISSION_RESTRICTIONS);
+        }
+
+        // NOTE * GROUP DELETE *
+        // CHECK 1. 펫 삭제 ( DELETE )
+        List<CareTarget> careTargetList = careTargetRepository.findByGroupNumInPet(groupNum);
+        for(CareTarget ct : careTargetList) {
+            careTargetRepository.delete(ct);
+        }
+        // CHECK 2. 멤버 삭제 여부 변경 ( UPDATE )
+        careGroupMemberRepository.groupMemberResignYnUpdateAll(groupNum);
+        // CHECK 3. 그룹 삭제 여부 변경 ( UPDATE )
+        groupRepository.groupResignYnUpdate(groupNum);
+
+        result = 1;
+        return result;
+    }
+
+    // NOTE 그룹 수정 - 인원 삭제 ( eunae )
+    @Transactional
+    public int groupInMemberOutUpdate(int groupNum, String loginId, String delTargetMember) {
+        int result = 0;
+
+        // NOTE 예외처리
+        // CHECK 1. 빈 값일 경우
+        if(groupNum == 0 || delTargetMember.equals("") || loginId.equals("")) {
+            result = -1;
+            throw new CareGroupException(ErrorCode.EMPTY_VALUE);
+        }
+        // CHECK 2. loginId가 admin이 아닐 경우
+        CareGroupMember member = careGroupMemberRepository.findByGroupNumAndMemberId(groupNum, loginId);
+        if(String.valueOf(member.getRole()).toLowerCase() != "admin") {
+            result = -1;
+            throw new CareGroupException(ErrorCode.PERMISSION_RESTRICTIONS);
+        }
+
+        // NOTE 멤버 삭제
+        CareGroupMember deleteTarget = careGroupMemberRepository.findByGroupNumAndMemberId(groupNum, delTargetMember);
+        deleteTarget.setResign_yn(Resign_yn.Y);
+        careGroupMemberRepository.save(deleteTarget);
+
+        result = 1;
+        return result;
+    }
 
 
+    // NOTE 그룹 수정 - 반려동물 삭제 ( eunae )
+    public int groupInPetOutUpdate(int groupNum, String loginId, int deleteTarget) {
+        int result = 0;
 
-        // 2. HOST인 주인장의 정보와 그룹을 만든다
-        //   1.1. 근데 그룹이 3개 이상이면 INSERT 못하게 해야하잖아?
-//        Long groupCount = groupRepository.countByMemberIdAndResignYn(careGroup.getMember().getMember_id());
-//        if(groupCount > 2L) {
-//            throw new MemberExcption(ErrorCode.GROUP_REGISTRATION_RESTRICTIONS);
-//        }
-//        //   1.2. 그룹 정상 등록
-//        careGroup.setResign_yn(Resign_yn.N);
-//        CareGroup cg = groupRepository.save(careGroup);
-//
-//        // 2. 1번이 정상적으로 진행되면 그룹에 GUEST를 넣어준다.
-//        Optional<CareGroup> findCgInfo
-//                = groupRepository.findGoupHostInfo(careGroup.getMember().getMember_id(), groupRepository.findNextGroupNum());
-//
-//
-//
-//
-//        // 3. 2번이 정상적으로 진행되면 그룹에 등록할 반려동물을 등록해준다.
-//
-//        if(cg != null) {
-//            result = 1;
-//        }
+        // CHECK 1. 빈 값일 경우
+        if(groupNum == 0 || deleteTarget == 0 || loginId.equals("")) {
+            result = -1;
+            throw new CareGroupException(ErrorCode.NOT_FOUND);
+        }
+        // CHECK 2. loginId가 admin이 아닐 경우
+        CareGroupMember member = careGroupMemberRepository.findByGroupNumAndMemberId(groupNum, loginId);
+        if(String.valueOf(member.getRole()).toLowerCase() != "admin") {
+            result = -1;
+            throw new CareGroupException(ErrorCode.PERMISSION_RESTRICTIONS);
+        }
 
-
+        // NOTE 반려동물 삭제
+        CareTarget pet = careTargetRepository.findByGroupNumInPetInformation(groupNum, deleteTarget);
+        careTargetRepository.delete(pet);
 
         return result;
     }
+
+
+    // NOTE 그룹 수정 ( eunae )
+    public int groupUpdate(CareGroup careGroup, List<String> member, List<Integer> pet, String currentMemberId) {
+        int result = 0;
+
+        // NOTE 예외처리
+        // CHECK 1. 빈값으로 넘어오는지?
+        // CHECK 2. 로그인한 아이디가 그룹을 수정할 수 있는 권한인지?
+        // CHECK 3. 멤버는 0명이 아닌지?
+
+        return result;
+    }
+
 }

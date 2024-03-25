@@ -29,4 +29,5 @@ public class PetDTO {
 
     private Gender gender;
 
+    private int photo_num;
 }
