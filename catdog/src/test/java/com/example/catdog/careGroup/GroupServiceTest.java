@@ -1,5 +1,6 @@
 package com.example.catdog.careGroup;
 
+import com.example.catdog.careGroup.target.CareTarget;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,5 +40,24 @@ class GroupServiceTest {
         int result = service.groupDelete(groupNum, currentMemberId);
 
         System.out.println(result);
+    }
+
+    @Test
+    void groupInMemberOutUpdate() {
+        int groupNum = 8;
+        String loginId = "ninano";
+        String deleteTargetMember = "tt";
+
+        int result = service.groupInMemberOutUpdate(groupNum, loginId, deleteTargetMember);
+    }
+
+    @Test
+    void groupInPetOutUpdate() {
+        int groupNum = 1;
+        String loginId = "hoho";
+        int petNum = 1;
+
+        int ct = service.groupInPetOutUpdate(groupNum, loginId ,petNum);
+        System.out.println("결과 >>>>>>>>>>>>>>>>>>>>>>>>>>>" + ct);
     }
 }

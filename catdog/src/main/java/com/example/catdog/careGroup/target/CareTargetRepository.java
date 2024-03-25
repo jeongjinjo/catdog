@@ -21,4 +21,11 @@ public interface CareTargetRepository extends JpaRepository<CareTarget, Integer>
                     " FROM CareTarget ct " +
                     "WHERE ct.group_num = :group_num")
     List<CareTarget> findByGroupNumInPet(@Param("group_num") int groupNum);
+
+    // NOTE 특정 그룹의 특정 반려동물의 정보를 조회 ( eunae )
+    @Query(value = "SELECT ct" +
+                    " FROM CareTarget ct " +
+                    "WHERE ct.group_num = :group_num " +
+                    "  AND ct.pet_num = :pet_num")
+    CareTarget findByGroupNumInPetInformation(@Param("group_num") int groupNum, @Param("pet_num") int petNum);
 }

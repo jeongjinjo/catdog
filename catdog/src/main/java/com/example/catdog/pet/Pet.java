@@ -2,6 +2,7 @@ package com.example.catdog.pet;
 
 import com.example.catdog.enum_column.Gender;
 import com.example.catdog.enum_column.Type;
+import com.example.catdog.pet.photo.Photo;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -40,6 +41,10 @@ public class Pet {
     private Gender gender;
 
     private String member_id;
+
+    @OneToOne
+    @JoinColumn(name="photo_num", unique = true)
+    private Photo photo;
 
     //이렇게하면... pet_num과 id 연결 되는 것
     /*@ManyToOne(fetch = FetchType.LAZY)

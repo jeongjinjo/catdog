@@ -26,4 +26,6 @@ public class PetDTO {
     private String resign_yn;
 
     private Gender gender;
+
+    private int photo_num;
 }
