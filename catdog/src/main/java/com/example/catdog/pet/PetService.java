@@ -21,6 +21,12 @@ public class PetService {
         return petRepository.save(pet);
     }//save 메소드는 Spring Data JPA 에서 제공하는 메소드, 주어진 앤티티를 데이터베이스에 저장하고 저장된 앤티티를 반환한다.
 
+   // member_id로 조회 가능
+    public Pet getPetBymemberId(String member_id){
+        Pet pet=petRepository.findByMemberId(member_id);
+        return pet;
+    }
+
     //pet 정보 조회 기능
     public Pet getPetById(int pet_num) {
 

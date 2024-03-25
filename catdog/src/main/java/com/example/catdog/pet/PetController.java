@@ -1,30 +1,32 @@
 package com.example.catdog.pet;
 
+import com.example.catdog.member.Member;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/pet")
+
 public class PetController {
+
+
     @Autowired
     private PetService petService;
     @Autowired
     private PetRepository petRepository;
 
-//    @Autowired
-//    private Member member;
-
-    //id당 등록된 반려동물 조회 기능 (member_id가 pet_name이 외래키로 연결)
-//    @GetMapping("/select/{member_id}")
-//    public ResponseEntity<Pet> getPetById(
-//
-//    )
-
-
+    //Member 테이블에 member_id를 통해 pet 조회
+    @GetMapping("/select/{member_id}")
+    public ResponseEntity<Pet> getPetById(@PathVariable String member_id){
+        Pet pet =petService.getPetBymemberId(member_id);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(pet);
+    }
 
     // id의 pet_num 을 이용해 pet의 정보 조회(개별적으로 조회 하는 기능)
     @GetMapping("/select/{pet_num}")

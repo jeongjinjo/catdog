@@ -60,6 +60,11 @@ public interface PetRepository extends JpaRepository<Pet, Integer> {
             ")  " +
             "AND p.resign_yn = 'N'"
     )
+
     public List<Pet> getGroupInfoPet(@Param("member_id") String member_id);
 
+
+    //member_id를 통해 pet 조회할 때//
+    @Query(value="SELECT p.pet_name FROM Pet p WHERE p.member_id = :memberId")
+    Pet findByMemberId(@Param("memberId") String memberId);
 }
