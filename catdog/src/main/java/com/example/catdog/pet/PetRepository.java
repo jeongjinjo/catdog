@@ -46,6 +46,7 @@ public interface PetRepository extends JpaRepository<Pet, Integer> {
             ") " +
             "AND p.resign_yn = 'N'"
     )
+
     public Optional<List<Object[]>> findByGroupInfoPet(@Param("id") String id);
 
     // NOTE 로그인 한 사람의 그룹별 반려동물 정보 ( eunae ) CHECK 03.25 수정완료
@@ -70,4 +71,8 @@ public interface PetRepository extends JpaRepository<Pet, Integer> {
     )
     public List<Pet> getGroupInfoPet(@Param("member_id") String member_id);
 
+
+    //member_id를 통해 pet 조회할 때//
+    @Query(value="SELECT p.pet_name FROM Pet p WHERE p.member_id = :memberId")
+    Pet findByMemberId(@Param("memberId") String memberId);
 }

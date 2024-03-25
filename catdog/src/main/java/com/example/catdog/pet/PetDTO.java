@@ -1,6 +1,7 @@
 package com.example.catdog.pet;
 
 import com.example.catdog.enum_column.Gender;
+import com.example.catdog.member.Member;
 import lombok.*;
 
 @ToString
@@ -9,6 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+
 public class PetDTO {
 
     private int pet_num;
