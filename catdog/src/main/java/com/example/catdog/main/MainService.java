@@ -19,23 +19,24 @@ public class MainService {
 
     // 로그인 한 회원의 그룹별 반려동물 정보
     public Map<Integer, List<Object>> getGroupInfoPet(String id){
-//        Optional<List<Object[]>> petInfo = petRepository.findByGroupInfoPet(id);
+        Optional<List<Object[]>> petInfo = petRepository.findByGroupInfoPet(id);
         Map<Integer, List<Object>> groupPets = new HashMap<>();
-//
-//        for(Object[] info : petInfo.get()){
-//            Integer groupName = (Integer) info[0];
-//
-//            Pet pet = new Pet();
-//
-//            pet.setPet_name((String) info[1]);
-//            pet.setGender((Gender) info[2]);
-//            pet.setAge((Integer) info[3]);
-//            pet.setDisease((String) info[4]);
-//
-//            groupPets.putIfAbsent(groupName, new ArrayList<>());
-//
-//            groupPets.get(groupName).add(pet);
-//        }
+
+        for(Object[] info : petInfo.get()){
+            Integer groupNum = (Integer) info[0];
+
+            Pet pet = new Pet();
+
+            pet.setPet_num((Integer) info[1]);
+            pet.setPet_name((String) info[2]);
+            pet.setGender((Gender) info[3]);
+            pet.setAge((Integer) info[4]);
+            pet.setDisease((String) info[5]);
+
+            groupPets.putIfAbsent(groupNum, new ArrayList<>());
+
+            groupPets.get(groupNum).add(pet);
+        }
         return groupPets;
     }
     // 로그인 한 회원이 속한 그룹의 그룹별 회원닉네임
@@ -44,7 +45,7 @@ public class MainService {
         Map<Integer, List<Object>> groupMembers = new HashMap<>();
 
         for(Object[] info : memberInfo.get()){
-            Integer groupName = (Integer) info[0];
+            Integer groupName = ((Integer) info[0]);
 
             Member member = new Member();
 
