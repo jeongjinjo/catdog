@@ -20,13 +20,5 @@ public class GroupDTO {
     @Size(max = 255)
     private String group_name;
 
-    @NotBlank(message = "필수 입력 값")
-    @Size(max = 50 ,message = "최대 50자 입력 가능합니다.")
-    private String member_id;
-
-    private Role role;
-
     private Resign_yn resign_yn;
-
-    private List<Integer> group_key;
 }

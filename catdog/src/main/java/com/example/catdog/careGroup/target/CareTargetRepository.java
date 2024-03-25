@@ -5,12 +5,20 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface CareTargetRepository extends JpaRepository<CareGroup, Integer> {
+import java.util.List;
 
+public interface CareTargetRepository extends JpaRepository<CareTarget, Integer> {
+    // NOTE 펫 번호를 기준으로 그룹 번호를 조회 ( eunae )
     @Query(value = "SELECT new com.example.catdog.careGroup.target.CareTarget(ct.group_num) " +
                     " FROM CareTarget ct " +
                     " JOIN Pet p " +
                     "   ON ct.pet_num = p.pet_num  " +
                     "WHERE ct.pet_num = :pet_num")
-    public CareTarget getCareGroupNum(@Param("pet_num") int pet_num);
+    CareTarget getCareGroupNum(@Param("pet_num") int petNum);
+
+    // NOTE 특정 그룹에 속해있는 반려동물의 모든 행을 조회 ( eunae )
+    @Query(value = "SELECT ct" +
+                    " FROM CareTarget ct " +
+                    "WHERE ct.group_num = :group_num")
+    List<CareTarget> findByGroupNumInPet(@Param("group_num") int groupNum);
 }

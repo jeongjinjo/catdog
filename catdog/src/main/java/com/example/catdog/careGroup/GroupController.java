@@ -1,5 +1,6 @@
 package com.example.catdog.careGroup;
 
+import com.example.catdog.careGroup.dto.RequestDTO;
 import com.example.catdog.careGroup.member.CareGroupMember;
 import com.example.catdog.careGroup.member.CareGroupMemberDTO;
 import com.example.catdog.member.Member;
@@ -24,21 +25,21 @@ public class GroupController {
     private final PetService petService;
     private final MemberService memberService;
 
-    // 유저가 속해있는 그룹 정보 조회 ( eunae ) - 03.21 확인완료 / 03.22 확인완료
+    // NOTE 유저가 속해있는 그룹 정보 조회 ( eunae ) CHECK 03.21 확인완료 03.22 확인완료
     @GetMapping("{id}")
     public ResponseEntity<Map<Integer, List<CareGroupMember>>> gorupList(@PathVariable String id) {
         Map<Integer,List<CareGroupMember>> list = groupService.groupList(id);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(list);
+        return ResponseEntity.status(HttpStatus.OK).body(list);
     }
 
-    // 그룹에 속해있지 않은 내 반려동물 조회 ( eunae ) - 03.21 확인완료 / 03.22 확인완료
+    // NOTE 그룹에 속해있지 않은 내 반려동물 조회 ( eunae ) CHECK 03.21 확인완료 03.22 확인완료
     @GetMapping("pet/{id}")
     public ResponseEntity<List<Pet>> getGroupNotInPet(@PathVariable String id) {
         List<Pet> pet = petService.getGroupNotInPet(id);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(pet);
+        return ResponseEntity.status(HttpStatus.OK).body(pet);
     }
 
-    // 그룹 내에 등록할 유저 검색 ( eunae ) -> 기능보유객체: Member / 03.22 확인완료
+    // NOTE 그룹 내에 등록할 유저 검색 ( eunae ) CHECK 03.22 확인완료
     @GetMapping("search")
     public ResponseEntity<List<Member>> memberGroupInvite(@RequestBody String myAndSearchMember) {
         String[] parts = myAndSearchMember.split(":");
@@ -50,24 +51,43 @@ public class GroupController {
 
         List<Member> list = memberService.memberGroupInvite(member_id, search_id);
 
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(list);
+        return ResponseEntity.status(HttpStatus.OK).body(list);
     }
 
-    // 그룹에 속해있는 반려동물 확인하기 ( eunae ) / 03.22 확인완료
+    // NOTE 그룹에 속해있는 반려동물 확인하기 ( eunae ) CHECK 03.22 확인완료
+
     @GetMapping("groupInPet/{id}")
     public ResponseEntity<Map<Integer, List<Pet>>> getGroupInfoPet(@PathVariable String id) {
         Map<Integer,List<Pet>> list = groupService.getGroupInfoPet(id);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(list);
+        return ResponseEntity.status(HttpStatus.OK).body(list);
     }
 
-    // 그룹 등록
-    @PostMapping()
-    public ResponseEntity<Integer> careGroupAndTargetInsert(@Valid @RequestBody CareGroupMemberDTO careGroupMemberDTO) {
+    // NOTE 그룹 등록 ( eunae ) CHECK 03.23 생성
+    @PostMapping
+    public ResponseEntity<Integer> careGroupAndMemberAndTargetInsert(@Valid @RequestBody RequestDTO requestDTO) {
+
         ModelMapper mapper = new ModelMapper();
-        CareGroupMember careGroupMember = mapper.map(careGroupMemberDTO, CareGroupMember.class);
-        int result = groupService.groupInsert(careGroupMember);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(result);
+        CareGroup careGroupDb = mapper.map(requestDTO.getGroupDTO(), CareGroup.class);
+        int result = groupService.groupInsert(careGroupDb
+                                                , requestDTO.getMember_id()
+                                                , requestDTO.getPet_num()
+                                                , requestDTO.getCurrent_member_id());
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    // NOTE 그룹 삭제 ( eunae ) CHECK 03.24 생성
+    @PutMapping("del")
+    public ResponseEntity<Integer> careGroupAllDelete(@Valid @RequestBody RequestDTO requestDTO) {
+        int result = groupService.groupDelete( requestDTO.getGroupDTO().getGroup_num(),
+                                               requestDTO.getCurrent_member_id()
+                                             );
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
 
+    // NOTE 그룹 수정 ( eunae )
+    @PutMapping
+    public ResponseEntity<Integer> careGroupUpdate() {
+        int result = 0;
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
 }

@@ -5,6 +5,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class CareTagetService {
+public class CareTargetService {
     private final CareTargetRepository careTargetRepository;
 }
