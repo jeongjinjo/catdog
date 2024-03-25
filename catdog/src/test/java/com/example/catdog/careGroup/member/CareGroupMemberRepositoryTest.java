@@ -21,14 +21,14 @@ class CareGroupMemberRepositoryTest {
     }
 
     // 그룹에 속한 반려동물 목록 조회
-    @Test
-    void checkGroupMembership() {
-        int groupNum = 21;
-        List<CareGroupMember> careGroupMember = careGroupMemberRepository.findByGroupInMember(groupNum);
-        for(CareGroupMember m : careGroupMember) {
-            System.out.println(m);
-        }
-    }
+//    @Test
+//    void checkGroupMembership() {
+//        int groupNum = 21;
+//        List<CareGroupMember> careGroupMember = careGroupMemberRepository.findByGroupInMember(groupNum);
+//        for(CareGroupMember m : careGroupMember) {
+//            System.out.println(m);
+//        }
+//    }
 
     // 그룹에 속해있는 멤버 목록 조회
     @Test

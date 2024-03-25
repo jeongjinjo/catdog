@@ -22,14 +22,18 @@ public class TodoDTO {
     @Size(max = 30, message = "todo는 최대 30자까지만 입력이 가능합니다.")
     private String todo;
 
-    private Comp_yn comp_yn;
-
     private String start_id;
+
+    private Comp_yn complete_yn;
 
     private LocalDateTime start_date;
 
     private Resign_yn resign_yn;
 
-    @NotBlank(message = "필수 입력 값")
-    private int group_num;
+    @NotBlank
+    private int pet_num;
+
+    private String complete_by;
+
+    private LocalDateTime complete_at;
 }
