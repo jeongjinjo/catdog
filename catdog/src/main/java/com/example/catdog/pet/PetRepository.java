@@ -42,6 +42,7 @@ public interface PetRepository extends JpaRepository<Pet, Integer> {
             "   SELECT careGroup.group_num " +
             "   FROM CareGroupMember " +
             "   WHERE member_id = :id " +
+            "   AND resign_yn='N' " +
             ") " +
             "AND p.resign_yn = 'N'"
     )

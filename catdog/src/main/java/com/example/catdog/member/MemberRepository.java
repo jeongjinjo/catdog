@@ -66,15 +66,15 @@ public interface MemberRepository extends JpaRepository<Member, String> {
 
     // 로그인 한 사람의 그룹별 회원닉네임 정보 ( gayoung )
     @Query(value = "SELECT cgm.careGroup.group_num, m.nickname " +
-            "  FROM Member m " +
-            "  JOIN CareGroupMember cgm " +
-            "    ON m.member_id = cgm.member.member_id " +
-            " WHERE cgm.careGroup.group_num IN ( " +
-            " SELECT cgm.careGroup.group_num " +
+            "FROM Member m " +
+            "JOIN CareGroupMember cgm " +
+            "ON m.member_id = cgm.member.member_id " +
+            "WHERE cgm.careGroup.group_num IN ( " +
+            "   SELECT cgm.careGroup.group_num " +
             "   FROM CareGroupMember cgm " +
-            " WHERE cgm.member.member_id = :id" +
-            ")" +
-            "   AND m.resign_yn = 'N'"
+            "   WHERE cgm.member.member_id = :id " +
+            ") " +
+            "AND m.resign_yn = 'N' "
     )
     public Optional<List<Object[]>> findByGroupMember(@Param("id") String id);
 

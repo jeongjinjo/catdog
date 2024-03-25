@@ -4,12 +4,18 @@ import com.example.catdog.enum_column.Comp_yn;
 import com.example.catdog.enum_column.Resign_yn;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Todo {
     @Id
     @Column(nullable = false)
@@ -18,10 +24,10 @@ public class Todo {
 
     private String todo;
 
-    @Enumerated(EnumType.STRING)
-    private Comp_yn comp_yn;
-
     private String start_id;
+
+    @Enumerated(EnumType.STRING)
+    private Comp_yn complete_yn;
 
     @JsonFormat(pattern = "yyyy/MM/dd HH:ss:mm")
     private LocalDateTime start_date;
@@ -31,4 +37,9 @@ public class Todo {
 
     @Column(nullable = false)
     private int pet_num;
+
+    private String complete_by;
+
+    @JsonFormat(pattern = "yyyy/MM/dd HH:ss:mm")
+    private LocalDateTime complete_at;
 }
