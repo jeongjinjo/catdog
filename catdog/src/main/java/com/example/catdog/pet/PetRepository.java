@@ -73,6 +73,11 @@ public interface PetRepository extends JpaRepository<Pet, Integer> {
 
 
     //member_id를 통해 pet 조회할 때//
-    @Query(value="SELECT p.pet_name FROM Pet p WHERE p.member_id = :memberId")
+    //리스트로 받아야됨 , p로 받아도되고 다른거 그냥 다 적어도 됨.
+    //pet_name 이거만 성공시ㅣ면 됨.
+
+
+
+    @Query(value="SELECT * FROM pet p WHERE p.member_id = :memberId",nativeQuery = true)
     Pet findByMemberId(@Param("memberId") String memberId);
 }

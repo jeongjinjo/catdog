@@ -22,7 +22,7 @@ public class PetController {
     private PetRepository petRepository;
 
     //Member 테이블에 member_id를 통해 pet 조회
-    @GetMapping("/select/{member_id}")
+    @GetMapping("/select/member/{member_id}")
     public ResponseEntity<Pet> getPetById(@PathVariable String member_id){
         Pet pet =petService.getPetBymemberId(member_id);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(pet);
