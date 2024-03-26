@@ -1,8 +1,8 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost/jjj?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=UTC&rewriteBatchedStatements=true
-    #url: jdbc:mysql://127.0.0.1:3306/catdog_test?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=UTC&rewriteBatchedStatements=true
+#    url: jdbc:mysql://localhost/jjj?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=UTC&rewriteBatchedStatements=true
+    url: jdbc:mysql://127.0.0.1:3306/catdog?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=UTC&rewriteBatchedStatements=true
     username: root
     password: 1234
 
@@ -20,6 +20,10 @@ spring:
         order_inserts: true
         order_updates: true
         format_sql: true
+
+  jwt:
+    secret: 7KCV7J2A7JWg7JaR6rCA7JiB7KCV7KeE7KGw6rOg7LCs7JqwY2F0ZG9ncjhHbdSN23nf2588NUnsdh
+
 #  sql:
 #    init:
 #      mode: always
