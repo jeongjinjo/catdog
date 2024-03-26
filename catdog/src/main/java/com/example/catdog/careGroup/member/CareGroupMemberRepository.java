@@ -13,6 +13,11 @@ import java.util.Optional;
 
 @Repository
 public interface CareGroupMemberRepository extends JpaRepository<CareGroupMember, Integer> {
+
+    // JJanu
+    @Query("SELECT cgm FROM CareGroupMember cgm WHERE cgm.member.member_id = :memberId")
+    Optional<CareGroupMember> findByMemberId(@Param("memberId") String memberId);
+
     // NOTE 그룹번호를 기준으로 내가 속해있는 그룹 조회 ( eunae )
     @Query(value = "SELECT cgm " +
                     " FROM CareGroupMember cgm " +

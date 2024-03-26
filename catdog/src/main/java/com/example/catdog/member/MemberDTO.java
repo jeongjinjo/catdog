@@ -16,7 +16,7 @@ public class MemberDTO {
     private String member_id;
 
     @NotBlank(message = "패스워드 값이 없습니다.")
-    @Size(min = 4, max = 100 ,message = "패스워드의 크기는 4에서 100 사이여야 합니다.")
+    @Size(min = 4, max = 100, message = "패스워드의 크기는 4에서 100 사이여야 합니다.")
     private String password;
 
     @NotBlank(message = "닉네임 값이 없습니다.")

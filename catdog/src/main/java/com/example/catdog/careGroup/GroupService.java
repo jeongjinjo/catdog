@@ -111,9 +111,9 @@ public class GroupService {
         //  CHECK 2. 그룹에 사람 집어넣기
         List<CareGroupMember> careGroupMemberInsert = new ArrayList<>();
         for(String member : memberId) {
-            String role = String.valueOf(Role.guest);
+            String role = String.valueOf(Role.GUEST);
             if(member.equals(currentMemberId)) {
-                role = String.valueOf(Role.admin);
+                role = String.valueOf(Role.ADMIN);
             }
 
             CareGroupMemberDTO cgmDTO = CareGroupMemberDTO

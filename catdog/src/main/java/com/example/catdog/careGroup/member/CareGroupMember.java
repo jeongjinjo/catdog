@@ -6,9 +6,11 @@ import com.example.catdog.enum_column.Role;
 import com.example.catdog.member.Member;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.stereotype.Component;
 
 @Data
 @Entity
+@Component
 @Table(name = "care_group_member")
 public class CareGroupMember {
     @Id
