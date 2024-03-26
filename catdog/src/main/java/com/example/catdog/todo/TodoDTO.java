@@ -26,6 +26,7 @@ public class TodoDTO {
 
     private Comp_yn complete_yn;
 
+    @JsonFormat(pattern = "yyyy/MM/dd HH:ss:mm")
     private LocalDateTime start_date;
 
     private Resign_yn resign_yn;
