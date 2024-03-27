@@ -38,19 +38,6 @@ public interface MemberRepository extends JpaRepository<Member, String> {
             ", m.phone_num" +
             ") " +
             " FROM Member m " +
-            "WHERE m.member_id = :member_id " +
-            "  AND m.password = :password")
-    public Optional<Member> findByMemberIdAndPassword(@Param("member_id") String member_id, @Param("password") String password);
-
-    @Query(value = "SELECT new com.example.catdog.member.Member(" +
-            "m.member_id" +
-            ", m.password" +
-            ", m.nickname" +
-            ", m.name" +
-            ", m.resign_yn" +
-            ", m.phone_num" +
-            ") " +
-            " FROM Member m " +
             "WHERE m.member_id = :member_id")
     public Optional<Member> findByMemberId(@Param("member_id") String member_id);
 

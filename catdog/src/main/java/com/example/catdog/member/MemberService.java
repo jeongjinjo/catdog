@@ -10,6 +10,7 @@ import com.example.catdog.exception.ErrorCode;
 import com.example.catdog.exception.MemberExcption;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -77,7 +78,7 @@ public class MemberService {
 
         // 회원이 속한 그룹 정보 저장
         String groupName = savedMember.getNickname();// group_name에 nickname 값 설정
-        Role role = Role.ADMIN; // role은 ADMIN으로 설정
+        Role role = Role.admin; // role은 ADMIN으로 설정
 
         CareGroup careGroup = new CareGroup();
         careGroup.setGroup_name(groupName);
@@ -111,16 +112,27 @@ public class MemberService {
     @Transactional
     // 내 정보 수정 ( eunae )
     public int myInfoUpdate(Member member, String passwordUpdate) {
-        String password = passwordUpdate;
-        Optional<Member> mem = memberRepository.findByMemberIdAndPassword(member.getMember_id(), member.getPassword());
-
-        if (mem.isEmpty()) {
-            throw new MemberExcption(ErrorCode.PASSWORD_NOT_MATCH);
+        // CHECK 0. 회원이 존재하지 않는 경우 예외 처리
+        Optional<Member> dbInMember = memberRepository.findByMemberId(member.getMember_id());
+        if(dbInMember.isEmpty()) {
+            throw new MemberExcption(ErrorCode.NOT_FOUND);
         }
 
-        // 패스워드를 바꾸지 않고 다른 정보를 바꾸는거라면?
-        if (passwordUpdate == null || passwordUpdate.equals("") || passwordUpdate == "") {
-            password = member.getPassword();
+        // CHECK 1. 입력한 패스워드와 DB에 저장된 패스워드가 동일한지?
+        boolean check = passwordEncoder.matches(member.getPassword(),dbInMember.get().getPassword());
+        if(!check) {
+            throw new MemberExcption(ErrorCode.PASSWORD_NOT_MATCH);
+        }
+        // CHECK 2. 동일하다면 패스워드를 바꿀건지?
+        String password = "";
+        // CHECK 2.1. 패스워드를 바꾸지 않고 다른 정보를 바꾸는거라면?
+        if (passwordUpdate == null ||  passwordUpdate.isEmpty()) {
+            // 패스워드 변경이 아닌 경우, 기존 패스워드를 사용
+            password = dbInMember.get().getPassword();
+        // CHECK 2.2. 패스워드를 바꿀 생각이라면?
+        } else {
+            // 패스워드 변경인 경우, 새로운 비밀번호를 암호화하여 사용
+            password = passwordEncoder.encode(passwordUpdate);
         }
 
         int result = memberRepository.myInfoUpdate(
@@ -134,33 +146,40 @@ public class MemberService {
     }
 
     // 회원탈퇴 ( eunae )
-    public Member signOut(String id) {
+    public int signOut(String id) {
+        int result = 0;
         Optional<Member> member = memberRepository.findByMemberId(id);
-
         if (member.isEmpty()) {
+            result = -1;
             throw new MemberExcption(ErrorCode.NOT_FOUND);
         }
-
-        System.out.println(member.get());
-
         Member memberUpdate = member.get();
         memberUpdate.setName("탈퇴한 회원");
         memberUpdate.setResign_yn(Resign_yn.Y);
-
         Member db = memberRepository.save(memberUpdate);
 
-        return db;
+        if(db != null) {
+            result = 1;
+        }
+        return result;
     }
 
-    // 비밀번호 확인 ( eunae )
-    public Member pwCheck(String id, String pw) {
-        Optional<Member> member = memberRepository.findByMemberIdAndPassword(id, pw);
+    // NOTE 비밀번호 확인 ( eunae ) CHECK 03.27 수정완료
+    public int pwCheck(String id, String pw) {
+        int result = 0;
+        Optional<Member> memberId = memberRepository.findByMemberId(id);
+        boolean check = passwordEncoder.matches(pw, memberId.get().getPassword());
 
-        if (member.isEmpty()) {
-            throw new MemberExcption(ErrorCode.ID_OR_PASSWORD_FAILED);
+        if(!check) {
+            result = -1;
+            throw new MemberExcption(ErrorCode.PASSWORD_NOT_MATCH);
         }
-
-        return member.get();
+//        Optional<Member> member = memberRepository.findByMemberIdAndPassword(id, pw);
+//        if (member.isEmpty()) {
+//            throw new MemberExcption(ErrorCode.ID_OR_PASSWORD_FAILED);
+//        }
+        result = 1;
+        return result;
     }
 
     // 멤버 그룹 초대 ( eunae )

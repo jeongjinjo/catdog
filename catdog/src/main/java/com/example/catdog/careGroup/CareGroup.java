@@ -3,6 +3,8 @@ package com.example.catdog.careGroup;
 import com.example.catdog.enum_column.Resign_yn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +13,8 @@ import lombok.NoArgsConstructor;
 @Schema(description = "Group Table에 대한 내용입니다.")
 @Table(name = "care_group")
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class CareGroup {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -43,10 +43,10 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                                 authorizationManagerRequestMatcherRegistry
-                                        .requestMatchers("/auth/**")
-                                        .permitAll()
-                                        .anyRequest().authenticated()
-//                                        .anyRequest().permitAll()
+//                                        .requestMatchers("/auth/**", "/swagger-ui/**","/v3/api-docs/**")
+//                                        .permitAll()
+//                                        .anyRequest().authenticated()
+                                        .anyRequest().permitAll()
                 );
 
         // 세션을 생성하지 않고, 각 요청을 독립적으로 처리하도록 서버에 지시하는 것입니다.
@@ -74,5 +74,4 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
     }
-
 }
