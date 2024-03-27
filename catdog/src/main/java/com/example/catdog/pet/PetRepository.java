@@ -49,7 +49,7 @@ public interface PetRepository extends JpaRepository<Pet, Integer> {
 
     public Optional<List<Object[]>> findByGroupInfoPet(@Param("id") String id);
 
-    // NOTE 로그인 한 사람의 그룹별 반려동물 정보 ( eunae ) CHECK 03.25 수정완료
+//     NOTE 로그인 한 사람의 그룹별 반려동물 정보 ( eunae ) CHECK 03.25 수정완료
     @Query(value = "SELECT p " +
                     " FROM Pet p " +
                     "  JOIN CareTarget ct " +
