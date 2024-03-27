@@ -37,7 +37,7 @@ public class TodoService {
         return groupTodos;
     }
     
-    // 로그인 한 사람이 본인이 작석한 오늘날짜의 할일 수정하기
+    // 로그인 한 사람의 그룹의 반려동물 할일 수정하기
     public Optional<Todo> updateTodo(int todo_num, String todo, String member_id) {
         Optional<Todo> optionalTodo = todoRepository.findById(todo_num);
 
@@ -45,15 +45,17 @@ public class TodoService {
 
             Todo todoEntity = optionalTodo.get();
 
-            if ( todoEntity.getStart_date().toLocalDate().isEqual(LocalDate.now()) &&
-                    todoEntity.getComplete_yn() == Comp_yn.N &&
-                    todoEntity.getComplete_by() == null &&
-                    todoEntity.getComplete_at() == null &&
-                    todoEntity.getResign_yn() == Resign_yn.N &&
-                    todoEntity.getStart_id().equals(member_id)) // 이 부분 없애고 set으로 던지면 로그인 한 아이디로 수정변경 됨.
+            if ( todoEntity.getStart_date().toLocalDate().isEqual(LocalDate.now())
+                    && todoEntity.getComplete_yn() == Comp_yn.N
+                    && todoEntity.getComplete_by() == null
+                    && todoEntity.getComplete_at() == null
+                    && todoEntity.getResign_yn() == Resign_yn.N
+//                    && todoEntity.getStart_id().equals(member_id)// 이 부분 없애고 set으로 던지면 로그인 한 아이디로 수정변경 됨.
+                )
             {
                 todoEntity.setTodo(todo);
                 todoEntity.setStart_date(LocalDateTime.now());
+                todoEntity.setStart_id(member_id);
 
                 Todo updatedTodo = todoRepository.save(todoEntity);
 
@@ -97,13 +99,13 @@ public class TodoService {
 
             Todo todoEntity = optionalTodo.get();
 
-            if ( todoEntity.getStart_date().toLocalDate().isEqual(LocalDate.now()) &&
-                    todoEntity.getComplete_yn() == Comp_yn.N &&
-                    todoEntity.getComplete_by() == null &&
-                    todoEntity.getComplete_at() == null &&
-                    todoEntity.getResign_yn() == Resign_yn.N &&
-                    todoEntity.getTodo()!=null &&
-                    todoEntity.getStart_id().equals(member_id)) // 이 부분 없애고 set으로 던지면 로그인 한 아이디로 삭제 됨.
+            if ( todoEntity.getStart_date().toLocalDate().isEqual(LocalDate.now())
+                    && todoEntity.getComplete_yn() == Comp_yn.N
+                    && todoEntity.getComplete_by() == null
+                    && todoEntity.getComplete_at() == null
+                    && todoEntity.getResign_yn() == Resign_yn.N
+                    && todoEntity.getTodo()!=null
+                )
             {
                 todoEntity.setResign_yn(Resign_yn.Y);
 

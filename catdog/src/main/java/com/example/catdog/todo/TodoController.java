@@ -48,7 +48,7 @@ public class TodoController {
      * @return : 선택한 동물과 날짜로 할 일 조회한다. 디폴트는 오늘날짜, 첫번째 반려동물
      */
     @GetMapping()
-    public ResponseEntity<Map<Integer, List<Object>>> todolist(@RequestBody String id, Integer petNum, Date date){
+    public ResponseEntity<Map<Integer, List<Object>>> todolist(@RequestParam String id, Integer petNum, Date date){
         Map<Integer, List<Object>> todolists = todoService.getdatePetTodoList(id, petNum, date);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(todolists);
     }
