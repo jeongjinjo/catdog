@@ -55,7 +55,6 @@ public class GroupController {
     }
 
     // NOTE 그룹에 속해있는 반려동물 확인하기 ( eunae ) CHECK 03.22 확인완료
-
     @GetMapping("groupInPet/{id}")
     public ResponseEntity<Map<Integer, List<Pet>>> getGroupInfoPet(@PathVariable String id) {
         Map<Integer,List<Pet>> list = groupService.getGroupInfoPet(id);
@@ -84,12 +83,12 @@ public class GroupController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    // NOTE 그룹 수정 - 인원 삭제 ( eunae ) CHECK 03.25 생성
-    @PutMapping("{groupNum}/{loginId}/{delTargetMember}")
+    // NOTE 그룹 수정 - 인원 삭제 및 등록 ( eunae ) CHECK 03.25 생성 03.27 수정완료
+    @PutMapping("{groupNum}/{loginId}/{targetMember}")
     public ResponseEntity<Integer> groupInMemberOutUpdate(@PathVariable int groupNum
             , @PathVariable String loginId
-            , @PathVariable String delTargetMember) {
-        int result = groupService.groupInMemberOutUpdate(groupNum, loginId, delTargetMember);
+            , @PathVariable String targetMember) {
+        int result = groupService.groupInMemberInAndOutUpdate(groupNum, loginId, targetMember);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
@@ -102,15 +101,21 @@ public class GroupController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    // NOTE 그룹 수정 ( eunae ) CHECK 03.26 생성
-    @PutMapping
-    public ResponseEntity<Integer> careGroupUpdate(@Valid @RequestBody RequestDTO requestDTO) {
+    @PostMapping("{groupNum}/{loginId}/{inTargetPet}")
+    // NOTE 그룹 수정 - 반려동물 등록 ( eunae ) CHECK 03.27 생성
+    public ResponseEntity<Integer> groupInPetInUpdate(@PathVariable int groupNum
+            , @PathVariable String loginId
+            , @PathVariable int inTargetPet) {
+        int result = groupService.groupInPetInUpdate(groupNum, loginId, inTargetPet);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    // NOTE 그룹 수정 ( eunae ) CHECK 03.27 생성
+    @PutMapping("{id}")
+    public ResponseEntity<Integer> careGroupUpdate(@RequestBody GroupDTO groupDTO, @PathVariable String loginId) {
         ModelMapper mapper = new ModelMapper();
-        CareGroup careGroupDb = mapper.map(requestDTO.getGroupDTO(), CareGroup.class);
-        int result = groupService.groupUpdate( careGroupDb
-                                            , requestDTO.getMember_id()
-                                            , requestDTO.getPet_num()
-                                            , requestDTO.getCurrent_member_id());
+        CareGroup careGroup = mapper.map(groupDTO, CareGroup.class);
+        int result = groupService.groupUpdate(careGroup, loginId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }
