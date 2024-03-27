@@ -43,12 +43,12 @@ class GroupServiceTest {
     }
 
     @Test
-    void groupInMemberOutUpdate() {
+    void groupInMemberInAndOutUpdate() {
         int groupNum = 8;
         String loginId = "ninano";
         String deleteTargetMember = "tt";
 
-        int result = service.groupInMemberOutUpdate(groupNum, loginId, deleteTargetMember);
+        int result = service.groupInMemberInAndOutUpdate(groupNum, loginId, deleteTargetMember);
     }
 
     @Test
@@ -59,5 +59,22 @@ class GroupServiceTest {
 
         int ct = service.groupInPetOutUpdate(groupNum, loginId ,petNum);
         System.out.println("결과 >>>>>>>>>>>>>>>>>>>>>>>>>>>" + ct);
+    }
+
+    @Test
+    void groupInPetInUpdate() {
+        int groupNum = 1;
+        String loginId = "hoho";
+        int petNum = 5;
+
+        int ct = service.groupInPetInUpdate(groupNum, loginId ,petNum);
+        System.out.println("결과 >>>>>>>>>>>>>>>>>>>>>>>>>>>" + ct);
+    }
+
+    @Test
+    void groupUpdate() {
+        CareGroup careGroup = CareGroup.builder().group_num(1).group_name("수정한그룹명").build();
+        String loginId = "hoho";
+        service.groupUpdate(careGroup, loginId);
     }
 }

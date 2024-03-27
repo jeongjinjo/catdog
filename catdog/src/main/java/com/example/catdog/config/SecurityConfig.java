@@ -43,7 +43,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                                 authorizationManagerRequestMatcherRegistry
-                                        .requestMatchers("/auth/**")
+                                        .requestMatchers("/auth/**", "/swagger-ui/**","/v3/api-docs/**")
                                         .permitAll()
                                         .anyRequest().authenticated()
 //                                        .anyRequest().permitAll()
@@ -74,5 +74,4 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
     }
-
 }
