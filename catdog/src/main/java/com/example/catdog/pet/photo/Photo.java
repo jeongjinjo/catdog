@@ -1,24 +1,28 @@
 package com.example.catdog.pet.photo;
 
 import com.example.catdog.enum_column.Resign_yn;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity // 이 클래스가 JPA 앤티티임을 나타낸다. JPA가 이 클래스와 데이터베이스 테이블 간의 매핑을 수행한다.
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor //Lombok 어노테이션 , 매개변수가 없는 생성자와 모든 필드를 매개변수로 받는 생성자를 자동으로 생성함.
+@Entity
+@Data
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(name = "photo")
+@Schema(description = "반려동물 사진에 대한 정보입니다.")
 public class Photo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
+    @Schema(title = "사진 고유번호", description = "자동으로 1씩 증가합니다.")
     private int photo_num;
 
+    @Schema(title = "사진 경로", description = "사진이 저장된 경로를 저장합니다.")
     private String route;
 
+    @Schema(title = "사진 사용여부")
     @Enumerated(EnumType.STRING)
     private Resign_yn resign_yn;
 }
