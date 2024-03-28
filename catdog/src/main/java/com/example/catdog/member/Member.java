@@ -22,7 +22,7 @@ public class Member {
     @Schema(title = "사용자 ID", description = "최대 50자까지이며, 고유한 값을 등록해주어야 합니다.")
     private String member_id = UUID.randomUUID().toString();
 
-//    @JsonIgnore
+    @JsonIgnore
     @Schema(title = "사용자 PW", description = "최대 100자까지이며, 4글자 이상이면 됩니다.")
     private String password;
 
@@ -37,19 +37,7 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Resign_yn resign_yn;
 
-    @Schema(title = "사용자 전화번호", description = "xxx-xxxx-xxxx 일 시, '-'은 없애고 등록해주어야 한다.")
+    @Column(unique = true)
+    @Schema(title = "사용자 전화번호", description = "고유한 값을 등록해주어야 합니다.")
     private String phone_num;
-
-
-//    public Member() {
-//    }
-//
-//    public Member(String member_id, String password, String nickname, String name, Resign_yn resign_yn, String phone_num) {
-//        this.member_id = member_id;
-//        this.password = password;
-//        this.nickname = nickname;
-//        this.name = name;
-//        this.resign_yn = resign_yn;
-//        this.phone_num = phone_num;
-//    }
 }
