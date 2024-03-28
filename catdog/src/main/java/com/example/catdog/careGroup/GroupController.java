@@ -211,21 +211,25 @@ public class GroupController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    // NOTE 그룹 수정 ( eunae ) CHECK 03.27 생성
+    // NOTE 그룹 수정 ( eunae ) CHECK 03.27 생성 03.28 수정완료
     @Operation(summary = "그룹 수정"
             , description = "현재 로그인한 아이디의 권한을 확인하여 그룹에 대한 정보를 수정할 수 있는 UPDATE 기능")
-    @Parameters(
+    @Parameters({
+            @Parameter(
+                    description = "수정할 그룹의 번호를 입력해주세요.",
+                    name = "groupNum",
+                    required = true
+            ),
             @Parameter(
                     description = "권한 체크를 위한 아이디 입력은 필수입니다.",
                     name = "id",
                     required = true
             )
-    )
-    @PutMapping("{id}")
-    public ResponseEntity<Integer> careGroupUpdate(@RequestBody GroupDTO groupDTO, @PathVariable String id) {
-        ModelMapper mapper = new ModelMapper();
-        CareGroup careGroup = mapper.map(groupDTO, CareGroup.class);
-        int result = groupService.groupUpdate(careGroup, id);
+    })
+    @PutMapping("up/{groupNum}/{id}")
+    public ResponseEntity<Integer> careGroupUpdate(@PathVariable int groupNum, @PathVariable String id, @RequestBody String groupName) {
+        String gn = groupName.replace("\"", "");
+        int result = groupService.groupUpdate(groupNum, id, gn);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }

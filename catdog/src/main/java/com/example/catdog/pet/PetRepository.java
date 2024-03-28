@@ -65,7 +65,7 @@ public interface PetRepository extends JpaRepository<Pet, Integer> {
                     "      AND cgm.resign_yn = 'N' " +
                     ")  " +
                     "AND p.resign_yn = 'N' " +
-                    "AND (photo.resign_yn = 'N' OR photo.resign_yn IS NULL)"
+                    "AND photo.resign_yn = 'N' OR photo.resign_yn IS NULL"
     )
     public List<Pet> getGroupInfoPet(@Param("member_id") String member_id);
 

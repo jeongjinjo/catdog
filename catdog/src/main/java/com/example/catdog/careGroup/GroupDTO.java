@@ -17,6 +17,7 @@ import java.util.List;
 @ToString
 @Schema(description = "그룹 유효성 검사를 위한 객체입니다.")
 public class GroupDTO {
+    @JsonIgnore
     @Schema(title = "그룹 고유 번호")
     private int group_num;
 

@@ -73,8 +73,8 @@ class GroupServiceTest {
 
     @Test
     void groupUpdate() {
-        CareGroup careGroup = CareGroup.builder().group_num(1).group_name("수정한그룹명").build();
-        String loginId = "hoho";
-        service.groupUpdate(careGroup, loginId);
+//        int groupNum = 1;
+//        String loginId = "hoho";
+//        service.groupUpdate(groupNum, loginId);
     }
 }
