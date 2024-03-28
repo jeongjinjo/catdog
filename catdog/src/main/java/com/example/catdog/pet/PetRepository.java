@@ -39,9 +39,9 @@ public interface PetRepository extends JpaRepository<Pet, Integer> {
             "JOIN CareGroup cg ON cg.group_num=ct.group_num " +
             "WHERE cg.group_num IN ( " +
             "   SELECT cgm.careGroup.group_num " +
-            "   FROM CareGroupMember cgm" +
+            "   FROM CareGroupMember cgm " +
             "   WHERE cgm.member.member_id = :id " +
-            "   AND cgm.resign_yn='N' " +
+            "   AND cgm.resign_yn = 'N' " +
             ") " +
             "AND p.resign_yn = 'N'"
     )
