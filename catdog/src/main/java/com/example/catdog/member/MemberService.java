@@ -64,28 +64,27 @@ public class MemberService {
         return member != null && passwordEncoder.matches(password, member.getPassword());
     }
 
-
-    // 회원가입 ( jjanu )
     @Transactional
-    public Member signup(Member member) {
-        // 암호화된 비밀번호 설정
+    public Member signup(MemberDTO memberDTO) {
 
-        member.setPassword(passwordEncoder.encode(member.getPassword()));
+        Member member = new Member();
+        member.setMember_id(memberDTO.getMember_id());
+        member.setPassword(passwordEncoder.encode(memberDTO.getPassword()));
+        member.setNickname(memberDTO.getNickname());
+        member.setName(memberDTO.getName());
         member.setResign_yn(Resign_yn.N);
+        member.setPhone_num(memberDTO.getPhone_num());
 
-        // 회원 정보 저장
         Member savedMember = memberRepository.save(member);
 
-        // 회원이 속한 그룹 정보 저장
-        String groupName = savedMember.getNickname();// group_name에 nickname 값 설정
-        Role role = Role.admin; // role은 ADMIN으로 설정
+        String groupName = memberDTO.getNickname();
+        Role role = Role.admin;
 
         CareGroup careGroup = new CareGroup();
         careGroup.setGroup_name(groupName);
         careGroup.setResign_yn(Resign_yn.N);
         groupRepository.save(careGroup);
 
-        // CareGroupMember 엔터티 생성 및 저장
         CareGroupMember careGroupMember = new CareGroupMember();
         careGroupMember.setCareGroup(careGroup);
         careGroupMember.setMember(savedMember);
@@ -96,6 +95,7 @@ public class MemberService {
 
         return savedMember;
     }
+
 
 
     // 내 정보 확인 ( eunae )

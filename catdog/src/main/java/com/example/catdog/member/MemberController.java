@@ -1,10 +1,13 @@
 package com.example.catdog.member;
 
 import com.example.catdog.jwt.JwtUtil;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -68,10 +71,20 @@ public class MemberController {
     }
 
     @PostMapping("signUp")
-    public ResponseEntity<String> signup(@RequestBody Member member) {
-        memberService.signup(member);
+    public ResponseEntity<String> signup(@RequestBody @Valid MemberDTO memberDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            // 유효성 검사 실패 시 처리
+            StringBuilder errorMessage = new StringBuilder();
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                errorMessage.append(error.getDefaultMessage());
+            }
+            return ResponseEntity.badRequest().body(errorMessage.toString());
+        }
+
+        memberService.signup(memberDTO);
         return ResponseEntity.ok("회원가입이 완료되었습니다.");
     }
+
 
     @PostMapping("checkId")
     public ResponseEntity<String> checkId(@RequestBody Member member) {
