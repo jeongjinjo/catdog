@@ -44,7 +44,7 @@ public class Pet {
 
     @OneToOne
     @JoinColumn(name="photo_num", unique = true)
-    private Photo photo;
+    private Photo photo; //문자로 사진이 있다는 경로 보냄.
 
     //이렇게하면... pet_num과 id 연결 되는 것
     /*@ManyToOne(fetch = FetchType.LAZY)
