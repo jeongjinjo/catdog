@@ -24,12 +24,10 @@ public class MemberDTO {
     @Schema(description = "아이디에 대한 패스워드")
     private String password;
 
-    @NotBlank(message = "닉네임 값이 없습니다.")
     @Size(min = 2, max = 50, message = "닉네임의 크기는 2에서 50 사이여야 합니다.")
     @Schema(description = "사용자의 닉네임")
     private String nickname;
 
-    @NotBlank(message = "이름 값이 없습니다.")
     @Size(max = 50, message = "이름은 50자까지 입력이 가능합니다.")
     @Schema(description = "사용자의 이름")
     private String name;

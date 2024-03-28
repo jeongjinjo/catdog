@@ -88,6 +88,7 @@
             <artifactId>spring-boot-starter-hateoas</artifactId>
         </dependency>
 
+
         <!--		시큐리티 관련 의존성 start -->
         <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api -->
         <dependency>
@@ -144,6 +145,7 @@
 <!--            <scope>provided</scope>-->
 <!--        </dependency>-->
     </dependencies>
+
 
     <build>
         <plugins>
