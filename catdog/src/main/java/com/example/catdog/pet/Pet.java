@@ -56,6 +56,7 @@ public class Pet {
 
     @OneToOne
     @JoinColumn(name="photo_num", unique = true)
+
     @Schema(title = "반려동물 사진", description = "반려동물 등록 시, 같이 등록될 프로필입니다.")
     private Photo photo;
 }

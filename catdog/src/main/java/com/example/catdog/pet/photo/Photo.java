@@ -3,12 +3,13 @@ package com.example.catdog.pet.photo;
 import com.example.catdog.enum_column.Resign_yn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name = "photo")
 @Schema(description = "반려동물 사진에 대한 정보입니다.")
 public class Photo {
