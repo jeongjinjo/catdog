@@ -38,81 +38,45 @@ public class TodoService {
     }
     
     // 로그인 한 사람의 그룹의 반려동물 할일 수정하기
-    public Optional<Todo> updateTodo(int todo_num, String todo, String member_id) {
-        Optional<Todo> optionalTodo = todoRepository.findById(todo_num);
+    public Todo updateTodo(Todo todo) {
+        Optional<Todo> optionalTodo = todoRepository.findById(todo.getTodo_num());
 
         if (optionalTodo.isPresent()) {
-
             Todo todoEntity = optionalTodo.get();
 
-            if ( todoEntity.getStart_date().toLocalDate().isEqual(LocalDate.now())
-                    && todoEntity.getComplete_yn() == Comp_yn.N
-                    && todoEntity.getComplete_by() == null
-                    && todoEntity.getComplete_at() == null
+            if (todoEntity.getStart_date().toLocalDate().isEqual(LocalDate.now())
                     && todoEntity.getResign_yn() == Resign_yn.N
-//                    && todoEntity.getStart_id().equals(member_id)// 이 부분 없애고 set으로 던지면 로그인 한 아이디로 수정변경 됨.
-                )
-            {
-                todoEntity.setTodo(todo);
+            ) {
+                todoEntity.setTodo(todo.getTodo());
                 todoEntity.setStart_date(LocalDateTime.now());
-                todoEntity.setStart_id(member_id);
 
-                Todo updatedTodo = todoRepository.save(todoEntity);
-
-                return Optional.of(updatedTodo);
+                Todo updateTodo = todoRepository.save(todoEntity);
+                return updateTodo;
             }
         }
-        return Optional.empty();
+        return null;
     }
-    //@RequestBody 로 수정해보기 도전 중--
-//    public Optional<Todo> updateTodo(TodoDTO todoDTO) {
-//        Optional<Todo> optionalTodo = todoRepository.findById(todoDTO.getTodo_num());
-//
-//        if (optionalTodo.isPresent()) {
-//            Todo todoEntity = optionalTodo.get();
-//
-//            // Check if the conditions allow for updating the todo
-//            if (isUpdateAllowed(todoEntity, todoDTO)) {
-//                todoEntity.setTodo(todoDTO.getTodo());
-//                todoEntity.setStart_date(LocalDateTime.now());
-//
-//                Todo updatedTodo = todoRepository.save(todoEntity);
-//                return Optional.of(updatedTodo);
-//            }
-//        }
-//        return Optional.empty();
-//    }
-//    private boolean isUpdateAllowed(Todo todoEntity, TodoDTO todoDTO) {
-//        return todoEntity.getStart_date().toLocalDate().isEqual(LocalDate.now()) &&
-//                todoEntity.getComplete_yn() == Comp_yn.N &&
-//                todoEntity.getComplete_by() == null &&
-//                todoEntity.getComplete_at() == null &&
-//                todoEntity.getResign_yn() == Resign_yn.N &&
-//                todoEntity.getStart_id().equals(todoDTO.getStart_id());
-//    }
 
     // 할일 완료 안 된 것만 삭제 하기
-    public Optional<Todo> deleteTodo(int todo_num, String member_id) {
+    public Todo deleteTodo(Integer todo_num) {
         Optional<Todo> optionalTodo = todoRepository.findById(todo_num);
 
         if (optionalTodo.isPresent()) {
-
             Todo todoEntity = optionalTodo.get();
-
             if ( todoEntity.getStart_date().toLocalDate().isEqual(LocalDate.now())
                     && todoEntity.getComplete_yn() == Comp_yn.N
                     && todoEntity.getComplete_by() == null
                     && todoEntity.getComplete_at() == null
                     && todoEntity.getResign_yn() == Resign_yn.N
-                    && todoEntity.getTodo()!=null
+                    && !todoEntity.getTodo().isEmpty()
                 )
             {
                 todoEntity.setResign_yn(Resign_yn.Y);
+                Todo updateTodo = todoRepository.save(todoEntity);
 
-                Todo updatedTodo = todoRepository.save(todoEntity);
-                return Optional.of(updatedTodo);
+                return updateTodo;
             }
         }
-        return Optional.empty();
+        return null;
     }
 }

@@ -28,25 +28,23 @@ public interface PetRepository extends JpaRepository<Pet, Integer> {
     public List<Pet> findByGroupNotInPet(@Param("id") String id);
 
     // 로그인 한 사람의 그룹별 반려동물 정보 ( gayoung )
-    @Query(value = "SELECT DISTINCT cgm.careGroup.group_num" +
+    @Query(value = "SELECT DISTINCT cg.group_num" +
             ", p.pet_num " +
             ", p.pet_name" +
             ", p.gender" +
             ", p.age" +
             ", p.disease " +
             "FROM Pet p " +
-            "JOIN CareTarget ct ON p.pet_num=ct.pet_num " +
-            "JOIN CareGroup cg ON ct.group_num=cg.group_num " +
-            "JOIN CareGroupMember cgm ON cg.group_num=cgm.careGroup.group_num " +
-            "WHERE cgm.careGroup.group_num IN ( " +
-            "   SELECT careGroup.group_num " +
-            "   FROM CareGroupMember " +
-            "   WHERE member_id = :id " +
-            "   AND resign_yn='N' " +
+            "JOIN CareTarget ct ON ct.pet_num=p.pet_num " +
+            "JOIN CareGroup cg ON cg.group_num=ct.group_num " +
+            "WHERE cg.group_num IN ( " +
+            "   SELECT cgm.careGroup.group_num " +
+            "   FROM CareGroupMember cgm" +
+            "   WHERE cgm.member.member_id = :id " +
+            "   AND cgm.resign_yn='N' " +
             ") " +
             "AND p.resign_yn = 'N'"
     )
-
     public Optional<List<Object[]>> findByGroupInfoPet(@Param("id") String id);
 
 //     NOTE 로그인 한 사람의 그룹별 반려동물 정보 ( eunae ) CHECK 03.25 수정완료

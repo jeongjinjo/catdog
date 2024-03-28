@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +17,7 @@ import java.time.LocalDateTime;
 @ToString
 @Schema(description = "메모 유효성 검사를 위한 객체입니다.")
 public class MemoDTO {
+
     @Schema(description = "메모 고유 번호")
     private int memo_num;
 
