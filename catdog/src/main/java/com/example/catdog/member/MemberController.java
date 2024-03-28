@@ -1,6 +1,8 @@
 package com.example.catdog.member;
 
 import com.example.catdog.jwt.JwtUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,12 +15,15 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
+@Tag(name = "MemberController", description = "Member 회원가입, 로그인 관련 controller 입니다")
 public class MemberController {
     private final JwtUtil jwtUtil;
     private final MemberService memberService;
     private final MemberRepository memberRepository;
     private final MemberDetailsService memberDetailsService;
 
+    @Operation(summary = "비밀번호 찾기전 인증과정",
+            description = "member_id, name, phone_num 정보를 받아서 db와 대조한뒤에 인증성공 여부를 확인")
     @PostMapping("/authenticate")
     public ResponseEntity<String> authenticate(@RequestBody Member member) {
         boolean authenticated = memberService.passwordAuthenticate(
@@ -30,6 +35,8 @@ public class MemberController {
         }
     }
 
+    @Operation(summary = "비밀번호 찾기 기능",
+            description = "새비밀번호와 비밀번호확인을 통해서 일치하면 비밀번호 변경을 해서 암호화한뒤 db에 저장")
     @PutMapping("/changePassword")
     public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
         String member_id = changePasswordRequest.getMember_id();
@@ -47,6 +54,8 @@ public class MemberController {
         }
     }
 
+    @Operation(summary = "아이디 찾기 기능",
+            description = "")
     @GetMapping("/findId")
     public String findMemberIdByNameAndPhoneNum(@RequestBody Member member) {
         return memberService.findMemberIdByNameAndPhoneNum(member.getName(), member.getPhone_num());
