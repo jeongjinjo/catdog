@@ -23,10 +23,10 @@ public interface MemoRepository extends JpaRepository<Memo, Integer> {
             "   WHERE member.member_id = :member_id " +
             "   AND resign_yn='N' " +
             ") " +
-            "AND m.memo_num = :memo_num " +
+            "AND m.pet_num = :pet_num " +
             "AND cg.resign_yn='N' " +
             "AND m.resign_yn='N' " +
             "AND DATE(m.date) = :date "
     )
-    List<Object> dateMemo(@Param("member_id") String member_id, @Param("memo_num") Integer memo_num, @Param("date") Date date);
+    List<Object> dateMemo(@Param("member_id") String member_id, @Param("pet_num") Integer memo_num, @Param("date") Date date);
 }
