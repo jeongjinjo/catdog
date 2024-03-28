@@ -2,6 +2,8 @@ package com.example.catdog.todo;
 
 import com.example.catdog.enum_column.Comp_yn;
 import com.example.catdog.enum_column.Resign_yn;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("checklist")
+@Tag(name = "MemoController", description = "반려동물 별 메모 컨트롤러")
 public class TodoController {
 
     private final TodoService todoService;
