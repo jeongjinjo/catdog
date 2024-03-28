@@ -7,6 +7,8 @@ import com.example.catdog.member.Member;
 import com.example.catdog.member.MemberService;
 import com.example.catdog.pet.Pet;
 import com.example.catdog.pet.PetService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -20,14 +22,17 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("group")
+@Tag(name = "CareGroupController", description = "그룹관리 관련 컨트롤러")
 public class GroupController {
     private final GroupService groupService;
     private final PetService petService;
     private final MemberService memberService;
 
     // NOTE 유저가 속해있는 그룹 정보 조회 ( eunae ) CHECK 03.21 확인완료 03.22 확인완료
+    @Operation(summary = "멤버가 속해있는 그룹 정보 조회"
+            , description = "그룹관리 페이지의 화면을 만들어주기 위한 SELECT 기능")
     @GetMapping("{id}")
-    public ResponseEntity<Map<Integer, List<CareGroupMember>>> gorupList(@PathVariable String id) {
+    public ResponseEntity<Map<Integer, List<CareGroupMember>>> groupList(@PathVariable String id) {
         Map<Integer,List<CareGroupMember>> list = groupService.groupList(id);
         return ResponseEntity.status(HttpStatus.OK).body(list);
     }
