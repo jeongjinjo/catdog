@@ -55,16 +55,19 @@ public class MemberController {
     }
 
     @Operation(summary = "아이디 찾기 기능",
-            description = "")
+            description = "name과 phone_num을 인증받아서 해당정보의 ID를 출력")
     @GetMapping("/findId")
     public String findMemberIdByNameAndPhoneNum(@RequestBody Member member) {
         return memberService.findMemberIdByNameAndPhoneNum(member.getName(), member.getPhone_num());
     }
 
+    @Operation(summary = "로그인 기능",
+            description = "")
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody Member member) {
-        String memberId = member.getMember_id();
-        String password = member.getPassword();
+    public ResponseEntity<String> login(@RequestBody MemberDTO memberDTO) {
+//        MemberDTO memberDTO = new MemberDTO();
+        String memberId = memberDTO.getMember_id();
+        String password = memberDTO.getPassword();
 
         // 회원 인증
         boolean isAuthenticated = memberService.authenticate(memberId, password);

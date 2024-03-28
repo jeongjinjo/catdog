@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -58,7 +59,8 @@ public class MemberService {
 
     public boolean authenticate(String member_id, String password) {
         // 회원 아이디로 회원 정보 조회
-        Member member = memberRepository.findById(member_id).orElse(null);
+        Member member = memberRepository.findById(member_id).orElseThrow(
+                () -> new NoSuchElementException("회원을 찾을 수 없습니다. ID: " + member_id));
 
         // 회원이 존재하고, 입력한 비밀번호가 일치하는지 확인
         return member != null && passwordEncoder.matches(password, member.getPassword());
