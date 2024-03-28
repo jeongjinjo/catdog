@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface PhotoRepository extends JpaRepository <Photo,Integer>{
 
 
+
 }

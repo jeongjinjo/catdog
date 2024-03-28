@@ -50,7 +50,7 @@ public class PhotoService {
             e.printStackTrace();
         }
 
-        //경로받는 곳
+//경로받는 곳
         Link link = WebMvcLinkBuilder
                 .linkTo(
                         WebMvcLinkBuilder
@@ -59,7 +59,8 @@ public class PhotoService {
                 )
                 .withRel("download");
         photo.setRoute(link.getHref().toString());
-
+        photo.setResign_yn(Resign_yn.N);
+        photoRepository.save(photo);
         System.out.println(photo);
 
     }
@@ -68,7 +69,7 @@ public class PhotoService {
     public void deletePhoto(int photo_num) {
         Optional<Photo> photo = photoRepository.findById(photo_num);
         if(photo.isEmpty()){
-            System.out.println("없다");
+            System.out.println("삭제할 사진이 존재하지 않습니다.");
         }
         photo.get().setResign_yn(Resign_yn.Y);
         photoRepository.save(photo.get());
