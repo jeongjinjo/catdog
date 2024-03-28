@@ -308,7 +308,6 @@ public class GroupService {
             result = -1;
             throw new CareGroupException(ErrorCode.PERMISSION_RESTRICTIONS);
         }
-
         // NOTE 그룹 수정 진행
         CareGroup cg = CareGroup.builder()
                                 .group_num(careGroup.getGroup_num())

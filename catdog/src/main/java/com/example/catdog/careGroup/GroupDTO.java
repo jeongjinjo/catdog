@@ -2,6 +2,7 @@ package com.example.catdog.careGroup;
 
 import com.example.catdog.enum_column.Resign_yn;
 import com.example.catdog.enum_column.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -24,6 +25,7 @@ public class GroupDTO {
     @Schema(title = "그룹명")
     private String group_name;
 
+    @JsonIgnore
     @Schema(title = "그룹 사용여부")
     private Resign_yn resign_yn;
 }

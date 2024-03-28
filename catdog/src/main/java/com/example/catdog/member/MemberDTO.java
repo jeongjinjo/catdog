@@ -1,6 +1,7 @@
 package com.example.catdog.member;
 
 import com.example.catdog.enum_column.Resign_yn;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -33,6 +34,7 @@ public class MemberDTO {
     private String name;
 
     @Schema(description = "사용자의 탈퇴여부")
+    @JsonIgnore
     private Resign_yn resign_yn;
 
     @Schema(description = "사용자의 전화번호", example = "010-1524-5151")
@@ -41,7 +43,6 @@ public class MemberDTO {
 
     // 비밀번호 변경될 값
     @Schema(description = "아이디에 대한 새로운 비밀번호")
-    @Size(min = 4, max = 100, message = "패스워드의 크기는 4에서 100 사이여야 합니다.")
     private String passwordUpdate;
 }
 //    @Pattern(regexp="^[a-zA-Z]+$", message="영어만 사용이 가능합니다.")
