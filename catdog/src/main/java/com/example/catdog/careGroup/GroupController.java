@@ -79,12 +79,10 @@ public class GroupController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    // NOTE 그룹 삭제 ( eunae ) CHECK 03.24 생성 --> @PathVariable로 바꿔보기
-    @PutMapping("del")
-    public ResponseEntity<Integer> careGroupAllDelete(@Valid @RequestBody RequestDTO requestDTO) {
-        int result = groupService.groupDelete( requestDTO.getGroupDTO().getGroup_num(),
-                requestDTO.getCurrent_member_id()
-        );
+    // NOTE 그룹 삭제 ( eunae ) CHECK 03.24 생성 03.28 수정완료
+    @PutMapping("{groupNum}/{loginId}")
+    public ResponseEntity<Integer> careGroupAllDelete(@PathVariable int groupNum, @PathVariable String loginId) {
+        int result = groupService.groupDelete( groupNum, loginId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 

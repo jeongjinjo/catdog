@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-@Schema(description = "그룹 등록 및 삭제를 위해 만들어진 DTO입니다.")
+@Schema(description = "그룹, 그룹에 속할 멤버, 그룹에 속할 반려동물을 위해 만들어진 DTO입니다.")
 public class RequestDTO {
     @Schema(title = "그룹 정보", description = "care_group에 대한 유효성 검사를 진행한 후 Entity로 전달")
     private GroupDTO groupDTO;
