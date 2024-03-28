@@ -63,6 +63,6 @@ public class PetController {
     @DeleteMapping("delete/{pet_num}")
     public ResponseEntity<String> deletedbyPet(@PathVariable int pet_num){
          petService.deletePet(pet_num);
-         return ResponseEntity.status(HttpStatus.ACCEPTED).body("삭제됨");
+         return ResponseEntity.status(HttpStatus.ACCEPTED).body("삭제 완료되었습니다.");
     }
 }

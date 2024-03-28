@@ -12,6 +12,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 
+import java.util.UUID;
+
 @Service
 
 
@@ -22,6 +24,8 @@ public class PhotoService {
     private Path photoPath;
 
     public PhotoService(PhotoRepository photoRepository) {
+
+
 
         this.photoRepository = photoRepository;
 
@@ -37,9 +41,10 @@ public class PhotoService {
 
     public void upload(Photo photo, MultipartFile photoFile) {
 
+        String uuid=UUID.randomUUID().toString();
         try {
             File dest = new File(photoPath +
-                    "/" + photoFile.getOriginalFilename());
+                    "/" +uuid+ photoFile.getOriginalFilename());
             photoFile.transferTo(dest);
         } catch (Exception e) {
             e.printStackTrace();

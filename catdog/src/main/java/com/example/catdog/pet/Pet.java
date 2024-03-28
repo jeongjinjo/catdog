@@ -41,8 +41,6 @@ public class Pet {
 
     @Schema(title = "반려동물 질병", description = "(,)을 기준으로 여러개의 질병을 넣을 수 있습니다.")
     private String disease;
-    //없다면 체크를 눌러서 disease없음에 해당되는건 어떨까//
-    //질병 ex( 심장병,방광염 , , , ) 쉼표로 구분되게 해야함.
 
     @Schema(title = "삭제여부")
     private String resign_yn;
