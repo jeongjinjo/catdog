@@ -24,7 +24,7 @@ public class PetController {
     //Member 테이블에 member_id를 통해 pet 조회
     @GetMapping("/select/member/{member_id}")
     public ResponseEntity<Pet> getPetById(@PathVariable String member_id){
-        Pet pet =petService.getPetBymemberId(member_id);
+        Pet pet =petService.getPetByMemberId(member_id);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(pet);
     }
 
@@ -45,10 +45,7 @@ public class PetController {
         ModelMapper mapper = new ModelMapper();
         Pet pet = mapper.map(petDto, Pet.class);
 
-        int petCount=petService.getPetCountById(petDto);
-        if (petCount>5){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
+
         Pet dbpet = petService.createPet(pet);
         return ResponseEntity.status(HttpStatus.CREATED).body(dbpet);
     }

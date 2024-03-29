@@ -3,6 +3,8 @@ package com.example.catdog.pet;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,13 +18,23 @@ public class PetService {
     PetRepository petRepository;
 
     //PET 정보 등록 기능
+    @Transactional
     public Pet createPet(Pet pet) {
         //Pet 을 반환하기 때문에
-        return petRepository.save(pet);
+        int petCount = petRepository.myPetCountByMemberId(pet.getMember_id());
+        System.out.println("petCount >>>> " + petCount);
+
+//        if(petCount < 6){
+//            return petRepository.save(pet);
+//        }else{
+//            throw new RuntimeException("펫을 더이상 등록할 수 없습니다. 5마리 이상입니다.");
+//        }
+
+        return null;
     }//save 메소드는 Spring Data JPA 에서 제공하는 메소드, 주어진 앤티티를 데이터베이스에 저장하고 저장된 앤티티를 반환한다.
 
    // member_id로 조회 가능
-    public Pet getPetBymemberId(String member_id){
+    public Pet getPetByMemberId(String member_id){
         Pet pet=petRepository.findByMemberId(member_id);
         return pet;
     }
@@ -63,8 +75,6 @@ public class PetService {
         return petRepository.findByGroupNotInPet(id);
     }
 
-    public int getPetCountById(PetDTO petDto) {
-        return petRepository.countById(petDto);
-    }
+
 }
 

@@ -1,6 +1,7 @@
 package com.example.catdog.pet;
 
 import com.example.catdog.enum_column.Gender;
+import com.example.catdog.enum_column.Resign_yn;
 import com.example.catdog.enum_column.Type;
 import com.example.catdog.pet.photo.Photo;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -43,7 +44,7 @@ public class Pet {
     private String disease;
 
     @Schema(title = "삭제여부")
-    private String resign_yn;
+    private Resign_yn resign_yn;
 
     @Schema(title = "반려동물 성별", description = "암컷, 수컷, 중성으로 이루어져있습니다.")
     @Enumerated(EnumType.STRING)
