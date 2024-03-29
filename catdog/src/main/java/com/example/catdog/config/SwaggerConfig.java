@@ -2,16 +2,12 @@ package com.example.catdog.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.service.*;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger.web.SecurityConfiguration;
-import springfox.documentation.swagger.web.SecurityConfigurationBuilder;
-
-import java.util.Arrays;
 
 @OpenAPIDefinition(
         info = @Info(
@@ -20,28 +16,24 @@ import java.util.Arrays;
                 , version = "v1.0.0"
         )
 )
+
 @Configuration
 public class SwaggerConfig {
 
-        @Bean
-        public Docket api() {
-                return new Docket(DocumentationType.SWAGGER_2)
-                        .select()
-                        .apis(RequestHandlerSelectors.basePackage("com.example.catdog"))
-                        .build()
-                        .securitySchemes(Arrays.asList(apiKey()));
-        }
+    @Bean
+    public OpenAPI openAPI() {
+        // SecurityScheme 설정
+        String jwtSchemeName = "jwtToken";
+        SecurityRequirement securityRequirement = new SecurityRequirement().addList(jwtSchemeName);
+        Components components = new Components()
+                .addSecuritySchemes(jwtSchemeName, new SecurityScheme()
+                        .name(jwtSchemeName)
+                        .type(SecurityScheme.Type.HTTP) // HTTP 방식
+                        .scheme("bearer")
+                        .bearerFormat("JWT")); // 토큰 형식을 지정하는 임의의 문자(Optional)
 
-        private ApiKey apiKey() {
-                return new ApiKey("JWT", "Authorization", "header");
-        }
-        @Bean
-        public SecurityConfiguration security() {
-                return SecurityConfigurationBuilder.builder()
-                        .scopeSeparator(",")
-                        .additionalQueryStringParams(null)
-                        .useBasicAuthenticationWithAccessCodeGrant(false)
-                        .build();
-        }
-
+        return new OpenAPI()
+                .components(components)
+                .addSecurityItem(securityRequirement);
+    }
 }
