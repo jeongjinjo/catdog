@@ -77,6 +77,7 @@ public class PetService {
     }
 
 
+
     // eunae 펫등록 테스트
     public Pet petCreate(Pet pet) {
         int petCount = petRepository.countByMemberIdIsMyPet(pet.getMember_id());

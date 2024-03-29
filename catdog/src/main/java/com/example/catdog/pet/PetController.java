@@ -35,6 +35,7 @@ public class PetController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(pet);
     }
     //애완동물 등록 (애완동물 5개까지 등록되여야 함)
+
     @PostMapping("/insert")
     public ResponseEntity<Pet> addPet(@Valid @RequestBody PetDTO petDto) {
         //클라이언트가 전송한 요청을 UserDto 객체로 받아온다..
@@ -46,6 +47,7 @@ public class PetController {
         Pet dbpet = petService.createPet(pet);
         return ResponseEntity.status(HttpStatus.CREATED).body(dbpet);
     }
+
     //수정
     @PutMapping("/update/{pet_num}")
     public ResponseEntity<Pet> updatePet(@RequestBody @Valid PetDTO petDto) {
