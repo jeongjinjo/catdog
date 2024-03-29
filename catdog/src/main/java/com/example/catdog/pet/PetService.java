@@ -63,8 +63,8 @@ public class PetService {
         return petRepository.findByGroupNotInPet(id);
     }
 
-    public int getPetCountById(PetDTO petDto) {
-        return petRepository.countById(petDto);
-    }
+//    public int getPetCountById(PetDTO petDto) {
+//        return petRepository.countById(petDto);
+//    }
 }
 
