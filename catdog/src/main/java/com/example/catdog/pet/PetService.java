@@ -1,6 +1,7 @@
 package com.example.catdog.pet;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,17 +13,14 @@ import java.util.Optional;
 
 
 @Service
-@Transactional
+@RequiredArgsConstructor
 public class PetService {
-    @Autowired //petRepository 의 인스턴트를 주입할 수 있는 어노테이션.
-    PetRepository petRepository;
+    private final PetRepository petRepository;
 
     //PET 정보 등록 기능
-    @Transactional
     public Pet createPet(Pet pet) {
         //Pet 을 반환하기 때문에
-        int petCount = petRepository.myPetCountByMemberId(pet.getMember_id());
-        System.out.println("petCount >>>> " + petCount);
+//        int petCount = petRepository.countByMyPetMemberId(pet.getMember_id());
 
 //        if(petCount < 6){
 //            return petRepository.save(pet);
