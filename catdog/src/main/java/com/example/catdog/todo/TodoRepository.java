@@ -5,8 +5,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -33,4 +31,10 @@ public interface TodoRepository extends JpaRepository<Todo, Integer> {
     )
     public Optional<List<Object[]>> findByGroupPetTodo(@Param("id") String id, @Param("pet_num") Integer pet_num, @Param("date") Date date);
 
+    // 날짜별로 할일이 있는지 없는지 확인해서 달력에 할일의 유무만 확인하기
+    @Query(value = "SELECT COUNT(*) " +
+            "FROM Todo t " +
+            "WHERE DATE(t.start_date) = :date "
+    )
+    int check(@Param("date") Date date);
 }
