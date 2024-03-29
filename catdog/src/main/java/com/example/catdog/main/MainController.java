@@ -16,7 +16,7 @@ import java.util.Map;
 public class MainController {
 
     private final MainService mainService;
-    
+
     /**
      * @param member_id : 로그인 한 아아디
      * @return : 로그인 한 사람이 속한 그룹별 반려동물의 정보 조회하기
