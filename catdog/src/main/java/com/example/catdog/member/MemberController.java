@@ -62,10 +62,9 @@ public class MemberController {
     }
 
     @Operation(summary = "로그인 기능",
-            description = "")
+            description = "Member_id와 password의 정보를 받아서 로그인한뒤 jwt토큰을 발행")
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody MemberDTO memberDTO) {
-//        MemberDTO memberDTO = new MemberDTO();
         String memberId = memberDTO.getMember_id();
         String password = memberDTO.getPassword();
 
@@ -82,6 +81,8 @@ public class MemberController {
         return ResponseEntity.ok(token);
     }
 
+    @Operation(summary = "회원가입 기능",
+            description = "회원가입시 member, careGroup, careGroupMember 테이블에 데이터를 저장")
     @PostMapping("signUp")
     public ResponseEntity<String> signup(@RequestBody @Valid MemberDTO memberDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -97,7 +98,8 @@ public class MemberController {
         return ResponseEntity.ok("회원가입이 완료되었습니다.");
     }
 
-
+    @Operation(summary = "아이디 중복체크",
+            description = "입력한 아이디를 db와 대조한뒤 중복 체크")
     @PostMapping("checkId")
     public ResponseEntity<String> checkId(@RequestBody Member member) {
         boolean checkIDDuplicate = memberRepository.existsById(member.getMember_id());
@@ -109,6 +111,8 @@ public class MemberController {
         }
     }
 
+    @Operation(summary = "닉네임 중복체크",
+            description = "입력한 닉네임을 db와 대조한뒤 중복 체크")
     @PostMapping("checkNick")
     public ResponseEntity<String> checkNick(@RequestBody Member member) {
         boolean checkNickDuplicate = memberRepository.existsByNickname(member.getNickname());
@@ -120,6 +124,8 @@ public class MemberController {
         }
     }
 
+    @Operation(summary = "폰번호 중복체크",
+            description = "입력한 폰번호를 db와 대조한뒤 중복 체크")
     @PostMapping("checkPhone")
     public ResponseEntity<String> checkPhone(@RequestBody Member member) {
         int checkPhoneDuplicate = memberRepository.countByPhoneNum(member.getPhone_num());
@@ -130,6 +136,5 @@ public class MemberController {
             return ResponseEntity.ok("사용가능한 전화번호 입니다");
         }
     }
-
 
 }

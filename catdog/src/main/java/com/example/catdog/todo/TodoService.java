@@ -2,9 +2,10 @@ package com.example.catdog.todo;
 
 import com.example.catdog.enum_column.Comp_yn;
 import com.example.catdog.enum_column.Resign_yn;
-import com.example.catdog.exception.CareGroupException;
 import com.example.catdog.exception.ErrorCode;
+import com.example.catdog.exception.TodoException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -36,8 +37,8 @@ public class TodoService {
             groupTodos.putIfAbsent(groupNum, new ArrayList<>());
             groupTodos.get(groupNum).add(todos);
         }
-        if(todoList.isEmpty()) {
-            throw new CareGroupException(ErrorCode.NOT_FOUND);
+        if(groupTodos.isEmpty()) {
+            throw new TodoException(ErrorCode.NOT_FOUND);
         }
         return groupTodos;
     }
@@ -57,6 +58,9 @@ public class TodoService {
 
                 Todo updateTodo = todoRepository.save(todoEntity);
                 return updateTodo;
+            }
+            else{
+                throw new TodoException(ErrorCode.NOT_FOUND);
             }
         }
         return null;
@@ -80,6 +84,9 @@ public class TodoService {
                 Todo updateTodo = todoRepository.save(todoEntity);
 
                 return updateTodo;
+            }
+            else{
+                throw new TodoException(ErrorCode.NOT_FOUND);
             }
         }
         return null;

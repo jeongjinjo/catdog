@@ -41,11 +41,8 @@ public class PetController {
         //@RequestBody는 HTTP 요청 본문을 해당 객체로 변환.
         //@Valid 는 UserDto 객체의 유효성 검사를 수행한다.
         //유효성 검사를 통과한 데이터만 처리한다.
-
         ModelMapper mapper = new ModelMapper();
         Pet pet = mapper.map(petDto, Pet.class);
-
-
         Pet dbpet = petService.createPet(pet);
         return ResponseEntity.status(HttpStatus.CREATED).body(dbpet);
     }

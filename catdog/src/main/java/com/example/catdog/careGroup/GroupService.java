@@ -293,26 +293,25 @@ public class GroupService {
     }
 
     // NOTE 그룹 수정 ( eunae )
-    public int groupUpdate(CareGroup careGroup, String loginId) {
+    public int groupUpdate(int groupNum, String loginId, String groupName) {
         int result = 0;
 
         // NOTE 예외처리
         // CHECK 1. 빈값으로 넘어오는지?
-        if(careGroup == null || loginId.equals("")) {
+        if(groupNum == 0 || loginId.equals("")) {
             result = -1;
             throw new CareGroupException(ErrorCode.EMPTY_VALUE);
         }
         // CHECK 2. 로그인한 아이디가 그룹을 수정할 수 있는 권한인지?
-        CareGroupMember roleCheck = careGroupMemberRepository.findByGroupNumAndMemberId(careGroup.getGroup_num(), loginId);
+        CareGroupMember roleCheck = careGroupMemberRepository.findByGroupNumAndMemberId(groupNum, loginId);
         if(String.valueOf(roleCheck.getRole()).toLowerCase() != "admin") {
             result = -1;
             throw new CareGroupException(ErrorCode.PERMISSION_RESTRICTIONS);
         }
-
         // NOTE 그룹 수정 진행
         CareGroup cg = CareGroup.builder()
-                                .group_num(careGroup.getGroup_num())
-                                .group_name(careGroup.getGroup_name())
+                                .group_num(groupNum)
+                                .group_name(groupName)
                                 .resign_yn(Resign_yn.N)
                                 .build();
         groupRepository.save(cg);

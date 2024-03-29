@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(MemberExcption.class)
-    private ResponseEntity<ErrorResponse> handleEmpExcption(MemberExcption memberExcption) {
+    private ResponseEntity<ErrorResponse> handleEmpException(MemberExcption memberExcption) {
         ErrorCode errorCode = memberExcption.getErrorCode();
 
         ErrorResponse errorResponse = ErrorResponse.builder()
@@ -34,7 +34,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(PetException.class)
-    private ResponseEntity<ErrorResponse> handleEmpExcption(PetException petException) {
+    private ResponseEntity<ErrorResponse> handleEmpException(PetException petException) {
         ErrorCode errorCode = petException.getErrorCode();
 
         ErrorResponse errorResponse = ErrorResponse.builder()
@@ -47,7 +47,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(CareGroupException.class)
-    private ResponseEntity<ErrorResponse> handleEmpExcption(CareGroupException petException) {
+    private ResponseEntity<ErrorResponse> handleEmpException(CareGroupException petException) {
         ErrorCode errorCode = petException.getErrorCode();
 
         ErrorResponse errorResponse = ErrorResponse.builder()
@@ -56,6 +56,32 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .errorDateTime(LocalDateTime.now())
                 .build();
         return ResponseEntity.status(petException.getErrorCode().getHttpStatus())
+                .body(errorResponse);
+    }
+
+    @ExceptionHandler(TodoException.class)
+    private ResponseEntity<ErrorResponse> handleEmpException(TodoException todoException) {
+        ErrorCode errorCode = todoException.getErrorCode();
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .errorCode(errorCode.getErrorCode())
+                .errorMessage(errorCode.getMessage())
+                .errorDateTime(LocalDateTime.now())
+                .build();
+        return ResponseEntity.status(todoException.getErrorCode().getHttpStatus())
+                .body(errorResponse);
+    }
+
+    @ExceptionHandler(MemoException.class)
+    private ResponseEntity<ErrorResponse> handleEmpException(MemoException memoException) {
+        ErrorCode errorCode = memoException.getErrorCode();
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .errorCode(errorCode.getErrorCode())
+                .errorMessage(errorCode.getMessage())
+                .errorDateTime(LocalDateTime.now())
+                .build();
+        return ResponseEntity.status(memoException.getErrorCode().getHttpStatus())
                 .body(errorResponse);
     }
 
