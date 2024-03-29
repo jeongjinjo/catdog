@@ -24,7 +24,7 @@ public class PetController {
     //Member 테이블에 member_id를 통해 pet 조회
     @GetMapping("/select/member/{member_id}")
     public ResponseEntity<Pet> getPetById(@PathVariable String member_id){
-        Pet pet =petService.getPetBymemberId(member_id);
+        Pet pet =petService.getPetByMemberId(member_id);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(pet);
     }
 
@@ -43,7 +43,7 @@ public class PetController {
         //유효성 검사를 통과한 데이터만 처리한다.
         ModelMapper mapper = new ModelMapper();
         Pet pet = mapper.map(petDto, Pet.class);
-        Pet dbpet = petService.petCreate(pet);
+        Pet dbpet = petService.createPet(pet);
         return ResponseEntity.status(HttpStatus.CREATED).body(dbpet);
     }
     //수정

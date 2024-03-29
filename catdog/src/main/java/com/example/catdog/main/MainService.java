@@ -19,8 +19,9 @@ public class MainService {
 
     // 로그인 한 회원의 그룹별 반려동물 정보
     public Map<Integer, List<Object>> getGroupInfoPet(String id){
-        Optional<List<Object[]>> petInfo = petRepository.findByGroupInfoPet(id);
+//        Optional<List<Object[]>> petInfo = petRepository.findByGroupInfoPet(id);
         Map<Integer, List<Object>> groupPets = new HashMap<>();
+
 
         for(Object[] info : petInfo.get()){
             Integer groupNum = (Integer) info[0];
@@ -40,6 +41,7 @@ public class MainService {
 
             groupPets.get(groupNum).add(pet);
         }
+
         return groupPets;
     }
     // 로그인 한 회원이 속한 그룹의 그룹별 회원닉네임
