@@ -76,10 +76,13 @@ public interface PetRepository extends JpaRepository<Pet, Integer> {
 
 
 
-    @Query(value="SELECT * FROM pet p WHERE p.member_id = :memberId",nativeQuery = true)
+    @Query(value="SELECT p FROM Pet p WHERE p.member_id = :memberId")
     Pet findByMemberId(@Param("memberId") String memberId);
 
 //    Pet countById(Pet);
 
+
+    @Query(value = "SELECT COUNT(*) FROM Pet p WHERE p.member_id = :member_id")
+    int countByMemberIdIsMyPet(@Param("member_id") String memberId);
 
 }
