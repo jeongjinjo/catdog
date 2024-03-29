@@ -2,12 +2,16 @@ package com.example.catdog.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
+
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+
+
 
 @OpenAPIDefinition(
         info = @Info(
@@ -20,6 +24,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SwaggerConfig {
 
+
     @Bean
     public OpenAPI openAPI() {
         // SecurityScheme 설정
@@ -31,6 +36,7 @@ public class SwaggerConfig {
                         .type(SecurityScheme.Type.HTTP) // HTTP 방식
                         .scheme("bearer")
                         .bearerFormat("JWT")); // 토큰 형식을 지정하는 임의의 문자(Optional)
+
 
         return new OpenAPI()
                 .components(components)

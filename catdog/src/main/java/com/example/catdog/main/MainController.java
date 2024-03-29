@@ -1,5 +1,6 @@
 package com.example.catdog.main;
 
+import com.example.catdog.todo.TodoRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +18,7 @@ import java.util.Map;
 public class MainController {
 
     private final MainService mainService;
+    private final TodoRepository todoRepository;
 
     /**
      * @param member_id : 로그인 한 아아디
@@ -27,5 +30,19 @@ public class MainController {
     public ResponseEntity<Map<Integer, List<Object>>> selectGroupPet(@PathVariable String member_id){
         Map<Integer, List<Object>> pets = mainService.getGroupInfoPet(member_id);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(pets);
+    }
+
+    /**
+     * @param date : 할일이 있는지 확인하려는 날짜 입력 (예시 : 2024/03/28)
+     * @return : 달력을 선택하면 달력의 날짜를 이용해서 할일이 있는지 없는지를 확인한다.
+     */
+    @Operation(summary = "날짜별 할일의 유무"
+            , description = "(예시 : 2024/03/28) 날짜별 할일이 있다면 true 로, 없다면 false 로 돌려주는 SELECT 기능")
+    @GetMapping("calendar")
+    public boolean check(@RequestParam Date date){
+        if(todoRepository.check(date) == 0){
+            return false;
+        }
+        return true;
     }
 }
