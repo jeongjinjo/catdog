@@ -58,4 +58,8 @@ public class Pet {
     @JoinColumn(name="photo_num", unique = true, insertable = false, updatable = false)
     @Schema(title = "반려동물 사진", description = "반려동물 등록 시, 같이 등록될 프로필입니다.")
     private Photo photo;
+
+    // (gayoung) 메인페이지의 사진 루트를 보여주기 위해서.
+    @Transient // 데이터베이스와 매핑되지 않음
+    private String photoRoute;
 }

@@ -33,6 +33,9 @@ public class MainService {
             pet.setAge((Integer) info[4]);
             pet.setDisease((String) info[5]);
 
+            String photoRoute = (String) info[6];
+            pet.setPhotoRoute(photoRoute);
+
             groupPets.putIfAbsent(groupNum, new ArrayList<>());
 
             groupPets.get(groupNum).add(pet);
