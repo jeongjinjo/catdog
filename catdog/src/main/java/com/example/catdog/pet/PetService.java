@@ -1,5 +1,8 @@
 package com.example.catdog.pet;
 
+import com.example.catdog.enum_column.Resign_yn;
+import com.example.catdog.exception.ErrorCode;
+import com.example.catdog.exception.PetException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,8 +66,17 @@ public class PetService {
         return petRepository.findByGroupNotInPet(id);
     }
 
-    public int getPetCountById(PetDTO petDto) {
-        return petRepository.countById(petDto);
+    // eunae 펫등록 테스트
+    public Pet petCreate(Pet pet) {
+        int petCount = petRepository.countByMemberIdIsMyPet(pet.getMember_id());
+        // 로그인한 사람가 등록한 반려동물이 5마리 초과일 시 반려동물 등록불가하도록 진행
+        if(petCount >= 5) {
+            throw new PetException(ErrorCode.PET_REGISTRATION_RESTRICTIONS);
+        }
+        // 본격적인 펫 등록
+        pet.setResign_yn(Resign_yn.N);
+        Pet db = petRepository.save(pet);
+        return db;
     }
 }
 
