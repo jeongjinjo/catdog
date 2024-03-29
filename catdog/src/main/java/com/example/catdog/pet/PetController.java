@@ -24,7 +24,7 @@ public class PetController {
     //Member 테이블에 member_id를 통해 pet 조회
     @GetMapping("/select/member/{member_id}")
     public ResponseEntity<Pet> getPetById(@PathVariable String member_id){
-        Pet pet =petService.getPetBymemberId(member_id);
+        Pet pet =petService.getPetByMemberId(member_id);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(pet);
     }
 
@@ -35,23 +35,19 @@ public class PetController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(pet);
     }
     //애완동물 등록 (애완동물 5개까지 등록되여야 함)
-//    @PostMapping("/insert")
-//    public ResponseEntity<Pet> addPet(@Valid @RequestBody PetDTO petDto) {
-//        //클라이언트가 전송한 요청을 UserDto 객체로 받아온다..
-//        //@RequestBody는 HTTP 요청 본문을 해당 객체로 변환.
-//        //@Valid 는 UserDto 객체의 유효성 검사를 수행한다.
-//        //유효성 검사를 통과한 데이터만 처리한다.
-//
-//        ModelMapper mapper = new ModelMapper();
-//        Pet pet = mapper.map(petDto, Pet.class);
-//
-//        int petCount=petService.getPetCountById(petDto);
-//        if (petCount>5){
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-//        }
-//        Pet dbpet = petService.createPet(pet);
-//        return ResponseEntity.status(HttpStatus.CREATED).body(dbpet);
-//    }
+
+    @PostMapping("/insert")
+    public ResponseEntity<Pet> addPet(@Valid @RequestBody PetDTO petDto) {
+        //클라이언트가 전송한 요청을 UserDto 객체로 받아온다..
+        //@RequestBody는 HTTP 요청 본문을 해당 객체로 변환.
+        //@Valid 는 UserDto 객체의 유효성 검사를 수행한다.
+        //유효성 검사를 통과한 데이터만 처리한다.
+        ModelMapper mapper = new ModelMapper();
+        Pet pet = mapper.map(petDto, Pet.class);
+        Pet dbpet = petService.createPet(pet);
+        return ResponseEntity.status(HttpStatus.CREATED).body(dbpet);
+    }
+
     //수정
     @PutMapping("/update/{pet_num}")
     public ResponseEntity<Pet> updatePet(@RequestBody @Valid PetDTO petDto) {

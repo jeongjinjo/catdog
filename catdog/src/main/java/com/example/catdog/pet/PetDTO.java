@@ -4,6 +4,7 @@ import com.example.catdog.enum_column.Gender;
 import com.example.catdog.enum_column.Resign_yn;
 import com.example.catdog.enum_column.Type;
 import com.example.catdog.member.Member;
+import com.example.catdog.pet.photo.Photo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -31,10 +32,10 @@ public class PetDTO {
     private String pet_name;
 
     @Schema(description = "반려동물 나이")
-    private int pet_age;
+    private int age;
 
     @Schema(description = "반려동물 몸무게")
-    private float pet_kg;
+    private float kg;
 
     @Size(max = 100, message = "질병은 100자까지 입력이 가능합니다.")
     @Schema(description = "반려동물 질병")
@@ -47,5 +48,8 @@ public class PetDTO {
     private Gender gender;
 
     @Schema(description = "반려동물 프로필 사진")
-    private int photo_num;
+    private Photo photo_num;
+
+    @Schema(description = "반려동물 소유자")
+    private String member_id;
 }

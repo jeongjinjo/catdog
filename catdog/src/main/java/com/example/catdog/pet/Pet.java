@@ -1,6 +1,7 @@
 package com.example.catdog.pet;
 
 import com.example.catdog.enum_column.Gender;
+import com.example.catdog.enum_column.Resign_yn;
 import com.example.catdog.enum_column.Type;
 import com.example.catdog.pet.photo.Photo;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -43,7 +44,8 @@ public class Pet {
     private String disease;
 
     @Schema(title = "삭제여부")
-    private String resign_yn;
+    @Enumerated(EnumType.STRING)
+    private Resign_yn resign_yn;
 
     @Schema(title = "반려동물 성별", description = "암컷, 수컷, 중성으로 이루어져있습니다.")
     @Enumerated(EnumType.STRING)
@@ -53,8 +55,11 @@ public class Pet {
     private String member_id;
 
     @OneToOne
-    @JoinColumn(name="photo_num", unique = true)
-
+    @JoinColumn(name="photo_num", unique = true, insertable = false, updatable = false)
     @Schema(title = "반려동물 사진", description = "반려동물 등록 시, 같이 등록될 프로필입니다.")
     private Photo photo;
+
+    // (gayoung) 메인페이지의 사진 루트를 보여주기 위해서.
+    @Transient // 데이터베이스와 매핑되지 않음
+    private String photoRoute;
 }
