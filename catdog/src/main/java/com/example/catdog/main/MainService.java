@@ -5,6 +5,7 @@ import com.example.catdog.member.Member;
 import com.example.catdog.member.MemberRepository;
 import com.example.catdog.pet.Pet;
 import com.example.catdog.pet.PetRepository;
+import com.example.catdog.todo.TodoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ public class MainService {
 
     private final PetRepository petRepository;
     private final MemberRepository memberRepository;
+    private final TodoRepository todoRepository;
 
     // 로그인 한 회원의 그룹별 반려동물 정보
     public Map<Integer, List<Object>> getGroupInfoPet(String id){
