@@ -39,17 +39,15 @@ public class MemberService {
     }
 
     public boolean passwordAuthenticate(String member_id, String name, String phone_num) {
-        // 회원 아이디로 회원 정보 조회
         Optional<Member> optionalMember = memberRepository.findById(member_id);
 
-        // 회원이 존재하고 이름과 전화번호가 일치하는지 확인
         if (optionalMember.isPresent()) {
             Member member = optionalMember.get();
             if (member.getName().equals(name) && member.getPhone_num().equals(phone_num)) {
-                return true; // 인증 성공
+                return true;
             }
         }
-        return false; // 인증 실패
+        return false;
     }
 
     public String findMemberIdByNameAndPhoneNum(String name, String phone_num) {
@@ -58,11 +56,8 @@ public class MemberService {
     }
 
     public boolean authenticate(String member_id, String password) {
-        // 회원 아이디로 회원 정보 조회
         Member member = memberRepository.findById(member_id).orElseThrow(
                 () -> new NoSuchElementException("회원을 찾을 수 없습니다. ID: " + member_id));
-
-        // 회원이 존재하고, 입력한 비밀번호가 일치하는지 확인
         return member != null && passwordEncoder.matches(password, member.getPassword());
     }
 
@@ -97,8 +92,6 @@ public class MemberService {
 
         return savedMember;
     }
-
-
 
     // 내 정보 확인 ( eunae )
     public Member getInfo(String id) {

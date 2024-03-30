@@ -10,9 +10,6 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-
-
-
 @OpenAPIDefinition(
         info = @Info(
                 title = "CatDog BackEnd"
@@ -20,11 +17,8 @@ import org.springframework.context.annotation.Configuration;
                 , version = "v1.0.0"
         )
 )
-
 @Configuration
 public class SwaggerConfig {
-
-
     @Bean
     public OpenAPI openAPI() {
         // SecurityScheme 설정
@@ -35,9 +29,7 @@ public class SwaggerConfig {
                         .name(jwtSchemeName)
                         .type(SecurityScheme.Type.HTTP) // HTTP 방식
                         .scheme("bearer")
-                        .bearerFormat("JWT")); // 토큰 형식을 지정하는 임의의 문자(Optional)
-
-
+                        .bearerFormat("JWT"));
         return new OpenAPI()
                 .components(components)
                 .addSecurityItem(securityRequirement);

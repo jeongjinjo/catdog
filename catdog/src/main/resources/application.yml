@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost/catdog?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=UTC&rewriteBatchedStatements=true
+#    url: jdbc:mysql://localhost/catdog?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=UTC&rewriteBatchedStatements=true
 #    url: jdbc:mysql://localhost/gcw?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=UTC&rewriteBatchedStatements=true
-#    url: jdbc:mysql://192.168.0.82/catdog?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=UTC&rewriteBatchedStatements=true
+    url: jdbc:mysql://192.168.0.82/catdog_test?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=UTC&rewriteBatchedStatements=true
 #    url: jdbc:mysql://localhost/jjj?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=UTC&rewriteBatchedStatements=true
     username: root
     password: 1234
@@ -30,6 +30,34 @@ spring:
     max-file-size: 10MB
     max-request-size: 10MB
     file-size-threshold: 0
+
+  springdoc:
+    swagger-ui:
+      path: /swagger-ui/index.html
+    openapi-ui:
+      path: /v3/api-docs
+
+  openapi: "3.0.0"
+  info:
+    title: catdog
+    version: 1.0.0
+  paths:
+    /auth/**:
+      get:
+        description: 인증이 필요 없는 공개 정보를 검색합니다.
+        responses:
+          '200':
+            description: ok
+      post:
+        description: 인증이 필요 없는 데이터를 제출합니다.
+        responses:
+          '200':
+            description: ok
+      put:
+        description: 인증이 필요 없는 데이터를 제출합니다.
+        responses:
+          '200':
+            description: ok
 
 #  sql:
 #    init:

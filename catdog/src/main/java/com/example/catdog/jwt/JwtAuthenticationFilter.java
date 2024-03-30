@@ -18,15 +18,12 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-
     private final JwtUtil jwtUtil;
     private final MemberDetailsService memberDetailsService;
-
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-
         String authorizationHeader = request.getHeader("Authorization");
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
@@ -37,7 +34,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 UserDetails userDetails = memberDetailsService.loadUserByUsername(member_id);
 
                 if (userDetails != null && jwtUtil.validateToken(token, userDetails)) {
-                    // 사용자가 제공한 비밀번호와 실제로 일치하는지 확인
                     UsernamePasswordAuthenticationToken authenticationToken =
                             new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
@@ -45,10 +41,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 }
             }
-
         }
-
         filterChain.doFilter(request, response);
-
     }
 }
