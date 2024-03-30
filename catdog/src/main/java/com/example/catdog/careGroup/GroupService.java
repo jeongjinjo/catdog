@@ -76,7 +76,6 @@ public class GroupService {
     @Transactional
     public int groupInsert(CareGroup careGroup, List<String> memberId, List<Integer> petNum, String currentMemberId) {
         int result = 0;
-
         // NOTE 예외처리
         // CHECK 1. 로그인한 사람이 그룹을 3개 가지고 있으면 등록을 못하게 하기.
         int groupCount = careGroupMemberRepository.countByMemberIdAndResignYn(currentMemberId);
@@ -84,13 +83,11 @@ public class GroupService {
             result = -1;
             throw new CareGroupException(ErrorCode.GROUP_REGISTRATION_RESTRICTIONS);
         }
-
         // CHECK 2. 등록할 사람이 하나도 없다면?
         if(memberId.size() == 0) {
             result = -1;
             throw new CareGroupException(ErrorCode.MEMBER_NOT_FOUND);
         }
-
         // CHECK 3.그룹내에 몇 명을 집어넣을건지 확인한다.
         if(memberId.size() > 4) {
             result = -1;
@@ -101,7 +98,6 @@ public class GroupService {
             result = -1;
             throw new CareGroupException(ErrorCode.PET_REGISTRATION_RESTRICTIONS);
         }
-
         // NOTE * INSERT START *
         // CHECK 1. 그룹 등록
         careGroup.setResign_yn(Resign_yn.N);
@@ -118,7 +114,7 @@ public class GroupService {
 
             CareGroupMemberDTO cgmDTO = CareGroupMemberDTO
                                                     .builder()
-                                                        .groupNum(groupNum)
+                                                        .group_num(groupNum.getGroup_num())
                                                         .member_id(member)
                                                         .role(Role.valueOf(role))
                                                         .resign_yn(Resign_yn.N)
@@ -160,12 +156,11 @@ public class GroupService {
             throw new CareGroupException(ErrorCode.EMPTY_VALUE);
         }
         // CHECK 2. 로그인한 사람이 admin이 아닐 경우
-        CareGroupMember careGroupMember = careGroupMemberRepository.findByGroupNumAndMemberId(groupNum, currentMemberId);
-        if(String.valueOf(careGroupMember.getRole()).toLowerCase() != "admin") {
+        Optional<CareGroupMember> careGroupMember = careGroupMemberRepository.findByGroupNumAndMemberId(groupNum, currentMemberId);
+        if(String.valueOf(careGroupMember.get().getRole()).toLowerCase() != "admin") {
             result = -1;
             throw new CareGroupException(ErrorCode.PERMISSION_RESTRICTIONS);
         }
-
         // NOTE * GROUP DELETE *
         // CHECK 1. 펫 삭제 ( DELETE )
         List<CareTarget> careTargetList = careTargetRepository.findByGroupNumInPet(groupNum);
@@ -176,7 +171,6 @@ public class GroupService {
         careGroupMemberRepository.groupMemberResignYnUpdateAll(groupNum);
         // CHECK 3. 그룹 삭제 여부 변경 ( UPDATE )
         groupRepository.groupResignYnUpdate(groupNum);
-
         result = 1;
         return result;
     }
@@ -187,38 +181,42 @@ public class GroupService {
         int result = 0;
 
         // NOTE 예외처리
-        // CHECK 1. 빈 값일 경우
-        if(groupNum == 0 || targetMember.equals("") || loginId.equals("")) {
-            result = -1;
-            throw new CareGroupException(ErrorCode.EMPTY_VALUE);
-        }
-        // CHECK 2. loginId가 admin이 아닐 경우
-        CareGroupMember member = careGroupMemberRepository.findByGroupNumAndMemberId(groupNum, loginId);
-        if(String.valueOf(member.getRole()).toLowerCase() != "admin") {
+        // CHECK 1. loginId가 admin이 아닐 경우
+        Optional<CareGroupMember> member = careGroupMemberRepository.findByGroupNumAndMemberId(groupNum, loginId);
+        if(String.valueOf(member.get().getRole()).toLowerCase() != "admin") {
             result = -1;
             throw new CareGroupException(ErrorCode.PERMISSION_RESTRICTIONS);
         }
-        // CHECK 3. 멤버는 0명이 아닌지?
+        // CHECK 2. 멤버는 0명이 아닌지?
         int memberCount = careGroupMemberRepository.countByGroupNumAndResignYn(groupNum);
-        System.err.println("memberCount >>>>>>>>> " + memberCount);
         if(memberCount == 0) {
             throw new CareGroupException(ErrorCode.MEMBER_NOT_FOUND);
         }
-        // CHECK 4. 멤버는 최대 4명까지만 등록이 가능하다.
+        // CHECK 3. 멤버는 최대 4명까지만 등록이 가능하다.
         if(memberCount > 4) {
             throw new CareGroupException(ErrorCode.LIMITED_NUMBER_OF_MEMBER_REGISTERED);
         }
-
         // NOTE 멤버 삭제 및 수정
-        CareGroupMember target = careGroupMemberRepository.findByGroupNumAndMemberId(groupNum, targetMember);
-        if(String.valueOf(target.getResign_yn()).toUpperCase() == "N") {
-            target.setResign_yn(Resign_yn.Y);
-            careGroupMemberRepository.save(target);
-        } else if(String.valueOf(target.getResign_yn()).toUpperCase() == "Y") {
-            target.setResign_yn(Resign_yn.N);
-            careGroupMemberRepository.save(target);
+        Optional<CareGroupMember> target = careGroupMemberRepository.findByGroupNumAndMemberId(groupNum, targetMember);
+        if(target.isEmpty()) {
+            CareGroupMemberDTO careGroupMemberDTO = CareGroupMemberDTO.builder()
+                                                                        .group_num(groupNum)
+                                                                        .member_id(targetMember)
+                                                                        .role(Role.guest)
+                                                                        .resign_yn(Resign_yn.N)
+                                                                        .build();
+            ModelMapper mapper = new ModelMapper();
+            CareGroupMember careGroupMember = mapper.map(careGroupMemberDTO, CareGroupMember.class);
+            careGroupMemberRepository.save(careGroupMember);
+        } else {
+            if(String.valueOf(target.get().getResign_yn()).toUpperCase() == "N") {
+                target.get().setResign_yn(Resign_yn.Y);
+                careGroupMemberRepository.save(target.get());
+            } else if(String.valueOf(target.get().getResign_yn()).toUpperCase() == "Y") {
+                target.get().setResign_yn(Resign_yn.N);
+                careGroupMemberRepository.save(target.get());
+            }
         }
-
         result = 1;
         return result;
     }
@@ -233,8 +231,8 @@ public class GroupService {
             throw new CareGroupException(ErrorCode.NOT_FOUND);
         }
         // CHECK 2. loginId가 admin이 아닐 경우
-        CareGroupMember member = careGroupMemberRepository.findByGroupNumAndMemberId(groupNum, loginId);
-        if(String.valueOf(member.getRole()).toLowerCase() != "admin") {
+        Optional<CareGroupMember> member = careGroupMemberRepository.findByGroupNumAndMemberId(groupNum, loginId);
+        if(String.valueOf(member.get().getRole()).toLowerCase() != "admin") {
             result = -1;
             throw new CareGroupException(ErrorCode.PERMISSION_RESTRICTIONS);
         }
@@ -258,8 +256,8 @@ public class GroupService {
             throw new CareGroupException(ErrorCode.EMPTY_VALUE);
         }
         // CHECK 2. loginId가 admin이 아닐 경우
-        CareGroupMember member = careGroupMemberRepository.findByGroupNumAndMemberId(groupNum, loginId);
-        if(String.valueOf(member.getRole()).toLowerCase() != "admin") {
+        Optional<CareGroupMember> member = careGroupMemberRepository.findByGroupNumAndMemberId(groupNum, loginId);
+        if(String.valueOf(member.get().getRole()).toLowerCase() != "admin") {
             result = -1;
             throw new CareGroupException(ErrorCode.PERMISSION_RESTRICTIONS);
         }
@@ -303,8 +301,9 @@ public class GroupService {
             throw new CareGroupException(ErrorCode.EMPTY_VALUE);
         }
         // CHECK 2. 로그인한 아이디가 그룹을 수정할 수 있는 권한인지?
-        CareGroupMember roleCheck = careGroupMemberRepository.findByGroupNumAndMemberId(groupNum, loginId);
-        if(String.valueOf(roleCheck.getRole()).toLowerCase() != "admin") {
+        Optional<CareGroupMember> roleCheck = careGroupMemberRepository.findByGroupNumAndMemberId(groupNum, loginId);
+        if(String.valueOf(roleCheck.get()
+                .getRole()).toLowerCase() != "admin") {
             result = -1;
             throw new CareGroupException(ErrorCode.PERMISSION_RESTRICTIONS);
         }
