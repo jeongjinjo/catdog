@@ -13,7 +13,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>catdog</name>
     <description>catdog_project</description>
-    <packaging>war</packaging>
+    <!--<packaging>war</packaging>-->
     <properties>
         <java.version>17</java.version>
     </properties>
@@ -139,8 +139,7 @@
             <version>RELEASE</version>
             <scope>compile</scope>
         </dependency>
-
-
+             
         <!-- jar 파일을 war로 만드는 방법-->
 <!--        <dependency>-->
 <!--            <groupId>org.springframework.boot</groupId>-->
