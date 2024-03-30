@@ -14,30 +14,31 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static com.example.catdog.exception.ErrorCode.PET_REGISTRATION_RESTRICTIONS;
+
 
 @Service
 @RequiredArgsConstructor
 public class PetService {
     private final PetRepository petRepository;
+    private ErrorCode errorCode;
 
     //PET 정보 등록 기능
     public Pet createPet(Pet pet) {
-        //Pet 을 반환하기 때문에
-//        int petCount = petRepository.countByMyPetMemberId(pet.getMember_id());
+        // Pet 을 반환하기 때문에
+        int petCount = petRepository.countByMemberIdIsMyPet(pet.getMember_id());
 
-//        if(petCount < 6){
-//            return petRepository.save(pet);
-//        }else{
-//            throw new RuntimeException("펫을 더이상 등록할 수 없습니다. 5마리 이상입니다.");
-//        }
+        if(petCount < 6){
+            return petRepository.save(pet);
+        }else{
+            throw new PetException (errorCode.PET_REGISTRATION_RESTRICTIONS);
+        }
 
-        return null;
     }//save 메소드는 Spring Data JPA 에서 제공하는 메소드, 주어진 앤티티를 데이터베이스에 저장하고 저장된 앤티티를 반환한다.
 
    // member_id로 조회 가능
-    public Pet getPetByMemberId(String member_id){
-        Pet pet=petRepository.findByMemberId(member_id);
-        return pet;
+    public List<Pet> getPetsByMemberId(String member_id){
+        return petRepository.findByMemberId(member_id);
     }
 
     //pet 정보 조회 기능
@@ -79,17 +80,17 @@ public class PetService {
 
 
     // eunae 펫등록 테스트
-    public Pet petCreate(Pet pet) {
-        int petCount = petRepository.countByMemberIdIsMyPet(pet.getMember_id());
-        // 로그인한 사람가 등록한 반려동물이 5마리 초과일 시 반려동물 등록불가하도록 진행
-        if(petCount >= 5) {
-            throw new PetException(ErrorCode.PET_REGISTRATION_RESTRICTIONS);
-        }
-        // 본격적인 펫 등록
-        pet.setResign_yn(Resign_yn.N);
-        Pet db = petRepository.save(pet);
-        return db;
-    }
+//    public Pet petCreate(Pet pet) {
+//        int petCount = petRepository.countByMemberIdIsMyPet(pet.getMember_id());
+//        // 로그인한 사람가 등록한 반려동물이 5마리 초과일 시 반려동물 등록불가하도록 진행
+//        if(petCount >= 5) {
+//            throw new PetException(ErrorCode.PET_REGISTRATION_RESTRICTIONS);
+//        }
+//        // 본격적인 펫 등록
+//        pet.setResign_yn(Resign_yn.N);
+//        Pet db = petRepository.save(pet);
+//        return db;
+//    }
 
 }
 
