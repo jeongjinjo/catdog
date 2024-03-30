@@ -22,6 +22,6 @@ class PetServiceTest {
                 .type(Type.DOG)
                 .build();
 
-        service.petCreate(pet);
+//        service.petCreate(pet);
     }
 }

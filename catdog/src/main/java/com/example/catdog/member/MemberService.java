@@ -106,38 +106,34 @@ public class MemberService {
     @Transactional
     // NOTE 내 정보 수정 ( eunae )
     public int myInfoUpdate(Member member, String passwordUpdate) {
-        // CHECK 0. 회원이 존재하지 않는 경우 예외 처리
+        // CHECK 1. 회원이 존재하지 않는 경우 예외 처리
         Optional<Member> dbInMember = memberRepository.findByMemberId(member.getMember_id());
         if(dbInMember.isEmpty()) {
             throw new MemberExcption(ErrorCode.NOT_FOUND);
         }
-        // CHECK 1. 입력한 패스워드와 DB에 저장된 패스워드가 동일한지?
+        // CHECK 2. 입력한 패스워드와 DB에 저장된 패스워드가 동일한지?
         boolean check = passwordEncoder.matches(member.getPassword()
-                                                 , dbInMember.get().getPassword());
+                , dbInMember.get().getPassword());
         if(!check) {
             throw new MemberExcption(ErrorCode.PASSWORD_NOT_MATCH);
         }
-        // CHECK 2. 동일하다면 패스워드를 바꿀건지?
+        // CHECK 3. 동일하다면 패스워드를 바꿀건지?
         String password = "";
-        // CHECK 2.1. 패스워드를 바꾸지 않고 다른 정보를 바꾸는거라면?
+        // CHECK 3.1. 패스워드를 바꾸지 않고 다른 정보를 바꾸는거라면?
         if (passwordUpdate == null ||  passwordUpdate.isEmpty()) {
             // 패스워드 변경이 아닌 경우, 기존 패스워드를 사용
             password = dbInMember.get().getPassword();
-        // CHECK 2.2. 패스워드를 바꿀 생각이라면?
+            // CHECK 3.2. 패스워드를 바꿀 생각이라면?
         } else {
             // 패스워드 변경인 경우, 새로운 비밀번호를 암호화하여 사용
             password = passwordEncoder.encode(passwordUpdate);
         }
-        // CHECK 3. 현재 폰번호와 바꾸려고하는 폰 번호가 동일하면?
-        if(dbInMember.get().getPhone_num().equals(member.getPhone_num())) {
-            throw new CareGroupException(ErrorCode.REDUPLICATION);
-        }
         int result = memberRepository.myInfoUpdate(
-            member.getName(),
-            member.getNickname(),
-            password,
-            member.getPhone_num(),
-            member.getMember_id()
+                member.getName(),
+                member.getNickname(),
+                password,
+                member.getPhone_num(),
+                member.getMember_id()
         );
         return result;
     }
