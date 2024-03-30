@@ -75,8 +75,8 @@ public interface PetRepository extends JpaRepository<Pet, Integer> {
     //pet_name 이거만 성공시ㅣ면 됨.
 
 
-    @Query(value="SELECT p FROM Pet p WHERE p.member_id = :memberId")
-    Pet findByMemberId(@Param("memberId") String memberId);
+    @Query(value="SELECT p FROM Pet p WHERE p.member_id = :member_id")
+    List<Pet> findByMemberId(@Param("member_id") String memberId);
 
 //    Pet countById(Pet);
 
