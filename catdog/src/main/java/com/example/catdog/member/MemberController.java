@@ -71,13 +71,10 @@ public class MemberController {
         String memberId = memberDTO.getMember_id();
         String password = memberDTO.getPassword();
 
-        // 회원 인증
         boolean isAuthenticated = memberService.authenticate(memberId, password);
         if (!isAuthenticated) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 실패");
         }
-
-        // JWT 토큰 생성
         UserDetails userDetails = memberDetailsService.loadUserByUsername(memberId);
         String token = jwtUtil.generateToken(userDetails);
 
@@ -87,16 +84,17 @@ public class MemberController {
     @Operation(summary = "회원가입 기능",
             description = "회원가입시 member, careGroup, careGroupMember 테이블에 데이터를 저장")
     @PostMapping("signUp")
-    public ResponseEntity<String> signup(@RequestBody @Valid MemberDTO memberDTO, BindingResult bindingResult) {
+    public ResponseEntity<String> signup(
+            @RequestBody @Valid
+            MemberDTO memberDTO,
+            BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            // 유효성 검사 실패 시 처리
             StringBuilder errorMessage = new StringBuilder();
             for (FieldError error : bindingResult.getFieldErrors()) {
                 errorMessage.append(error.getDefaultMessage());
             }
             return ResponseEntity.badRequest().body(errorMessage.toString());
         }
-
         memberService.signup(memberDTO);
         return ResponseEntity.ok("회원가입이 완료되었습니다.");
     }

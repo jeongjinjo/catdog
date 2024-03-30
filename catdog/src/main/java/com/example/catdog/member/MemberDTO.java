@@ -41,12 +41,6 @@ public class MemberDTO {
     @Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$", message = "휴대폰 번호 양식에 맞지 않습니다.")
     private String phone_num;
 
-    // 비밀번호 변경될 값
     @Schema(description = "아이디에 대한 새로운 비밀번호")
     private String passwordUpdate;
 }
-//    @Pattern(regexp="^[a-zA-Z]+$", message="영어만 사용이 가능합니다.")
-//    @Min(0) // 양수확인
-//    private Integer mgr;
-//    @JsonFormat(pattern = "yyyy/MM/dd")
-//    private Date hiredate;

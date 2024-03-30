@@ -51,7 +51,6 @@ public class JwtUtil {
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        // 사용자 ID 및 권한 정보 추가
         claims.put("member_id", userDetails.getUsername());
         claims.put("role", userDetails.getAuthorities().stream().map(Objects::toString).collect(Collectors.toList()));
 

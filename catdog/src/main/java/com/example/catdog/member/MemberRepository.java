@@ -12,7 +12,6 @@ import java.util.Optional;
 @Repository
 public interface MemberRepository extends JpaRepository<Member, String> {
 
-    // jjanu start
     @Query("SELECT m FROM Member m WHERE m.member_id = :memberId AND m.name = :name AND m.phone_num = :phoneNum")
     Optional<Member> findByMemberIdAndNameAndPhoneNum(@Param("memberId") String memberId, @Param("name") String name, @Param("phoneNum") String phoneNum);
 
@@ -26,8 +25,6 @@ public interface MemberRepository extends JpaRepository<Member, String> {
 
     @Query("SELECT m FROM Member m WHERE m.name = :name AND m.phone_num = :phoneNum")
     Optional<Member> findByNameAndPhoneNum(@Param("name") String name, @Param("phoneNum") String phoneNum);
-
-    // jjanu end
 
     @Query(value = "SELECT new com.example.catdog.member.Member(" +
             "m.member_id" +
