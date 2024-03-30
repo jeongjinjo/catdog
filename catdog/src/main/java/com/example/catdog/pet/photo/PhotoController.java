@@ -1,5 +1,7 @@
 package com.example.catdog.pet.photo;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.core.io.Resource;
@@ -17,7 +19,7 @@ import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 @RestController
 @RequestMapping("/photo")
-
+@Tag(name = "PhotoController", description = "Photo의 정보 조회,등록,삭제가 가능합니다.")
 public class PhotoController {
 
     private PhotoService photoService;
@@ -37,7 +39,9 @@ public class PhotoController {
 
     }
 
-    @PostMapping(value = "/upload",consumes = MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "반려동물 사진 등록",
+            description = "유효성 검사 후 반려동물 사진 업로드")
+    @PostMapping(value = "",consumes = MULTIPART_FORM_DATA_VALUE)
     public String PhotoUpload(@Valid @RequestPart(value = "photoDto") PhotoDto photoDto,
                               @RequestPart(value = "file") MultipartFile photoFile) {
         ModelMapper mapper = new ModelMapper();
@@ -46,7 +50,9 @@ public class PhotoController {
         return "업로드가 완료되었습니다.";
     }
 
-    @GetMapping("/select/{PhotoName}")
+    @Operation(summary = "반려동물 사진 조회",
+            description = "PhotoName을 통해 반려동물 사진 조회")
+    @GetMapping("/{PhotoName}")
     public ResponseEntity<Resource> getImage(@PathVariable String PhotoName) {
         Path photoPath = this.photoPath.resolve(PhotoName).normalize();
         Resource resource = null;
@@ -60,9 +66,11 @@ public class PhotoController {
         return ResponseEntity.ok().body(resource);
     }
 
-    @DeleteMapping("delete/{photo_num}")
-    public ResponseEntity<String> deletedbyPet(@PathVariable int photo_num){
-        photoService.deletePhoto(photo_num);
+    @Operation(summary = "반려동물 사진 삭제",
+            description = "photoNum을 통해 반려동물 사진 삭제")
+    @DeleteMapping("/{photoNum}")
+    public ResponseEntity<String> deletedbyPet(@PathVariable int photoNum){
+        photoService.deletePhoto(photoNum);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("삭제됨");
     }
 }

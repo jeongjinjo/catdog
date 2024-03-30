@@ -21,14 +21,14 @@ public class MainController {
     private final TodoRepository todoRepository;
 
     /**
-     * @param member_id : 로그인 한 아아디
+     * @param loginId : 로그인 한 아아디
      * @return : 로그인 한 사람이 속한 그룹별 반려동물의 정보 조회하기
      */
     @Operation(summary = "그룹별 반려동물"
             , description = "로그인 한 사람이 속한 그룹별 반려동물의 정보 확인을 위한 SELECT 기능")
-    @GetMapping("{member_id}")
-    public ResponseEntity<Map<Integer, List<Object>>> selectGroupPet(@PathVariable String member_id){
-        Map<Integer, List<Object>> pets = mainService.getGroupInfoPet(member_id);
+    @GetMapping("{loginId}")
+    public ResponseEntity<Map<Integer, List<Object>>> selectGroupPet(@PathVariable String loginId){
+        Map<Integer, List<Object>> pets = mainService.getGroupInfoPet(loginId);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(pets);
     }
 
@@ -39,7 +39,7 @@ public class MainController {
     @Operation(summary = "날짜별 할일의 유무"
             , description = "(예시 : 2024/03/28) 날짜별 할일이 있다면 true 로, 없다면 false 로 돌려주는 SELECT 기능")
     @GetMapping("calendar")
-    public boolean check(@RequestParam Date date){
+    public boolean checkCalendar(@RequestParam Date date){
         if(todoRepository.check(date) == 0){
             return false;
         }

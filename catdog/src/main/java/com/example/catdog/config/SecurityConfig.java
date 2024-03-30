@@ -31,8 +31,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                                 authorizationManagerRequestMatcherRegistry
                                         .requestMatchers("/auth/**", "/swagger-ui/**","/v3/api-docs/**")
+//                                       .requestMatchers("/auth/**")
                                         .permitAll()
                                         .anyRequest().authenticated()
+                                        .anyRequest().permitAll()
+
                 );
         http
                 .sessionManagement(httpSecuritySessionManagementConfigurer ->

@@ -6,6 +6,7 @@ import com.example.catdog.careGroup.member.CareGroupMember;
 import com.example.catdog.careGroup.member.CareGroupMemberRepository;
 import com.example.catdog.enum_column.Resign_yn;
 import com.example.catdog.enum_column.Role;
+import com.example.catdog.exception.CareGroupException;
 import com.example.catdog.exception.ErrorCode;
 import com.example.catdog.exception.MemberExcption;
 import jakarta.transaction.Transactional;
@@ -96,25 +97,23 @@ public class MemberService {
     // 내 정보 확인 ( eunae )
     public Member getInfo(String id) {
         Optional<Member> member = memberRepository.findByMemberId(id);
-
         if (member.isEmpty()) {
             throw new MemberExcption(ErrorCode.NOT_FOUND);
         }
-
         return member.get();
     }
 
     @Transactional
-    // 내 정보 수정 ( eunae )
+    // NOTE 내 정보 수정 ( eunae )
     public int myInfoUpdate(Member member, String passwordUpdate) {
         // CHECK 0. 회원이 존재하지 않는 경우 예외 처리
         Optional<Member> dbInMember = memberRepository.findByMemberId(member.getMember_id());
         if(dbInMember.isEmpty()) {
             throw new MemberExcption(ErrorCode.NOT_FOUND);
         }
-
         // CHECK 1. 입력한 패스워드와 DB에 저장된 패스워드가 동일한지?
-        boolean check = passwordEncoder.matches(member.getPassword(),dbInMember.get().getPassword());
+        boolean check = passwordEncoder.matches(member.getPassword()
+                                                 , dbInMember.get().getPassword());
         if(!check) {
             throw new MemberExcption(ErrorCode.PASSWORD_NOT_MATCH);
         }
@@ -129,13 +128,16 @@ public class MemberService {
             // 패스워드 변경인 경우, 새로운 비밀번호를 암호화하여 사용
             password = passwordEncoder.encode(passwordUpdate);
         }
-
+        // CHECK 3. 현재 폰번호와 바꾸려고하는 폰 번호가 동일하면?
+        if(dbInMember.get().getPhone_num().equals(member.getPhone_num())) {
+            throw new CareGroupException(ErrorCode.REDUPLICATION);
+        }
         int result = memberRepository.myInfoUpdate(
-                member.getName(),
-                member.getNickname(),
-                password,
-                member.getPhone_num(),
-                member.getMember_id()
+            member.getName(),
+            member.getNickname(),
+            password,
+            member.getPhone_num(),
+            member.getMember_id()
         );
         return result;
     }
@@ -152,7 +154,6 @@ public class MemberService {
         memberUpdate.setName("탈퇴한 회원");
         memberUpdate.setResign_yn(Resign_yn.Y);
         Member db = memberRepository.save(memberUpdate);
-
         if(db != null) {
             result = 1;
         }
@@ -164,15 +165,10 @@ public class MemberService {
         int result = 0;
         Optional<Member> memberId = memberRepository.findByMemberId(id);
         boolean check = passwordEncoder.matches(pw, memberId.get().getPassword());
-
         if(!check) {
             result = -1;
             throw new MemberExcption(ErrorCode.PASSWORD_NOT_MATCH);
         }
-//        Optional<Member> member = memberRepository.findByMemberIdAndPassword(id, pw);
-//        if (member.isEmpty()) {
-//            throw new MemberExcption(ErrorCode.ID_OR_PASSWORD_FAILED);
-//        }
         result = 1;
         return result;
     }
@@ -181,6 +177,4 @@ public class MemberService {
     public List<Member> memberGroupInvite(String member_id, String search_id) {
         return memberRepository.memberGroupInvite(member_id, search_id);
     }
-
-
 }

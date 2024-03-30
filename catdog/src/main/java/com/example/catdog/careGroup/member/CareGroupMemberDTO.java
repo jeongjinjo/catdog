@@ -20,7 +20,7 @@ public class CareGroupMemberDTO {
     private int group_member_num;
 
     @Schema(title = "회원이 속해있는 그룹의 정보")
-    private CareGroup groupNum;
+    private int group_num;
 
     @Schema(title = "그룹에 속해있는 회원")
     private String member_id;

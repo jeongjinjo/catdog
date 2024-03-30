@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,7 +17,7 @@ class CareGroupMemberRepositoryTest {
     // 멤버 권한 확인
     @Test
     void checkMemberPermissions() {
-        CareGroupMember careGroupMember = careGroupMemberRepository.findByGroupNumAndMemberId(1, "hoho");
+        Optional<CareGroupMember> careGroupMember = careGroupMemberRepository.findByGroupNumAndMemberId(1, "hoho");
         System.out.println(careGroupMember);
     }
 

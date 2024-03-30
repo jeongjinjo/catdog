@@ -53,7 +53,7 @@ public interface CareGroupMemberRepository extends JpaRepository<CareGroupMember
                     " FROM CareGroupMember cgm " +
                     "WHERE cgm.careGroup.group_num = :group_num " +
                     "  AND cgm.member.member_id = :member_id")
-    CareGroupMember findByGroupNumAndMemberId(@Param("group_num") int group_num, @Param("member_id") String member_id);
+    Optional<CareGroupMember> findByGroupNumAndMemberId(@Param("group_num") int group_num, @Param("member_id") String member_id);
 
     // NOTE 그룹 내 멤버 삭제 여부 수정하기 ( eunae )
     @Modifying
