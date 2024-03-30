@@ -7,6 +7,7 @@ import com.example.catdog.pet.photo.Photo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.relational.core.sql.In;
 
 @Entity // 이 클래스가 JPA 앤티티임을 나타낸다. JPA가 이 클래스와 데이터베이스 테이블 간의 매핑을 수행한다.
 @Getter
@@ -62,4 +63,7 @@ public class Pet {
     // (gayoung) 메인페이지의 사진 루트를 보여주기 위해서.
     @Transient // 데이터베이스와 매핑되지 않음
     private String photoRoute;
+    // (gayoung) 메인페이지의 이름을 보여주 위해서.
+    @Transient // 데이터베이스와 매핑되지 않음
+    private String groupName;
 }

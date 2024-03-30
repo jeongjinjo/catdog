@@ -26,6 +26,7 @@ public interface PetRepository extends JpaRepository<Pet, Integer> {
 
     // 로그인 한 사람의 그룹별 반려동물 정보 ( gayoung )
     @Query(value = "SELECT DISTINCT cg.group_num " +
+            ", cg.group_name " +
             ", p.pet_num " +
             ", p.pet_name " +
             ", p.gender " +
@@ -39,13 +40,13 @@ public interface PetRepository extends JpaRepository<Pet, Integer> {
             "WHERE cg.group_num IN ( " +
             "   SELECT cgm.careGroup.group_num " +
             "   FROM CareGroupMember cgm " +
-            "   WHERE cgm.member.member_id = :id " +
+            "   WHERE cgm.member.member_id = :loginId " +
             "   AND cgm.resign_yn = 'N' " +
             ") " +
             "AND p.resign_yn = 'N' " +
             "AND (ph.resign_yn = 'N' OR ph.resign_yn IS NULL) "
     )
-    public Optional<List<Object[]>> findByGroupInfoPet(@Param("id") String id);
+    public Optional<List<Object[]>> findByGroupInfoPet(@Param("loginId") String id);
 
 //     NOTE 로그인 한 사람의 그룹별 반려동물 정보 ( eunae ) CHECK 03.25 수정완료
     @Query(value = "SELECT p " +
