@@ -42,16 +42,16 @@ public class MemoController {
     }
 
     /**
-     * @param member_id : 로그인 한 아이디
-     * @param pet_num : 반려동물 고유번호
+     * @param loginId : 로그인 한 아이디
+     * @param petNum : 반려동물 고유번호
      * @param date : 날짜 확인
      * @return : 반려동물 별 메모 조회하기
      */
     @Operation(summary = "로그인 한 아이디를 이용해 반려동물의 메모 확인"
             , description = "메모를 가져오기 위한 SELECT 기능 / date 예시 : 2024/03/28")
     @GetMapping()
-    public ResponseEntity<List<Object>> selectMemo(@RequestParam String member_id, Integer pet_num, Date date){
-        List<Object> memo = memoService.todayMemoList(member_id, pet_num, date);
+    public ResponseEntity<List<Object>> selectMemo(@RequestParam String loginId, Integer petNum, Date date){
+        List<Object> memo = memoService.todayMemoList(loginId, petNum, date);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(memo);
     }
 
