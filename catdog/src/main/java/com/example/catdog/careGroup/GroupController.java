@@ -2,7 +2,8 @@ package com.example.catdog.careGroup;
 
 import com.example.catdog.careGroup.dto.RequestDTO;
 import com.example.catdog.careGroup.member.CareGroupMember;
-import com.example.catdog.careGroup.member.CareGroupMemberDTO;
+import com.example.catdog.exception.CareGroupException;
+import com.example.catdog.exception.ErrorCode;
 import com.example.catdog.member.Member;
 import com.example.catdog.member.MemberService;
 import com.example.catdog.pet.Pet;
@@ -40,9 +41,9 @@ public class GroupController {
                     required = true
             )
     )
-    @GetMapping("{id}")
-    public ResponseEntity<Map<Integer, List<CareGroupMember>>> groupList(@PathVariable String id) {
-        Map<Integer,List<CareGroupMember>> list = groupService.groupList(id);
+    @GetMapping("{loginId}")
+    public ResponseEntity<Map<Integer, List<CareGroupMember>>> groupList(@PathVariable String loginId) {
+        Map<Integer,List<CareGroupMember>> list = groupService.groupList(loginId);
         return ResponseEntity.status(HttpStatus.OK).body(list);
     }
 
@@ -56,9 +57,9 @@ public class GroupController {
                     required = true
             )
     )
-    @GetMapping("pet/{id}")
-    public ResponseEntity<List<Pet>> getGroupNotInPet(@PathVariable String id) {
-        List<Pet> pet = petService.getGroupNotInPet(id);
+    @GetMapping("pet/{loginId}")
+    public ResponseEntity<List<Pet>> getGroupNotInPet(@PathVariable String loginId) {
+        List<Pet> pet = petService.getGroupNotInPet(loginId);
         return ResponseEntity.status(HttpStatus.OK).body(pet);
     }
 
@@ -86,9 +87,9 @@ public class GroupController {
     // NOTE 그룹에 속해있는 반려동물 확인하기 ( eunae ) CHECK 03.22 확인완료
     @Operation(summary = "그룹에 속해있는 반려동물 조회"
             , description = "나를 제외한 모든 유저를 닉네임 또는 아이디를 통해 검색할 수 있는 SELECT 기능")
-    @GetMapping("groupInPet/{id}")
-    public ResponseEntity<Map<Integer, List<Pet>>> getGroupInfoPet(@PathVariable String id) {
-        Map<Integer,List<Pet>> list = groupService.getGroupInfoPet(id);
+    @GetMapping("groupInPet/{loginId}")
+    public ResponseEntity<Map<Integer, List<Pet>>> getGroupInfoPet(@PathVariable String loginId) {
+        Map<Integer,List<Pet>> list = groupService.getGroupInfoPet(loginId);
         return ResponseEntity.status(HttpStatus.OK).body(list);
     }
 
@@ -123,7 +124,7 @@ public class GroupController {
     })
     @PutMapping("{groupNum}/{loginId}")
     public ResponseEntity<Integer> careGroupAllDelete(@PathVariable int groupNum, @PathVariable String loginId) {
-        int result = groupService.groupDelete( groupNum, loginId);
+        int result = groupService.groupDelete(groupNum, loginId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
@@ -149,8 +150,8 @@ public class GroupController {
     })
     @PutMapping("{groupNum}/{loginId}/{targetMember}")
     public ResponseEntity<Integer> groupInMemberOutUpdate(@PathVariable int groupNum
-            , @PathVariable String loginId
-            , @PathVariable String targetMember) {
+                                                        , @PathVariable String loginId
+                                                        , @PathVariable String targetMember) {
         int result = groupService.groupInMemberInAndOutUpdate(groupNum, loginId, targetMember);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
@@ -226,10 +227,10 @@ public class GroupController {
                     required = true
             )
     })
-    @PutMapping("up/{groupNum}/{id}")
-    public ResponseEntity<Integer> careGroupUpdate(@PathVariable int groupNum, @PathVariable String id, @RequestBody String groupName) {
+    @PutMapping("up/{groupNum}/{loginId}")
+    public ResponseEntity<Integer> careGroupUpdate(@PathVariable int groupNum, @PathVariable String loginId, @RequestBody String groupName) {
         String gn = groupName.replace("\"", "");
-        int result = groupService.groupUpdate(groupNum, id, gn);
+        int result = groupService.groupUpdate(groupNum, loginId, gn);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }

@@ -2,6 +2,7 @@ package com.example.catdog.member;
 
 import com.example.catdog.careGroup.GroupService;
 import com.example.catdog.careGroup.member.CareGroupMember;
+import com.example.catdog.pet.Pet;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -34,9 +35,9 @@ public class MyPageController {
                     required = true
             )
     )
-    @GetMapping("{id}")
-    public ResponseEntity<Member> myInfo(@PathVariable String id) {
-        Member member = service.getInfo(id);
+    @GetMapping("{loginId}")
+    public ResponseEntity<Member> myInfo(@PathVariable String loginId) {
+        Member member = service.getInfo(loginId);
         return ResponseEntity.status(HttpStatus.OK).body(member);
     }
 
@@ -61,9 +62,9 @@ public class MyPageController {
                     required = true
             )
     )
-    @PutMapping("{id}")
-    public ResponseEntity<Integer> SignOut(@PathVariable String id) {
-        int result = service.signOut(id);
+    @PutMapping("{loginId}")
+    public ResponseEntity<Integer> SignOut(@PathVariable String loginId) {
+        int result = service.signOut(loginId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
@@ -77,20 +78,28 @@ public class MyPageController {
                     required = true
             )
     )
-    @PostMapping("{id}")
-    public ResponseEntity<Integer> pwCheck(@PathVariable String id, @RequestBody String password) {
+    @PostMapping("{loginId}")
+    public ResponseEntity<Integer> pwCheck(@PathVariable String loginId, @RequestBody String password) {
         String pw = password.replace("\"", "");
-        int result = service.pwCheck(id, pw);
+        int result = service.pwCheck(loginId, pw);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     //  NOTE 그룹관리 조회 ( eunae )
     @Operation(summary = "본인이 속해있는 그룹과 그룹에 속해있는 멤버 조회"
             , description = "id만 입력하시면 본인이 속해있는 그룹과 그룹에 속해있는 멤버를 조회할 수 있습니다.")
-    @PostMapping("group")
-    public ResponseEntity<Map<Integer, List<CareGroupMember>>> groupList(@RequestBody String id) {
-        String loginId = id.replace("\"", "");
+    @PostMapping("group/{loginId}")
+    public ResponseEntity<Map<Integer, List<CareGroupMember>>> groupList(@PathVariable String loginId) {
         Map<Integer,List<CareGroupMember>> list = groupService.groupList(loginId);
         return ResponseEntity.status(HttpStatus.OK).body(list);
+    }
+
+    // NOTE 내 반려동물 조회 ( eunae )
+    @Operation(summary = "본인이 등록한 반려동물 조회 (X)"
+    ,description = "id만 입력하시면 본인이 등록한 반려동물을 확인할 수 있습니다.")
+    @GetMapping("pet/{loginId}")
+    public ResponseEntity<List<Pet>> myPetInfo(@PathVariable String loginId) {
+//        ResponseEntity.status(HttpStatus.OK).body();
+        return null;
     }
 }
