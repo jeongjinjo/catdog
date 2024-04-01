@@ -3,15 +3,20 @@ package com.example.catdog.pet;
 import com.example.catdog.enum_column.Resign_yn;
 import com.example.catdog.exception.ErrorCode;
 import com.example.catdog.exception.PetException;
+import com.example.catdog.pet.photo.Photo;
+import com.example.catdog.pet.photo.PhotoRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static com.example.catdog.exception.ErrorCode.PET_REGISTRATION_RESTRICTIONS;
@@ -22,13 +27,18 @@ import static com.example.catdog.exception.ErrorCode.PET_REGISTRATION_RESTRICTIO
 public class PetService {
     private final PetRepository petRepository;
     private ErrorCode errorCode;
+    private final PhotoRepository photoRepository;
 
     //PET 정보 등록 기능
     public Pet createPet(Pet pet) {
         // Pet 을 반환하기 때문에
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String member_id = authentication.getName();
+        pet.setMember_id(member_id);
         int petCount = petRepository.countByMemberIdIsMyPet(pet.getMember_id());
+        pet.setResign_yn(Resign_yn.N);
 
-        if(petCount < 6){
+        if(petCount < 5){
             return petRepository.save(pet);
         }else{
             throw new PetException (errorCode.PET_REGISTRATION_RESTRICTIONS);
