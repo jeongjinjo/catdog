@@ -25,4 +25,5 @@ public class Photo {
     @Schema(title = "사진 사용여부")
     @Enumerated(EnumType.STRING)
     private Resign_yn resign_yn;
+
 }

@@ -26,7 +26,6 @@ public class MemberController {
 
     @Operation(summary = "비밀번호 찾기전 인증과정",
             description = "member_id, name, phone_num 정보를 받아서 db와 대조한뒤에 인증성공 여부를 확인")
-
     @PostMapping("/authenticate")
     public ResponseEntity<String> authenticate(@RequestBody Member member) {
         boolean authenticated = memberService.passwordAuthenticate(
