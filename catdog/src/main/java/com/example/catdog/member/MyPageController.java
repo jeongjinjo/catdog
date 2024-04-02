@@ -3,6 +3,7 @@ package com.example.catdog.member;
 import com.example.catdog.careGroup.GroupService;
 import com.example.catdog.careGroup.member.CareGroupMember;
 import com.example.catdog.pet.Pet;
+import com.example.catdog.pet.PetService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -24,6 +25,7 @@ import java.util.Map;
 public class MyPageController {
     private final MemberService service;
     private final GroupService groupService;
+    private final PetService petService;
 
     // NOTE 내 정보 확인 ( eunae ) CHECK 03.21 확인완료 / 03.22 확인완료
     @Operation(summary = "내 정보 조회"
@@ -95,11 +97,11 @@ public class MyPageController {
     }
 
     // NOTE 내 반려동물 조회 ( eunae )
-    @Operation(summary = "본인이 등록한 반려동물 조회 (X)"
+    @Operation(summary = "본인이 등록한 반려동물 조회"
     ,description = "id만 입력하시면 본인이 등록한 반려동물을 확인할 수 있습니다.")
     @GetMapping("pet/{loginId}")
     public ResponseEntity<List<Pet>> myPetInfo(@PathVariable String loginId) {
-//        ResponseEntity.status(HttpStatus.OK).body();
-        return null;
+        List<Pet> pets =petService.getPetsByMemberId(loginId);
+        return ResponseEntity.status(HttpStatus.OK).body(pets);
     }
 }
