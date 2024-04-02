@@ -27,6 +27,7 @@ public class PetService {
     public Pet createPet(Pet pet) {
         // Pet 을 반환하기 때문에
         int petCount = petRepository.countByMemberIdIsMyPet(pet.getMember_id());
+        //photo_num도 가지고 와야하는데
 
         if(petCount < 6){
             return petRepository.save(pet);
