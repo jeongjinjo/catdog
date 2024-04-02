@@ -41,30 +41,24 @@ public class PetController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(pet);
     }
 
-    //애완동물 등록 (애완동물 5개까지 등록되여야 함)
+    //애완동물 등록 (애완동물 5개까지 등록 가능)
     @Operation(summary = "반려동물 정보 등록",
             description = "반려동물 나이,질병,체중 등 케어에 필요한 정보 등록")
     @PostMapping("")
     public ResponseEntity<Pet> addPet(@Valid @RequestBody PetDTO petDto) {
-        //클라이언트가 전송한 요청을 UserDto 객체로 받아온다..
-        //@RequestBody는 HTTP 요청 본문을 해당 객체로 변환.
-        //@Valid 는 UserDto 객체의 유효성 검사를 수행한다.
-        //유효성 검사를 통과한 데이터만 처리한다.
         ModelMapper mapper = new ModelMapper();
         Pet pet = mapper.map(petDto, Pet.class);
         Pet dbpet = petService.createPet(pet);
         return ResponseEntity.status(HttpStatus.CREATED).body(dbpet);
     }
+
     @Operation(summary = "반려동물 정보 수정",
             description = "petNum을 이용해 반려동물의 정보를 수정")
-    //수정
     @PutMapping("/{petNum}")
     public ResponseEntity<Pet> updatePet(@RequestBody @Valid PetDTO petDto) {
         ModelMapper mapper=new ModelMapper();
         Pet pet=mapper.map(petDto,Pet.class);
-
-        //Pet pet은 된게 없으니까 pet.getPet_num() 해서 Pet에 있는걸 가지고 와줘야함.
-        Pet dbPet=petService.updatePet(pet.getPet_num(), petDto); //getpet_num이 아니라 어떻게 getPet_num을 가지고 오는겨?! 물음표 ?!?!?
+        Pet dbPet=petService.updatePet(pet.getPet_num(), petDto);
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(dbPet);
     }
