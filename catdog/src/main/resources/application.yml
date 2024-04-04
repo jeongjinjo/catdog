@@ -2,15 +2,9 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
-#    url: jdbc:mysql://localhost/catdog_test?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=UTC&rewriteBatchedStatements=true
-#    url: jdbc:mysql://192.168.0.82/catdog_test?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=UTC&rewriteBatchedStatements=true
-    url: jdbc:mysql://localhost/catdog?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=UTC&rewriteBatchedStatements=true
-#    url: jdbc:mysql://localhost/catdog?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=UTC&rewriteBatchedStatements=true
-#    url: jdbc:mysql://localhost/gcw?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=UTC&rewriteBatchedStatements=true
-#    url: jdbc:mysql://localhost/jjj?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=UTC&rewriteBatchedStatements=true
-
-    username: root
-    password: 1234
+    url: ENC(94Isl1HlY5fQSQt03knEYD7pHHBVqOgGxKR8hbYeNiZ3PFbYWXGI4PoSuXGnY1mlbj7eF4WG0P/UxYg6h1SZ+iiMM05ZF5TewBjC3x5L2A6ldFX115r38MeQ9RmIVQgLfIx1Rl5n3FjIBC8nS3xGz4DKw5UqmYi9LEatKkFHY8A=)
+    username: ENC(H+puQrDoE0uErjjkDsqcWw==)
+    password: ENC(4fvvGD/B116CHjYmCzharw==)
 
   jpa:
     database: mysql
@@ -67,6 +61,6 @@ spring:
 #    init:
 #      mode: always
 
-#jasypt:
-#  encryptor:
-#    password: ${PASSWORD}
+jasypt:
+  encryptor:
+    password: ${PASSWORD}
