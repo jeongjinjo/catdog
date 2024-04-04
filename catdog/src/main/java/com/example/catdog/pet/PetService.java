@@ -1,6 +1,8 @@
 package com.example.catdog.pet;
 
+import com.example.catdog.enum_column.Gender;
 import com.example.catdog.enum_column.Resign_yn;
+import com.example.catdog.enum_column.Type;
 import com.example.catdog.exception.ErrorCode;
 import com.example.catdog.exception.PetException;
 import com.example.catdog.pet.photo.Photo;
@@ -58,19 +60,22 @@ public class PetService {
         return optionalPet.get();
     }
 
-    public Pet updatePet(int pet_num, PetDTO petDto) {
+    public Pet updatePet(int pet_num, String pet_name, String disease, int age, Type type,  Gender gender, float kg) {
         //        updatedPet.setId(idx);
         Optional<Pet> optionalPet = petRepository.findById(pet_num);
+        System.out.println(optionalPet);
         if (optionalPet.isPresent()) {
-            Pet existingPet = optionalPet.get();
-            ModelMapper mapper = new ModelMapper();
-            mapper.map(petDto, existingPet);
-            //
-            return petRepository.save(existingPet);
-
-        } else {
-            return null;
+            Pet dbPet = optionalPet.get();
+            dbPet.setPet_num(pet_num);
+            dbPet.setAge(age);
+            dbPet.setDisease(disease);
+            dbPet.setKg(kg);
+            dbPet.setGender(gender);
+            dbPet.setType(type);
+            dbPet.setPet_name(pet_name);
+            return petRepository.save(dbPet);
         }
+        return new Pet();
     }
 
     public void deletePet(int pet_num) {

@@ -1,5 +1,7 @@
 package com.example.catdog.pet;
 
+import com.example.catdog.enum_column.Gender;
+import com.example.catdog.enum_column.Type;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -1,5 +1,6 @@
 package com.example.catdog.pet;
 
+import com.example.catdog.enum_column.Gender;
 import com.example.catdog.member.Member;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -55,12 +56,12 @@ public class PetController {
     @Operation(summary = "반려동물 정보 수정",
             description = "petNum을 이용해 반려동물의 정보를 수정")
     @PutMapping("/{petNum}")
-    public ResponseEntity<Pet> updatePet(@RequestBody @Valid PetDTO petDto) {
+    public ResponseEntity<Pet> updatePet(@PathVariable int petNum , @RequestBody @Valid PetDTO petDto) {
         ModelMapper mapper=new ModelMapper();
         Pet pet=mapper.map(petDto,Pet.class);
-        Pet dbPet=petService.updatePet(pet.getPet_num(), petDto);
+        pet = petService.updatePet(petNum, pet.getPet_name(), pet.getDisease(), pet.getAge(), pet.getType(), pet.getGender(), pet.getKg());
 
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(dbPet);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(pet);
     }
 
     //삭제

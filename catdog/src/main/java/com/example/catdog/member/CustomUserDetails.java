@@ -16,8 +16,6 @@ public class CustomUserDetails implements UserDetails {
     private String member_id;
     private Collection<? extends GrantedAuthority> authorities;
 
-    // getPassword(), getUsername(), isAccountNonExpired(), isAccountNonLocked(), isCredentialsNonExpired(), isEnabled() 메서드의 구현은 생략되었습니다.
-
     @Override
     public String getPassword() {
         return null; // 패스워드 반환

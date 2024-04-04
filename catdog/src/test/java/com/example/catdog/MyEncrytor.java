@@ -5,9 +5,9 @@ import org.jasypt.encryption.pbe.config.SimpleStringPBEConfig;
 import org.junit.jupiter.api.Test;
 
 public class MyEncrytor {
-    private String password = "cr@amma@rc";
+    private String password = "";
 
-    /*Test
+    @Test
     void name() {
 
         PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
@@ -21,19 +21,19 @@ public class MyEncrytor {
         config.setStringOutputType("base64");
         encryptor.setConfig(config);
 
-        String content = "jdbc:mysql://localhost:3306/gcw?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=UTC";
+        String content = "";
         String encString = encryptor.encrypt(content);
         String decString = encryptor.decrypt(encString);
         System.out.println(String.format("root encString = %s decString = %s", encString, decString));
 
-        content = "root";
+        content = "";
         encString = encryptor.encrypt(content);
         decString = encryptor.decrypt(encString);
         System.out.println(String.format("root encString = %s decString = %s", encString, decString));
 
-        content = "1234";
+        content = "";
         encString = encryptor.encrypt(content);
         decString = encryptor.decrypt(encString);
         System.out.println(String.format("root encString = %s decString = %s", encString, decString));
-    }*/
+    }
 }
