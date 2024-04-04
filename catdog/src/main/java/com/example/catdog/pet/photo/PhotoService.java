@@ -24,9 +24,6 @@ public class PhotoService {
     private Path photoPath;
 
     public PhotoService(PhotoRepository photoRepository) {
-
-
-
         this.photoRepository = photoRepository;
 
         photoPath = Paths.get("src/main/resources/static/petphoto/upload/")
