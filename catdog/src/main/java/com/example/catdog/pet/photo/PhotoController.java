@@ -51,14 +51,13 @@ public class PhotoController {
     }
 
     @Operation(summary = "반려동물 사진 조회",
-            description = "PhotoName을 통해 반려동물 사진 조회")
-    @GetMapping("/{PhotoName}")
-    public ResponseEntity<Resource> getImage(@PathVariable String PhotoName) {
-        Path photoPath = this.photoPath.resolve(PhotoName).normalize();
+            description = "photoNum 통해 반려동물 사진 조회")
+    @GetMapping("/{photoName}")
+    public ResponseEntity<Resource> getImage(@PathVariable String photoName) {
+        Path photoPath = this.photoPath.resolve(photoName).normalize();
         Resource resource = null;
         try {
             resource = new UrlResource((photoPath.toUri()));
-
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.notFound().build();
